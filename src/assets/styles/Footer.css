@@ -1,0 +1,90 @@
+/* General styling for the footer */
+.footer {
+    background-color: #2c2c54;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  /* Content container */
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Footer text styling */
+  .footer-text {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+  
+  /* Phone number styling */
+  .footer-phone {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+  
+  .footer-phone-link {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+  
+  .footer-phone-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Social media links styling */
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .social-icon {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+  }
+  
+  .social-icon:hover {
+    color: #1e90ff;
+  }
+  
+  /* Footer links styling */
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .footer-link {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .footer-link:hover {
+    color: #1e90ff;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footer-content {
+      padding: 0 10px;
+    }
+  
+    .social-links {
+      gap: 10px;
+    }
+  
+    .footer-link {
+      font-size: 0.85rem;
+    }
+  }
+  

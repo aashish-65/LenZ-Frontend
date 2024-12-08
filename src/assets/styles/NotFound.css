@@ -1,0 +1,34 @@
+.not-found-container {
+    text-align: center;
+    padding: 50px 20px;
+    color: #333;
+  }
+  
+  .not-found-title {
+    font-size: 6rem;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+  }
+  
+  .not-found-links {
+    margin-top: 20px;
+  }
+  
+  .not-found-links ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .not-found-links li {
+    margin: 10px 0;
+  }
+  
+  .not-found-links a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .not-found-links a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,215 @@
+/* General container styles */
+.create-order {
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: "Arial", sans-serif;
+}
+
+/* Step container */
+.step {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Step title */
+.step-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #34495e;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Label styles */
+.label {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.label-text {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* Input fields */
+.input-text,
+.select-frame,
+.select-glass,
+.select-lens,
+.input-power {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #fafafa;
+  box-sizing: border-box;
+}
+
+.input-text:focus,
+.select-frame:focus,
+.select-glass:focus,
+.select-lens:focus,
+.input-power:focus {
+  border-color: #3498db;
+  outline: none;
+  background-color: #ffffff;
+}
+
+/* Radio buttons */
+.radio-button {
+  margin-right: 8px;
+}
+
+.radio-container label {
+  font-size: 14px;
+  color: #34495e;
+  cursor: pointer;
+}
+
+/* Dropdown styles */
+.select-frame,
+.select-glass,
+.select-lens 
+{
+  height: 40px;
+  appearance: none;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn-next,
+.btn-previous,
+.btn-confirm {
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+  margin-top: 15px;
+}
+
+.btn-next:hover,
+.btn-previous:hover,
+.btn-confirm:hover {
+  background-color: #2980b9;
+}
+
+.btn-previous {
+  margin-right: 10px;
+}
+
+/* Bill summary */
+.bill-summary {
+  padding: 20px;
+  background-color: #fef7e4;
+  border: 1px solid #f39c12;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.bill-title {
+  font-size: 18px;
+  color: #d35400;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.bill-amount {
+  font-size: 20px;
+  color: #34495e;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* Eye power section */
+.eye-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.eye-section .eye-title {
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.eye-section label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.eye-section input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Add a blur effect when the popup is shown */
+.create-order.blurred {
+    filter: blur(5px);
+    pointer-events: none; /* Optional: prevents interaction with the blurred content */
+  }
+
+/* Confirmation popup styles */
+.confirmation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  text-align: center;
+}
+
+.confirmation-popup .popup-content {
+  font-size: 16px;
+  color: #34495e;
+}
+
+.confirmation-popup h3 {
+  margin-bottom: 10px;
+  color: #2ecc71;
+}
+
+.confirmation-popup p {
+  margin: 5px 0;
+}
+/* Adjustments for responsiveness */
+@media (max-width: 768px) {
+  .create-order {
+    padding: 15px;
+  }
+
+  .btn-next,
+  .btn-previous,
+  .btn-confirm {
+    font-size: 14px;
+    padding: 8px 15px;
+  }
+
+  .eye-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
