@@ -25,9 +25,9 @@ const CreateOrder = () => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
-//   console.log("powerDetails", powerDetails);
-//   console.log("powerType", powerType);
-//   console.log("powerEntryType", powerEntryType);
+  //   console.log("powerDetails", powerDetails);
+  //   console.log("powerType", powerType);
+  //   console.log("powerEntryType", powerEntryType);
 
   return (
     <div>
@@ -105,26 +105,26 @@ const CreateOrder = () => {
       )}
       {step === 7 && glassType === "Sunglass" && (
         <PowerEntry
-        onPowerDataChange={setPowerDetails}
-        onPowerTypeChange={setPowerType}
-        onPowerEntryTypeChange={setPowerEntryType}
-        lensType={lensDetails}
-        nextStep={nextStep}
-        prevStep={prevStep}
-      />
+          onPowerDataChange={setPowerDetails}
+          onPowerTypeChange={setPowerType}
+          onPowerEntryTypeChange={setPowerEntryType}
+          lensType={lensDetails}
+          nextStep={nextStep}
+          prevStep={prevStep}
+        />
       )}
       {step === 8 && glassType === "Sunglass" && (
         <Bill
-        customerDetails={customerDetails}
-        frameOptions={frameOptions}
-        shiftingOrFitting={shiftingOrFitting}
-        lensDetails={lensDetails}
-        powerDetails={powerDetails}
-        powerType={powerType}
-        powerEntryType={powerEntryType}
-        nextStep={nextStep}
-        prevStep={prevStep}
-      />
+          customerDetails={customerDetails}
+          frameOptions={frameOptions}
+          shiftingOrFitting={shiftingOrFitting}
+          lensDetails={lensDetails}
+          powerDetails={powerDetails}
+          powerType={powerType}
+          powerEntryType={powerEntryType}
+          nextStep={nextStep}
+          prevStep={prevStep}
+        />
       )}
       {step === 7 && glassType === "Normal" && (
         <MaterialSelection
@@ -134,13 +134,23 @@ const CreateOrder = () => {
           frameOptions={frameOptions}
         />
       )}
-      {step === 8 && glassType === "Normal" && materialDetails && (
+      {step === 8 && glassType === "Normal" && materialDetails && purchaseLens && (
         <CoatingSelection
           setCoatingDetails={setCoatingDetails}
           nextStep={nextStep}
           prevStep={prevStep}
           materialDetails={materialDetails}
         />
+      )}
+      {step === 8 && glassType === "Normal" && materialDetails && purchaseLens === false && (
+        <PowerEntry
+        onPowerDataChange={setPowerDetails}
+        onPowerTypeChange={setPowerType}
+        onPowerEntryTypeChange={setPowerEntryType}
+        lensType={lensDetails}
+        nextStep={nextStep}
+        prevStep={prevStep}
+      />
       )}
       {step === 9 && (
         <PowerEntry
