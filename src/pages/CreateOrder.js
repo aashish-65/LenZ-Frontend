@@ -51,6 +51,16 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
+      {step === 4 &&
+        shiftingOrFitting === "Shifting" && (
+          <Bill
+            customerDetails={customerDetails}
+            frameOptions={frameOptions}
+            shiftingOrFitting={shiftingOrFitting}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
       {step === 4 && shiftingOrFitting === "Fitting" && (
         <div>
           <h3>Do you have the lens or want to purchase the lens?</h3>
@@ -73,7 +83,7 @@ const CreateOrder = () => {
           <button onClick={prevStep}>Back</button>
         </div>
       )}
-      {step === 5 && purchaseLens !== null && (
+      {step === 5 && shiftingOrFitting === "Fitting" && purchaseLens !== null && (
         <div>
           <h3>Glass Type</h3>
           <button
@@ -134,49 +144,78 @@ const CreateOrder = () => {
           frameOptions={frameOptions}
         />
       )}
-      {step === 8 && glassType === "Normal" && materialDetails && purchaseLens && (
-        <CoatingSelection
-          setCoatingDetails={setCoatingDetails}
-          nextStep={nextStep}
-          prevStep={prevStep}
-          materialDetails={materialDetails}
-        />
-      )}
-      {step === 8 && glassType === "Normal" && materialDetails && purchaseLens === false && (
-        <PowerEntry
-        onPowerDataChange={setPowerDetails}
-        onPowerTypeChange={setPowerType}
-        onPowerEntryTypeChange={setPowerEntryType}
-        lensType={lensDetails}
-        nextStep={nextStep}
-        prevStep={prevStep}
-      />
-      )}
-      {step === 9 && (
-        <PowerEntry
-          onPowerDataChange={setPowerDetails}
-          onPowerTypeChange={setPowerType}
-          onPowerEntryTypeChange={setPowerEntryType}
-          lensType={lensDetails}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-      {step === 10 && (
-        <Bill
-          customerDetails={customerDetails}
-          frameOptions={frameOptions}
-          shiftingOrFitting={shiftingOrFitting}
-          lensDetails={lensDetails}
-          materialDetails={materialDetails}
-          coatingDetails={coatingDetails}
-          powerDetails={powerDetails}
-          powerType={powerType}
-          powerEntryType={powerEntryType}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
+      {step === 8 &&
+        glassType === "Normal" &&
+        materialDetails &&
+        purchaseLens === false && (
+          <PowerEntry
+            onPowerDataChange={setPowerDetails}
+            onPowerTypeChange={setPowerType}
+            onPowerEntryTypeChange={setPowerEntryType}
+            lensType={lensDetails}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+      {step === 9 &&
+        glassType === "Normal" &&
+        materialDetails &&
+        purchaseLens === false && (
+          <Bill
+            customerDetails={customerDetails}
+            frameOptions={frameOptions}
+            shiftingOrFitting={shiftingOrFitting}
+            lensDetails={lensDetails}
+            materialDetails={materialDetails}
+            powerDetails={powerDetails}
+            powerType={powerType}
+            powerEntryType={powerEntryType}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+      {step === 8 &&
+        glassType === "Normal" &&
+        materialDetails &&
+        purchaseLens && (
+          <CoatingSelection
+            setCoatingDetails={setCoatingDetails}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            materialDetails={materialDetails}
+          />
+        )}
+      {step === 9 &&
+        glassType === "Normal" &&
+        materialDetails &&
+        purchaseLens === true && (
+          <PowerEntry
+            onPowerDataChange={setPowerDetails}
+            onPowerTypeChange={setPowerType}
+            onPowerEntryTypeChange={setPowerEntryType}
+            lensType={lensDetails}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+      {step === 10 &&
+        glassType === "Normal" &&
+        materialDetails &&
+        purchaseLens === true && (
+          <Bill
+            customerDetails={customerDetails}
+            frameOptions={frameOptions}
+            shiftingOrFitting={shiftingOrFitting}
+            lensDetails={lensDetails}
+            materialDetails={materialDetails}
+            coatingDetails={coatingDetails}
+            powerDetails={powerDetails}
+            powerType={powerType}
+            powerEntryType={powerEntryType}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
     </div>
   );
 };

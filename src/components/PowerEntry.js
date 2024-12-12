@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEntryTypeChange, prevStep, nextStep }) => {
-    console.log("lensType: ", lensType);
+const PowerEntry = ({
+  lensType,
+  onPowerDataChange,
+  onPowerTypeChange,
+  onPowerEntryTypeChange,
+  prevStep,
+  nextStep,
+}) => {
   const [eyePower, setEyePower] = useState({
     right: {
       spherical: "",
@@ -18,17 +24,59 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
   });
 
   const [errors, setErrors] = useState({});
-  const [powerType, setPowerType] = useState("");
+  const [powerType, setPowerType] = useState({});
   const [powerEntryType, setPowerEntryType] = useState("");
+  const [cylindricalErrorPowerRange, setCylindricalErrorPowerRange] = useState(
+    {}
+  );
+  const [isValidCylindricalPowerRange, setIsValidCylindricalPowerRange] =
+    useState(true);
+  const [sphericalErrorPowerRange, setSphericalErrorPowerRange] = useState({});
+  const [isValidSphericalPowerRange, setIsValidSphericalPowerRange] =
+    useState(true);
+  const [axisErrorPowerRange, setAxisErrorPowerRange] = useState({});
+  const [isValidAxisPowerRange, setIsValidAxisPowerRange] = useState(true);
+  const [additionErrorPowerRange, setAdditionErrorPowerRange] = useState({});
+  const [isValidAdditionPowerRange, setIsValidAdditionPowerRange] =
+    useState(true);
+  const [isValid, setIsValid] = useState(false);
+  // const [errorPowerRange, setErrorPowerRange] = useState({});
+  const [isValidPowerRange, setIsValidPowerRange] = useState(false);
+
+  const lensRanges = {
+    SV: {
+      spherical: { min: -30, max: 30 },
+      cylindrical: { min: -16, max: 15 },
+      axis: { min: 1, max: 180 },
+      addition: null,
+    },
+    KT: {
+      spherical: { min: -20, max: 20 },
+      cylindrical: { min: -10, max: 10 },
+      axis: { min: 1, max: 180 },
+      addition: { min: 1, max: 3 },
+    },
+    PR: {
+      spherical: { min: -20, max: 20 },
+      cylindrical: { min: -10, max: 10 },
+      axis: { min: 1, max: 180 },
+      addition: { min: 1, max: 3 },
+    },
+  };
 
   useEffect(() => {
-    // Notify parent of the current power data
     onPowerDataChange(eyePower);
-    // Determine power type (high or low) for billing purposes
+
     const calculatePowerType = (eye) => {
       const spherical = parseFloat(eye.spherical);
-      if (!isNaN(spherical)) {
-        return spherical >= 7 || spherical <= -7 ? "High" : "Low";
+      const cylindrical = parseFloat(eye.cylindrical);
+      if (!isNaN(spherical) || !isNaN(cylindrical)) {
+        return spherical >= 7 ||
+          spherical <= -7 ||
+          cylindrical >= 7 ||
+          cylindrical <= -7
+          ? "High"
+          : "Low";
       }
       return "";
     };
@@ -47,7 +95,6 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
       left: leftPowerType,
     });
 
-    // Determine if it's Single or Double Power
     const hasRightEyePower = Object.values(eyePower.right).some(
       (val) => val !== ""
     );
@@ -64,100 +111,201 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
     } else {
       setPowerEntryType("");
     }
-  }, [eyePower, onPowerDataChange, onPowerTypeChange, onPowerEntryTypeChange]);
 
-  const validateInput = (eye, param, value) => {
-    const lensRanges = {
-      SV: {
-        spherical: { min: -30, max: 30 },
-        cylindrical: { min: -16, max: 15 },
-        axis: { min: 1, max: 180 },
-        addition: null, // Addition not allowed for SV
-      },
-      KT: {
-        spherical: { min: -20, max: 20 },
-        cylindrical: { min: -10, max: 10 },
-        axis: { min: 1, max: 180 },
-        addition: { min: 1, max: 3 },
-      },
-      PR: {
-        spherical: { min: -20, max: 20 },
-        cylindrical: { min: -10, max: 10 },
-        axis: { min: 1, max: 180 },
-        addition: { min: 1, max: 3 },
-      },
+    // const hasErrors = Object.values(errors).some((eye) =>
+    //   Object.values(eye || {}).some((error) => error !== "")
+    // );
+    // setIsValid(!hasErrors && (hasRightEyePower || hasLeftEyePower));
+
+    const validateInputs = () => {
+      let isValid = true;
+
+      const validateEye = (eye) => {
+        const { spherical, cylindrical, axis, addition } = eye;
+        const hasSphericalOrCylindrical =
+          spherical !== "" || cylindrical !== "";
+        const needsAxis = cylindrical !== "" && axis === "";
+        const needsAddition =
+          ["KT", "PR"].includes(lensType) &&
+          hasSphericalOrCylindrical &&
+          addition === "";
+
+        return {
+          hasSphericalOrCylindrical,
+          needsAxis,
+          needsAddition,
+        };
+      };
+
+      const rightEyeValidation = validateEye(eyePower.right);
+      const leftEyeValidation = validateEye(eyePower.left);
+
+      if (
+        !rightEyeValidation.hasSphericalOrCylindrical &&
+        !leftEyeValidation.hasSphericalOrCylindrical
+      ) {
+        isValid = false;
+      }
+
+      if (
+        rightEyeValidation.needsAxis ||
+        leftEyeValidation.needsAxis ||
+        rightEyeValidation.needsAddition ||
+        leftEyeValidation.needsAddition
+      ) {
+        isValid = false;
+      }
+
+      setErrors({
+        right: {
+          axis: rightEyeValidation.needsAxis
+            ? "Axis is required for cylindrical power"
+            : "",
+          addition: rightEyeValidation.needsAddition
+            ? "Addition is required for KT/PR lenses"
+            : "",
+        },
+        left: {
+          axis: leftEyeValidation.needsAxis
+            ? "Axis is required for cylindrical power"
+            : "",
+          addition: leftEyeValidation.needsAddition
+            ? "Addition is required for KT/PR lenses"
+            : "",
+        },
+      });
+      if (
+        isValidSphericalPowerRange === false ||
+        isValidCylindricalPowerRange === false ||
+        isValidAxisPowerRange === false ||
+        isValidAdditionPowerRange === false
+      ) {
+        setIsValidPowerRange(false);
+      } else {
+        setIsValidPowerRange(true);
+      }
+
+      if (isValid === true && isValidPowerRange === true) {
+        isValid = true;
+      } else {
+        isValid = false;
+      }
+      setIsValid(isValid);
     };
 
+    validateInputs();
+  }, [
+    eyePower,
+    lensType,
+    onPowerDataChange,
+    onPowerTypeChange,
+    onPowerEntryTypeChange,
+    isValidSphericalPowerRange,
+    isValidCylindricalPowerRange,
+    isValidAxisPowerRange,
+    isValidAdditionPowerRange,
+    isValidPowerRange,
+  ]);
+
+  const validateRange = (eye, param, value) => {
+    if (value === "") return true;
+    console.log("eye : ", eye);
+    console.log("param : ", param);
     const lensRange = lensRanges[lensType];
+    if (!lensRange) return true;
 
-    if (!lensRange) {
-      console.error(`Invalid lens type: ${lensType}`);
-      return false;
-    }
+    const range = lensRange[param];
+    console.log("range", range);
 
-    // Validate Spherical Power
     if (param === "spherical") {
-      if (value < lensRange.spherical.min || value > lensRange.spherical.max) {
-        setErrors((prev) => ({
+      if (range && (value < range.min || value > range.max)) {
+        setSphericalErrorPowerRange((prev) => ({
           ...prev,
-          [eye]: { ...prev[eye], spherical: "Invalid spherical power" },
+          [eye]: {
+            ...prev[eye],
+            [param]: `Value out of range (${range.min}-${range.max})`,
+          },
         }));
+        setIsValidSphericalPowerRange(false);
         return false;
+      } else {
+        setSphericalErrorPowerRange((prev) => ({
+          ...prev,
+          [eye]: { ...prev[eye], [param]: "" },
+        }));
+        setIsValidSphericalPowerRange(true);
+        return true;
       }
-    }
+    } 
 
-    // Validate Cylindrical Power
     if (param === "cylindrical") {
-      if (
-        value < lensRange.cylindrical.min ||
-        value > lensRange.cylindrical.max
-      ) {
-        setErrors((prev) => ({
+      if (range && (value < range.min || value > range.max)) {
+        setCylindricalErrorPowerRange((prev) => ({
           ...prev,
-          [eye]: { ...prev[eye], cylindrical: "Invalid cylindrical power" },
+          [eye]: {
+            ...prev[eye],
+            [param]: `Value out of range (${range.min}-${range.max})`,
+          },
         }));
+        setIsValidCylindricalPowerRange(false);
         return false;
-      }
-      // If cylindrical power is entered, validate axis power
-      if (
-        eyePower[eye].cylindrical !== "" &&
-        (eyePower[eye].axis === "" ||
-          value < lensRange.axis.min ||
-          value > lensRange.axis.max)
-      ) {
-        setErrors((prev) => ({
+      } else {
+        setCylindricalErrorPowerRange((prev) => ({
           ...prev,
-          [eye]: { ...prev[eye], axis: "Invalid axis power" },
+          [eye]: { ...prev[eye], [param]: "" },
         }));
-        return false;
+        setIsValidCylindricalPowerRange(true);
+        return true;
       }
     }
 
-    // Validate Axis Power
     if (param === "axis") {
-      if (value < lensRange.axis.min || value > lensRange.axis.max) {
-        setErrors((prev) => ({
+      if (range && (value < range.min || value > range.max)) {
+        setAxisErrorPowerRange((prev) => ({
           ...prev,
-          [eye]: { ...prev[eye], axis: "Invalid axis power" },
+          [eye]: {
+            ...prev[eye],
+            [param]: `Value out of range (${range.min}-${range.max})`,
+          },
         }));
+        setIsValidAxisPowerRange(false);
         return false;
-      }
-    }
-
-    // Validate Addition Power
-    if (param === "addition" && lensRange.addition) {
-      if (value < lensRange.addition.min || value > lensRange.addition.max) {
-        setErrors((prev) => ({
+      } else {
+        setAxisErrorPowerRange((prev) => ({
           ...prev,
-          [eye]: { ...prev[eye], addition: "Invalid addition power" },
+          [eye]: { ...prev[eye], [param]: "" },
         }));
-        return false;
+        setIsValidAxisPowerRange(true);
+        return true;
       }
-    }
+    } 
 
-    // Clear any previous error for this parameter
-    setErrors((prev) => ({ ...prev, [eye]: { ...prev[eye], [param]: "" } }));
-    return true;
+    if (param === "addition") {
+      if (range && (value < range.min || value > range.max)) {
+        setAdditionErrorPowerRange((prev) => ({
+          ...prev,
+          [eye]: {
+            ...prev[eye],
+            [param]: `Value out of range (${range.min}-${range.max})`,
+          },
+        }));
+        setIsValidAdditionPowerRange(false);
+        return false;
+      } else {
+        setAdditionErrorPowerRange((prev) => ({
+          ...prev,
+          [eye]: { ...prev[eye], [param]: "" },
+        }));
+        setIsValidAdditionPowerRange(true);
+        return true;
+      }
+    } 
+
+    // console.log("isValidPowerRange", isValidPowerRange);
+    console.log("isValidCylindricalPowerRange", isValidCylindricalPowerRange);
+    console.log("isValidAxisPowerRange", isValidAxisPowerRange);
+    console.log("isValidAdditionPowerRange", isValidAdditionPowerRange);
+    ;
   };
 
   const handleChange = (eye, param, value) => {
@@ -169,9 +317,24 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
         [param]: numericValue,
       },
     }));
+    validateRange(eye, param, numericValue);
+  };
 
-    // Validate the input
-    validateInput(eye, param, numericValue);
+  const handleBlur = (eye, param) => {
+    const value = eyePower[eye][param];
+    if (value !== "") {
+      const roundedValue = Math.round(value * 4) / 4;
+      setEyePower((prev) => ({
+        ...prev,
+        [eye]: {
+          ...prev[eye],
+          [param]: roundedValue,
+        },
+      }));
+      const isValid = validateRange(eye, param, roundedValue);
+      console.log("isValidPowerRange", isValid);
+      // setIsValidPowerRange(isValid);
+    }
   };
 
   return (
@@ -186,8 +349,12 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
               type="number"
               value={eyePower[eye].spherical}
               onChange={(e) => handleChange(eye, "spherical", e.target.value)}
+              onBlur={() => handleBlur(eye, "spherical")}
             />
             {errors[eye]?.spherical && <span>{errors[eye].spherical}</span>}
+            {sphericalErrorPowerRange[eye]?.spherical && (
+              <span>{sphericalErrorPowerRange[eye].spherical}</span>
+            )}
           </div>
           <div>
             <label>Cylindrical Power:</label>
@@ -195,8 +362,12 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
               type="number"
               value={eyePower[eye].cylindrical}
               onChange={(e) => handleChange(eye, "cylindrical", e.target.value)}
+              onBlur={() => handleBlur(eye, "cylindrical")}
             />
             {errors[eye]?.cylindrical && <span>{errors[eye].cylindrical}</span>}
+            {cylindricalErrorPowerRange[eye]?.cylindrical && (
+              <span>{cylindricalErrorPowerRange[eye].cylindrical}</span>
+            )}
           </div>
           {eyePower[eye].cylindrical !== "" && (
             <div>
@@ -207,29 +378,41 @@ const PowerEntry = ({ lensType, onPowerDataChange, onPowerTypeChange, onPowerEnt
                 onChange={(e) => handleChange(eye, "axis", e.target.value)}
               />
               {errors[eye]?.axis && <span>{errors[eye].axis}</span>}
+              {axisErrorPowerRange[eye]?.axis && (
+                <span>{axisErrorPowerRange[eye].axis}</span>
+              )}
             </div>
           )}
           {["KT", "PR"].includes(lensType) && (
             <div>
-              <label>Addition Power:</label>
+              <label>Addition:</label>
               <input
                 type="number"
                 value={eyePower[eye].addition}
                 onChange={(e) => handleChange(eye, "addition", e.target.value)}
+                onBlur={() => handleBlur(eye, "addition")}
               />
               {errors[eye]?.addition && <span>{errors[eye].addition}</span>}
+              {additionErrorPowerRange[eye]?.addition && (
+                <span>{additionErrorPowerRange[eye].addition}</span>
+              )}
             </div>
           )}
         </div>
       ))}
       <div>
+        <button onClick={prevStep}>Previous</button>
+        <button onClick={nextStep} disabled={!isValid}>
+          Next
+        </button>
+      </div>
+      <div>
+        <h4>Selected Lens Type: {lensType}</h4>
         <h4>
           Power Type: {powerType.right} (Right), {powerType.left} (Left)
         </h4>
         <h4>Power Entry Type: {powerEntryType}</h4>
       </div>
-      <button onClick={prevStep}>Back</button>
-      <button onClick={nextStep}>Next</button>
     </div>
   );
 };
