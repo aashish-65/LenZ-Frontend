@@ -27,9 +27,9 @@ const Bill = ({
 
   // Shifting Charges
   const shiftingCharges = {
-    "Full Frame": 25,
-    Supra: 35,
-    Rimless: 80,
+    "Full Frame": 15,
+    Supra: 20,
+    Rimless: 40,
   };
 
   // Fitting Charges

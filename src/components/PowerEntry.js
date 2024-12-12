@@ -70,11 +70,14 @@ const PowerEntry = ({
     const calculatePowerType = (eye) => {
       const spherical = parseFloat(eye.spherical);
       const cylindrical = parseFloat(eye.cylindrical);
+      const total = spherical + cylindrical;
       if (!isNaN(spherical) || !isNaN(cylindrical)) {
         return spherical >= 7 ||
           spherical <= -7 ||
           cylindrical >= 7 ||
-          cylindrical <= -7
+          cylindrical <= -7 ||
+          total >= 10 ||
+          total <= -10
           ? "High"
           : "Low";
       }
@@ -209,13 +212,10 @@ const PowerEntry = ({
 
   const validateRange = (eye, param, value) => {
     if (value === "") return true;
-    console.log("eye : ", eye);
-    console.log("param : ", param);
     const lensRange = lensRanges[lensType];
     if (!lensRange) return true;
 
     const range = lensRange[param];
-    console.log("range", range);
 
     if (param === "spherical") {
       if (range && (value < range.min || value > range.max)) {
@@ -299,12 +299,7 @@ const PowerEntry = ({
         setIsValidAdditionPowerRange(true);
         return true;
       }
-    } 
-
-    // console.log("isValidPowerRange", isValidPowerRange);
-    console.log("isValidCylindricalPowerRange", isValidCylindricalPowerRange);
-    console.log("isValidAxisPowerRange", isValidAxisPowerRange);
-    console.log("isValidAdditionPowerRange", isValidAdditionPowerRange);
+    }
     ;
   };
 
@@ -331,9 +326,7 @@ const PowerEntry = ({
           [param]: roundedValue,
         },
       }));
-      const isValid = validateRange(eye, param, roundedValue);
-      console.log("isValidPowerRange", isValid);
-      // setIsValidPowerRange(isValid);
+      validateRange(eye, param, roundedValue);
     }
   };
 
