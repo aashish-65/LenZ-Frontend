@@ -15,15 +15,6 @@ const Bill = ({
 }) => {
   const { name, billNumber } = customerDetails;
   const { type: frameType } = frameOptions;
-//   console.log("customerDetails", customerDetails);
-//   console.log("frameOptions", frameOptions);
-//   console.log("shiftingOrFitting", shiftingOrFitting);
-//   console.log("lensDetails", lensDetails);
-//   console.log("materialDetails", materialDetails);
-//   console.log("coatingDetails", coatingDetails);
-//   console.log("powerDetails", powerDetails);
-//   console.log("powerType", powerType);
-//   console.log("powerEntryType", powerEntryType);
 
   // Shifting Charges
   const shiftingCharges = {
@@ -77,8 +68,6 @@ const Bill = ({
   // Calculate total amounts
   let totalAmount = 0;
   let billDetails = `Customer Name: ${name}\nBill Number: ${billNumber}\nFrame Type: ${frameType}\n`;
-  console.log("frameType", frameType);
-  console.log("materialDetails", materialDetails);
 
   if (shiftingOrFitting === "Shifting") {
     const shiftingCharge = shiftingCharges[frameType] || 0;
@@ -88,7 +77,6 @@ const Bill = ({
     const frameCategory = fittingCharges[frameType];
     let frameTypeKey="";
     // frameTypeKey = lensDetails === "PR" ? "PR" : "Normal";
-    console.log("frameCategory", frameCategory);
     
     if(frameType === "Rimless" && materialDetails === "Poly" && (lensDetails === "SV" || lensDetails === "KT")){
         frameTypeKey = "Poly";
@@ -97,15 +85,7 @@ const Bill = ({
     } else {
     frameTypeKey = lensDetails === "PR" ? "PR" : "Normal";
     }
-    console.log("frameTypeKey", frameTypeKey);
 
-    // const powerKey = powerType === "low" ? "low" : "high";
-    // const lensCategory = frameCategory[frameTypeKey];
-    // const powerTypeCategory = lensCategory[powerType];
-    // const powerEntryTypeCategory = powerTypeCategory[powerEntryType];
-    // console.log("lensCategory", lensCategory);
-    // console.log("powerTypeCategory", powerTypeCategory);
-    // console.log("powerEntryTypeCategory", powerEntryTypeCategory);
     const powerCharge = frameCategory[frameTypeKey][powerType][powerEntryType];
 
     totalAmount += powerCharge;
