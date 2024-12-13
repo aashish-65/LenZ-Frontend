@@ -67,12 +67,18 @@ const Bill = ({
         low: { Single: 50, Double: 100 },
         high: { Single: 60, Double: 120 },
       },
+      PolyPR: {
+        low: { Single: 75, Double: 150 },
+        high: { Single: 90, Double: 180 },
+      },
     },
   };
 
   // Calculate total amounts
   let totalAmount = 0;
   let billDetails = `Customer Name: ${name}\nBill Number: ${billNumber}\nFrame Type: ${frameType}\n`;
+  console.log("frameType", frameType);
+  console.log("materialDetails", materialDetails);
 
   if (shiftingOrFitting === "Shifting") {
     const shiftingCharge = shiftingCharges[frameType] || 0;
@@ -80,8 +86,19 @@ const Bill = ({
     billDetails += `Shifting Charges: Rs ${shiftingCharge}\n`;
   } else if (shiftingOrFitting === "Fitting") {
     const frameCategory = fittingCharges[frameType];
+    let frameTypeKey="";
+    // frameTypeKey = lensDetails === "PR" ? "PR" : "Normal";
     console.log("frameCategory", frameCategory);
-    const frameTypeKey = lensDetails === "PR" ? "PR" : "Normal";
+    
+    if(frameType === "Rimless" && materialDetails === "Poly" && (lensDetails === "SV" || lensDetails === "KT")){
+        frameTypeKey = "Poly";
+    } else if(frameType === "Rimless" && lensDetails === "PR" && materialDetails === "Poly"){
+        frameTypeKey = "PolyPR";
+    } else {
+    frameTypeKey = lensDetails === "PR" ? "PR" : "Normal";
+    }
+    console.log("frameTypeKey", frameTypeKey);
+
     // const powerKey = powerType === "low" ? "low" : "high";
     // const lensCategory = frameCategory[frameTypeKey];
     // const powerTypeCategory = lensCategory[powerType];
