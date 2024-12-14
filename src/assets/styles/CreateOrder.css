@@ -1,215 +1,228 @@
-/* General container styles */
-.create-order {
+/* Container Styling */
+.lens-options-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 30px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  max-width: 700px;
-  margin: 20px auto;
-  font-family: "Arial", sans-serif;
+  max-width: 500px;
+  margin: 40px auto;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border: 2px solid #ddd;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Step container */
-.step {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-bottom: 15px;
+.lens-options-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Step title */
-.step-title {
-  font-size: 24px;
+/* Title Styling */
+.lens-options-title {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Group Styling */
+.lens-options-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
   margin-bottom: 20px;
-  color: #34495e;
+}
+
+/* Main Buttons */
+.lens-options-button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #007BFF, #0056b3);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.lens-options-button:hover {
+  background: linear-gradient(135deg, #0056b3, #003f7f);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.lens-options-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Back Button */
+.lens-options-back-button {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  color: #555;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lens-options-back-button:hover {
+  background: #e9e9e9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lens-options-back-button:active {
+  background: #e0e0e0;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .lens-options-container {
+      padding: 20px;
+      max-width: 100%;
+      border-radius: 12px;
+  }
+
+  .lens-options-title {
+      font-size: 1.4rem;
+  }
+
+  .lens-options-buttons {
+      flex-direction: column;
+      gap: 15px;
+  }
+
+  .lens-options-button {
+      padding: 10px 16px;
+      font-size: 1rem;
+  }
+
+  .lens-options-back-button {
+      padding: 8px 14px;
+  }
+}
+
+
+/* Container Styling */
+.glass-type-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  max-width: 450px;
+  margin: 50px auto;
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border: 2px solid #ddd;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-type-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Title Styling */
+.glass-type-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 25px;
   text-align: center;
   font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Label styles */
-.label {
-  display: block;
-  margin-bottom: 15px;
-  font-size: 16px;
-  color: #2c3e50;
-}
-
-.label-text {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-/* Input fields */
-.input-text,
-.select-frame,
-.select-glass,
-.select-lens,
-.input-power {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  background-color: #fafafa;
-  box-sizing: border-box;
-}
-
-.input-text:focus,
-.select-frame:focus,
-.select-glass:focus,
-.select-lens:focus,
-.input-power:focus {
-  border-color: #3498db;
-  outline: none;
-  background-color: #ffffff;
-}
-
-/* Radio buttons */
-.radio-button {
-  margin-right: 8px;
-}
-
-.radio-container label {
-  font-size: 14px;
-  color: #34495e;
-  cursor: pointer;
-}
-
-/* Dropdown styles */
-.select-frame,
-.select-glass,
-.select-lens 
-{
-  height: 40px;
-  appearance: none;
-  background: #fafafa;
-  cursor: pointer;
-}
-
-/* Buttons */
-.btn-next,
-.btn-previous,
-.btn-confirm {
-  background-color: #3498db;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s;
-  margin-top: 15px;
-}
-
-.btn-next:hover,
-.btn-previous:hover,
-.btn-confirm:hover {
-  background-color: #2980b9;
-}
-
-.btn-previous {
-  margin-right: 10px;
-}
-
-/* Bill summary */
-.bill-summary {
-  padding: 20px;
-  background-color: #fef7e4;
-  border: 1px solid #f39c12;
-  border-radius: 8px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.bill-title {
-  font-size: 18px;
-  color: #d35400;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.bill-amount {
-  font-size: 20px;
-  color: #34495e;
-  margin-top: 15px;
-  text-align: center;
-}
-
-/* Eye power section */
-.eye-section {
+/* Button Group Styling */
+.glass-type-buttons {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: center;
   gap: 20px;
+  margin-bottom: 20px;
 }
 
-.eye-section .eye-title {
-  margin-bottom: 10px;
-  color: #34495e;
+/* Glass Type Buttons */
+.glass-type-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #28a745, #218838);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.eye-section label {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
+.glass-type-button:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.eye-section input {
-  width: 100%;
-  padding: 8px;
+.glass-type-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Back Button Styling */
+.glass-type-back-button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  color: #555;
+  background: #f5f5f5;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Add a blur effect when the popup is shown */
-.create-order.blurred {
-    filter: blur(5px);
-    pointer-events: none; /* Optional: prevents interaction with the blurred content */
+.glass-type-back-button:hover {
+  background: #e9e9e9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.glass-type-back-button:active {
+  background: #e0e0e0;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .glass-type-container {
+      padding: 20px;
+      max-width: 100%;
+      border-radius: 12px;
   }
 
-/* Confirmation popup styles */
-.confirmation-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
-  text-align: center;
-}
-
-.confirmation-popup .popup-content {
-  font-size: 16px;
-  color: #34495e;
-}
-
-.confirmation-popup h3 {
-  margin-bottom: 10px;
-  color: #2ecc71;
-}
-
-.confirmation-popup p {
-  margin: 5px 0;
-}
-/* Adjustments for responsiveness */
-@media (max-width: 768px) {
-  .create-order {
-    padding: 15px;
+  .glass-type-title {
+      font-size: 1.5rem;
   }
 
-  .btn-next,
-  .btn-previous,
-  .btn-confirm {
-    font-size: 14px;
-    padding: 8px 15px;
+  .glass-type-buttons {
+      flex-direction: column;
+      gap: 15px;
   }
 
-  .eye-section {
-    flex-direction: column;
-    gap: 10px;
+  .glass-type-button {
+      padding: 10px 16px;
+      font-size: 1rem;
+  }
+
+  .glass-type-back-button {
+      padding: 8px 14px;
   }
 }

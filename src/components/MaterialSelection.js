@@ -1,35 +1,75 @@
-import React from 'react'
+import React from "react";
+import "../assets/styles/MaterialSelection.css";
 
-const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOptions }) => {
-    const handleMaterialSelection = (materialType) => {
-        setMaterialDetails(materialType);
-        nextStep();
-    };
+const MaterialSelection = ({
+  setMaterialDetails,
+  nextStep,
+  prevStep,
+  frameOptions,
+}) => {
+  const handleMaterialSelection = (materialType) => {
+    setMaterialDetails(materialType);
+    nextStep();
+  };
 
-    return (
-        <div>
-            <h3>Select Material for {frameOptions.type}</h3>
-            {frameOptions.type === 'Full Frame' && (
-                <>
-                    <button onClick={() => handleMaterialSelection('CR')}>CR</button>
-                    <button onClick={() => handleMaterialSelection('Glass')}>Glass</button>
-                </>
-            )}
-            {frameOptions.type === 'Supra' && (
-                <>
-                    <button onClick={() => handleMaterialSelection('CR')}>CR</button>
-                    <button onClick={() => handleMaterialSelection('Glass')}>Glass</button>
-                </>
-            )}
-            {frameOptions.type === 'Rimless' && (
-                <>
-                    <button onClick={() => handleMaterialSelection('Poly')}>Poly</button>
-                    <button onClick={() => handleMaterialSelection('CR')}>CR</button>
-                </>
-            )}
-            <button onClick={prevStep}>Back</button>
-        </div>
-    );
+  return (
+    <div className="material-selection-container">
+      <h3 className="material-selection-title">Select Material for {frameOptions.type}</h3>
+      <div className="material-selection-buttons">
+        {frameOptions.type === "Full Frame" && (
+          <>
+            <button
+              className="material-selection-button"
+              onClick={() => handleMaterialSelection("CR")}
+            >
+              CR
+            </button>
+            <button
+              className="material-selection-button"
+              onClick={() => handleMaterialSelection("Glass")}
+            >
+              Glass
+            </button>
+          </>
+        )}
+        {frameOptions.type === "Supra" && (
+          <>
+            <button
+              className="material-selection-button"
+              onClick={() => handleMaterialSelection("CR")}
+            >
+              CR
+            </button>
+            <button
+              className="material-selection-button"
+              onClick={() => handleMaterialSelection("Glass")}
+            >
+              Glass
+            </button>
+          </>
+        )}
+        {frameOptions.type === "Rimless" && (
+          <>
+            <button
+              className="material-selection-button"
+              onClick={() => handleMaterialSelection("Poly")}
+            >
+              Poly
+            </button>
+            <button
+              className="material-selection-button"
+              onClick={() => handleMaterialSelection("CR")}
+            >
+              CR
+            </button>
+          </>
+        )}
+      </div>
+      <button className="material-selection-back-button" onClick={prevStep}>
+        Back
+      </button>
+    </div>
+  );
 };
 
-export default MaterialSelection
+export default MaterialSelection;

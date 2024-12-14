@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../assets/styles/PowerEntry.css";
 
 const PowerEntry = ({
   lensType,
@@ -24,8 +25,8 @@ const PowerEntry = ({
   });
 
   const [errors, setErrors] = useState({});
-  const [powerType, setPowerType] = useState({});
-  const [powerEntryType, setPowerEntryType] = useState("");
+  // const [powerType, setPowerType] = useState({});
+  // const [powerEntryType, setPowerEntryType] = useState("");
   const [cylindricalErrorPowerRange, setCylindricalErrorPowerRange] = useState(
     {}
   );
@@ -93,10 +94,10 @@ const PowerEntry = ({
       onPowerTypeChange("low");
     }
 
-    setPowerType({
-      right: rightPowerType,
-      left: leftPowerType,
-    });
+    // setPowerType({
+    //   right: rightPowerType,
+    //   left: leftPowerType,
+    // });
 
     const hasRightEyePower = Object.values(eyePower.right).some(
       (val) => val !== ""
@@ -106,13 +107,13 @@ const PowerEntry = ({
     );
 
     if (hasRightEyePower && hasLeftEyePower) {
-      setPowerEntryType("Double");
+      // setPowerEntryType("Double");
       onPowerEntryTypeChange("Double");
     } else if (hasRightEyePower || hasLeftEyePower) {
-      setPowerEntryType("Single");
+      // setPowerEntryType("Single");
       onPowerEntryTypeChange("Single");
     } else {
-      setPowerEntryType("");
+      // setPowerEntryType("");
     }
 
     // const hasErrors = Object.values(errors).some((eye) =>
@@ -236,7 +237,7 @@ const PowerEntry = ({
         setIsValidSphericalPowerRange(true);
         return true;
       }
-    } 
+    }
 
     if (param === "cylindrical") {
       if (range && (value < range.min || value > range.max)) {
@@ -278,7 +279,7 @@ const PowerEntry = ({
         setIsValidAxisPowerRange(true);
         return true;
       }
-    } 
+    }
 
     if (param === "addition") {
       if (range && (value < range.min || value > range.max)) {
@@ -300,7 +301,6 @@ const PowerEntry = ({
         return true;
       }
     }
-    ;
   };
 
   const handleChange = (eye, param, value) => {
@@ -331,82 +331,121 @@ const PowerEntry = ({
   };
 
   return (
-    <div>
-      <h3>Enter Power Details</h3>
+    <div className="power-entry-container">
+      <h3 className="power-entry-title">Enter Power Details</h3>
+      <div>
+        <h4>Selected Lens Type: {lensType}</h4>
+      </div>
       {["right", "left"].map((eye) => (
-        <div key={eye}>
-          <h4>{eye.charAt(0).toUpperCase() + eye.slice(1)} Eye</h4>
-          <div>
-            <label>Spherical Power:</label>
-            <input
-              type="number"
+        <div key={eye} className="eye-section">
+          <h4 className="eye-title">
+            {eye.charAt(0).toUpperCase() + eye.slice(1)} Eye
+          </h4>
+
+          {/* Spherical Power */}
+          <div className="input-group">
+            <label className="input-label">Spherical Power:</label>
+            <MyNumberInput
               value={eyePower[eye].spherical}
               onChange={(e) => handleChange(eye, "spherical", e.target.value)}
               onBlur={() => handleBlur(eye, "spherical")}
             />
-            {errors[eye]?.spherical && <span>{errors[eye].spherical}</span>}
+            {errors[eye]?.spherical && (
+              <span className="error-message">{errors[eye].spherical}</span>
+            )}
             {sphericalErrorPowerRange[eye]?.spherical && (
-              <span>{sphericalErrorPowerRange[eye].spherical}</span>
+              <span className="error-message">
+                {sphericalErrorPowerRange[eye].spherical}
+              </span>
             )}
           </div>
-          <div>
-            <label>Cylindrical Power:</label>
-            <input
-              type="number"
+
+          {/* Cylindrical Power */}
+          <div className="input-group">
+            <label className="input-label">Cylindrical Power:</label>
+            <MyNumberInput
               value={eyePower[eye].cylindrical}
               onChange={(e) => handleChange(eye, "cylindrical", e.target.value)}
               onBlur={() => handleBlur(eye, "cylindrical")}
             />
-            {errors[eye]?.cylindrical && <span>{errors[eye].cylindrical}</span>}
+            {errors[eye]?.cylindrical && (
+              <span className="error-message">{errors[eye].cylindrical}</span>
+            )}
             {cylindricalErrorPowerRange[eye]?.cylindrical && (
-              <span>{cylindricalErrorPowerRange[eye].cylindrical}</span>
+              <span className="error-message">
+                {cylindricalErrorPowerRange[eye].cylindrical}
+              </span>
             )}
           </div>
+
+          {/* Axis Power */}
           {eyePower[eye].cylindrical !== "" && (
-            <div>
-              <label>Axis Power:</label>
-              <input
-                type="number"
+            <div className="input-group">
+              <label className="input-label">Axis Power:</label>
+              <MyNumberInput
                 value={eyePower[eye].axis}
                 onChange={(e) => handleChange(eye, "axis", e.target.value)}
               />
-              {errors[eye]?.axis && <span>{errors[eye].axis}</span>}
+              {errors[eye]?.axis && (
+                <span className="error-message">{errors[eye].axis}</span>
+              )}
               {axisErrorPowerRange[eye]?.axis && (
-                <span>{axisErrorPowerRange[eye].axis}</span>
+                <span className="error-message">
+                  {axisErrorPowerRange[eye].axis}
+                </span>
               )}
             </div>
           )}
+
+          {/* Addition (for specific lens types) */}
           {["KT", "PR"].includes(lensType) && (
-            <div>
-              <label>Addition:</label>
-              <input
-                type="number"
+            <div className="input-group">
+              <label className="input-label">Addition:</label>
+              <MyNumberInput
                 value={eyePower[eye].addition}
                 onChange={(e) => handleChange(eye, "addition", e.target.value)}
                 onBlur={() => handleBlur(eye, "addition")}
               />
-              {errors[eye]?.addition && <span>{errors[eye].addition}</span>}
+              {errors[eye]?.addition && (
+                <span className="error-message">{errors[eye].addition}</span>
+              )}
               {additionErrorPowerRange[eye]?.addition && (
-                <span>{additionErrorPowerRange[eye].addition}</span>
+                <span className="error-message">
+                  {additionErrorPowerRange[eye].addition}
+                </span>
               )}
             </div>
           )}
         </div>
       ))}
-      <div>
-        <button onClick={prevStep}>Previous</button>
-        <button onClick={nextStep} disabled={!isValid}>
+      <div className="button-container">
+        <button className="prev-button" onClick={prevStep}>Previous</button>
+        <button className="next-button" onClick={nextStep} disabled={!isValid}>
           Next
         </button>
       </div>
-      <div>
-        <h4>Selected Lens Type: {lensType}</h4>
-        <h4>
-          Power Type: {powerType.right} (Right), {powerType.left} (Left)
-        </h4>
-        <h4>Power Entry Type: {powerEntryType}</h4>
-      </div>
     </div>
+  );
+};
+
+const MyNumberInput = ({ value, onChange, onBlur }) => {
+  const numberInputOnWheelPreventChange = (e) => {
+    e.target.blur();
+    e.stopPropagation();
+    setTimeout(() => {
+      e.target.focus();
+    }, 0);
+  };
+
+  return (
+    <input
+      type="number"
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      onWheel={numberInputOnWheelPreventChange}
+      className="input-field"
+    />
   );
 };
 
