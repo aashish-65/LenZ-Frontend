@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import "../assets/styles/Dashboard.css";
@@ -6,9 +6,34 @@ import "../assets/styles/Dashboard.css";
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user?._id) {
+      // Fetch the user's orders
+      fetch(`https://lenz-backend.onrender.com/api/orders/get-order/${user._id}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch orders");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setOrders(data.data); // Assuming the response contains an `orders` array
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError("Failed to load your orders.");
+          setLoading(false);
+        });
+    }
+  }, [user?._id]);
 
   const handleCreateOrder = () => {
-    navigate("/create-order"); // Navigate to the Create Order page
+    navigate("/create-order");
   };
 
   return (
@@ -47,7 +72,24 @@ const Dashboard = () => {
 
         <section id="orders" className="dashboard-section">
           <h2>Your Orders</h2>
-          <p>No orders have been created yet.</p>
+          {loading ? (
+            <p>Loading orders...</p>
+          ) : error ? (
+            <p className="error-message">{error}</p>
+          ) : orders.length === 0 ? (
+            <p>No orders have been created yet.</p>
+          ) : (
+            <div className="orders-list">
+              {orders.map((order) => (
+                <div key={order._id} className="orders-list-item">
+                  <p><span>Order ID:</span> {order._id}</p>
+                  <p><span>Date:</span> {new Date(order.createdAt).toLocaleDateString()}</p>
+                  <p><span>Status:</span> <span className={`status ${order.orderPlaced ? "placed" : "pending"}`}>{order.orderPlaced ? "Placed" : "Pending"}</span></p>
+                  <p><span>Total Amount:</span> ₹{order.totalAmount}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         <section id="create-order" className="dashboard-section">

@@ -5,7 +5,7 @@
     align-items: center;
     padding: 30px;
     max-width: 450px;
-    margin: 50px auto;
+    /* margin: 50px auto; */
     background: linear-gradient(135deg, #ffffff, #f8f9fa);
     border: 2px solid #e0e0e0;
     border-radius: 16px;

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/styles/Bill.css";
+import axios from "axios";
 
 const Bill = ({
   customerDetails,
@@ -11,64 +12,44 @@ const Bill = ({
   powerDetails,
   powerType,
   powerEntryType,
+  shiftingCharge,
+  setShiftingCharge,
+  fittingCharge,
+  setFittingCharge,
+  totalAmount,
+  setTotalAmount,
+  glassType,
   prevStep,
   nextStep,
 }) => {
   const { name, billNumber } = customerDetails;
   const { type: frameType } = frameOptions;
 
-  // Shifting Charges
-  const shiftingCharges = {
-    "Full Frame": 15,
-    Supra: 20,
-    Rimless: 40,
-  };
+  const [charges, setCharges] = useState({ shiftingCharges: {}, fittingCharges: {} });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fitting Charges
-  const fittingCharges = {
-    "Full Frame": {
-      Normal: {
-        low: { Single: 15, Double: 25 },
-        high: { Single: 20, Double: 35 },
-      },
-      PR: {
-        low: { Single: 50, Double: 100 },
-        high: { Single: 60, Double: 120 },
-      },
-    },
-    Supra: {
-      Normal: {
-        low: { Single: 20, Double: 35 },
-        high: { Single: 25, Double: 45 },
-      },
-      PR: {
-        low: { Single: 50, Double: 100 },
-        high: { Single: 60, Double: 120 },
-      },
-    },
-    Rimless: {
-      Normal: {
-        low: { Single: 40, Double: 80 },
-        high: { Single: 50, Double: 100 },
-      },
-      PR: {
-        low: { Single: 60, Double: 120 },
-        high: { Single: 75, Double: 150 },
-      },
-      Poly: {
-        low: { Single: 50, Double: 100 },
-        high: { Single: 60, Double: 120 },
-      },
-      PolyPR: {
-        low: { Single: 75, Double: 150 },
-        high: { Single: 90, Double: 180 },
-      },
-    },
-  };
+  useEffect(() => {
+    // Fetch the charges from the API
+    const fetchCharges = async () => {
+      try {
+        const response = await axios.get("https://lenz-backend.onrender.com/api/charges/");
+        setCharges(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch charges:", err);
+        setError("Failed to load charges");
+        setIsLoading(false);
+      }
+    };
+
+    fetchCharges();
+  }, []);
 
   // Helper function to determine frameTypeKey
   const getFrameTypeKey = () => {
     if (frameType === "Rimless") {
+      if(glassType === "Sunglass") return "Sunglass";
       if (
         materialDetails === "Poly" &&
         (lensDetails === "SV" || lensDetails === "KT")
@@ -78,72 +59,35 @@ const Bill = ({
         return "PolyPR";
       }
     }
+    if (glassType === "Sunglass") return "Sunglass";
     return lensDetails === "PR" ? "PR" : "Normal";
   };
 
-  // Helper function to render power details
-  // const renderPowerDetails = (powerDetails) => {
-  //   let powerDetailStr = "";
-  //   if (powerDetails.right) {
-  //     powerDetailStr += `Right Eye:- \n`;
-  //     if (powerDetails.right.spherical)
-  //       powerDetailStr += `\tSpherical: ${powerDetails.right.spherical}\n`;
-  //     if (powerDetails.right.cylindrical)
-  //       powerDetailStr += `\tCylindrical: ${powerDetails.right.cylindrical}\n`;
-  //     if (powerDetails.right.axis)
-  //       powerDetailStr += `\tAxis: ${powerDetails.right.axis}\n`;
-  //     if (powerDetails.right.addition)
-  //       powerDetailStr += `\tAddition: ${powerDetails.right.addition}\n`;
-  //   }
-  //   if (powerDetails.left) {
-  //     powerDetailStr += `Left Eye:- \n`;
-  //     if (powerDetails.left.spherical)
-  //       powerDetailStr += `\tSpherical: ${powerDetails.left.spherical}\n`;
-  //     if (powerDetails.left.cylindrical)
-  //       powerDetailStr += `\tCylindrical: ${powerDetails.left.cylindrical}\n`;
-  //     if (powerDetails.left.axis)
-  //       powerDetailStr += `\tAxis: ${powerDetails.left.axis}\n`;
-  //     if (powerDetails.left.addition)
-  //       powerDetailStr += `\tAddition: ${powerDetails.left.addition}\n`;
-  //   }
-  //   return powerDetailStr;
-  // };
+  let total = 0;
+  let shiftingAmt = 0;
+  let fittingAmt = 0;
 
-  // Calculate total amount
-  let totalAmount = 0;
-  // let billDetails = `Customer Name: ${name}\nBill Number: ${billNumber}\nFrame Type: ${frameType}\n`;
-
-  if (shiftingOrFitting === "Shifting") {
-    const shiftingCharge = shiftingCharges[frameType] || 0;
-    totalAmount += shiftingCharge;
-    // billDetails += `Shifting Charges: Rs ${shiftingCharge}\n`;
-  } else if (shiftingOrFitting === "Fitting") {
-    const frameCategory = fittingCharges[frameType];
+  if (shiftingOrFitting === "Shifting" && !isLoading) {
+    shiftingAmt = charges[0].data[frameType] || 0;
+    setShiftingCharge(shiftingAmt);
+    total += shiftingAmt;
+    setTotalAmount(total);
+  } else if (shiftingOrFitting === "Fitting" && !isLoading) {
+    const frameCategory = charges[1].data[frameType];
     const frameTypeKey = getFrameTypeKey();
-    const powerCharge = frameCategory[frameTypeKey][powerType][powerEntryType];
-    totalAmount += powerCharge;
-    // billDetails += `Fitting Charges: Rs ${powerCharge}\n`;
+    fittingAmt = frameCategory?.[frameTypeKey]?.[powerType]?.[powerEntryType] || 0;
+    setFittingCharge(fittingAmt);
+    total += fittingAmt;
+    setTotalAmount(total);
   }
 
-  // If lens is purchased, include lens details
-  // if (lensDetails) {
-  //   billDetails += `Lens Type: ${lensDetails}\n`;
-  // }
+  if (isLoading) {
+    return <p>Loading charges...</p>;
+  }
 
-  // Include material and coating details if available
-  // if (materialDetails) {
-  //   billDetails += `Material: ${materialDetails}\n`;
-  // }
-  // if (coatingDetails) {
-  //   billDetails += `Coating: ${coatingDetails}\n`;
-  // }
-
-  // Include power details
-  // if (powerDetails) {
-  //   billDetails += `Power: \n${renderPowerDetails(powerDetails)}`;
-  // }
-
-  // billDetails += `Total Amount: Rs ${totalAmount}\n`;
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="bill-container">
@@ -169,8 +113,8 @@ const Bill = ({
             <p>
               <strong>Charge Amount:</strong> Rs{" "}
               {shiftingOrFitting === "Shifting"
-                ? shiftingCharges[frameType]
-                : totalAmount}
+                ? shiftingCharge
+                : fittingCharge}
             </p>
           </section>
         )}

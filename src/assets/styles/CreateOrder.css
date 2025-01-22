@@ -1,3 +1,15 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /* padding: 20px; */
+  box-sizing: border-box;
+  /* background: linear-gradient(135deg, #f8f9fa, #ffffff); Background design */
+  /* background: linear-gradient(135deg, #6a11cb, #2575fc); */
+}
+
 /* Container Styling */
 .lens-options-container {
   display: flex;
@@ -5,7 +17,7 @@
   align-items: center;
   padding: 30px;
   max-width: 500px;
-  margin: 40px auto;
+  /* margin: 40px auto; */
   background: linear-gradient(135deg, #ffffff, #f9f9f9);
   border: 2px solid #ddd;
   border-radius: 16px;
@@ -87,8 +99,8 @@
 /* Responsive Design */
 @media (max-width: 600px) {
   .lens-options-container {
-      padding: 20px;
-      max-width: 100%;
+      padding: 30px;
+      width: 80%;
       border-radius: 12px;
   }
 
@@ -119,7 +131,7 @@
   align-items: center;
   padding: 30px;
   max-width: 450px;
-  margin: 50px auto;
+  /* margin: 50px auto; */
   background: linear-gradient(135deg, #ffffff, #f8f9fa);
   border: 2px solid #ddd;
   border-radius: 16px;
@@ -158,7 +170,7 @@
   font-size: 1rem;
   font-weight: bold;
   color: #fff;
-  background: linear-gradient(135deg, #28a745, #218838);
+  background: linear-gradient(135deg, #007BFF, #0056b3);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -168,7 +180,7 @@
 }
 
 .glass-type-button:hover {
-  background: linear-gradient(135deg, #218838, #1e7e34);
+  background: linear-gradient(135deg, #0056b3, #003f7f);
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
@@ -203,8 +215,8 @@
 /* Responsive Design */
 @media (max-width: 600px) {
   .glass-type-container {
-      padding: 20px;
-      max-width: 100%;
+      padding: 30px;
+      width: 80%;
       border-radius: 12px;
   }
 
@@ -225,4 +237,23 @@
   .glass-type-back-button {
       padding: 8px 14px;
   }
+}
+
+/* Highlight Selected Buttons */
+.lens-options-button.selected, .glass-type-button.selected {
+  background: linear-gradient(135deg, #28a745, #218838); /* Green Gradient */
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.lens-options-button.selected:hover,
+.glass-type-button.selected:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+  transform: scale(1.07);
+}
+
+.lens-options-button.selected:active,
+.glass-type-button.selected:active {
+  transform: scale(1.02);
 }

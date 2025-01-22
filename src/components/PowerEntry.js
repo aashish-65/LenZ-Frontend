@@ -41,7 +41,6 @@ const PowerEntry = ({
   const [isValidAdditionPowerRange, setIsValidAdditionPowerRange] =
     useState(true);
   const [isValid, setIsValid] = useState(false);
-  // const [errorPowerRange, setErrorPowerRange] = useState({});
   const [isValidPowerRange, setIsValidPowerRange] = useState(false);
 
   const lensRanges = {
@@ -94,11 +93,6 @@ const PowerEntry = ({
       onPowerTypeChange("low");
     }
 
-    // setPowerType({
-    //   right: rightPowerType,
-    //   left: leftPowerType,
-    // });
-
     const hasRightEyePower = Object.values(eyePower.right).some(
       (val) => val !== ""
     );
@@ -107,19 +101,12 @@ const PowerEntry = ({
     );
 
     if (hasRightEyePower && hasLeftEyePower) {
-      // setPowerEntryType("Double");
       onPowerEntryTypeChange("Double");
     } else if (hasRightEyePower || hasLeftEyePower) {
-      // setPowerEntryType("Single");
       onPowerEntryTypeChange("Single");
     } else {
-      // setPowerEntryType("");
+      onPowerEntryTypeChange("");
     }
-
-    // const hasErrors = Object.values(errors).some((eye) =>
-    //   Object.values(eye || {}).some((error) => error !== "")
-    // );
-    // setIsValid(!hasErrors && (hasRightEyePower || hasLeftEyePower));
 
     const validateInputs = () => {
       let isValid = true;
@@ -419,7 +406,9 @@ const PowerEntry = ({
         </div>
       ))}
       <div className="button-container">
-        <button className="prev-button" onClick={prevStep}>Previous</button>
+        <button className="prev-button" onClick={prevStep}>
+          Previous
+        </button>
         <button className="next-button" onClick={nextStep} disabled={!isValid}>
           Next
         </button>

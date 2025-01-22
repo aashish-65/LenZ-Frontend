@@ -1,108 +1,160 @@
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .logout-button:hover {
-    background-color: #e63946;
-  }
-  
-  .dashboard-nav {
-    display: flex;
-    gap: 20px;
-    background-color: #f0f0f0;
-    padding: 15px;
-    border-radius: 8px;
-  }
-  
-  .dashboard-nav ul {
-    display: flex;
-    gap: 15px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .dashboard-nav a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: 500;
-  }
-  
-  .dashboard-nav a:hover {
-    text-decoration: underline;
-  }
-  
-  .dashboard-main {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  .dashboard-section {
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-section h2 {
-    margin-bottom: 15px;
-  }
-  
-  .settings-button {
-    margin-right: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .settings-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .create-order-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .create-order-form label {
-    display: flex;
-    flex-direction: column;
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-  
-  .create-order-button {
-    padding: 10px 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .create-order-button:hover {
-    background-color: #218838;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+}
+
+.logout-button:hover {
+  background-color: #e63946;
+}
+
+.dashboard-nav {
+  display: flex;
+  gap: 20px;
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.dashboard-nav ul {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-nav a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.dashboard-nav a:hover {
+  text-decoration: underline;
+}
+
+.dashboard-main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.dashboard-section {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-section h2 {
+  margin-bottom: 15px;
+}
+
+.settings-button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.settings-button:hover {
+  background-color: #0056b3;
+}
+
+.create-order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.create-order-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.create-order-button {
+  padding: 10px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-order-button:hover {
+  background-color: #218838;
+}
+
+/* Orders Section */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.orders-list-item {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.orders-list-item p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.orders-list-item p span {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.orders-list-item .status {
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.orders-list-item .status.placed {
+  background-color: #28a745;
+  color: white;
+}
+
+.orders-list-item .status.pending {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.orders-list-item .status.failed {
+  background-color: #dc3545;
+  color: white;
+}

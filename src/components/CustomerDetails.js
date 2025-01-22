@@ -8,8 +8,8 @@ const CustomerDetails = ({ setCustomerDetails, nextStep, customerDetails }) => {
   useEffect(() => {
     // This effect ensures that the form is updated when the customerDetails prop changes.
     if (customerDetails) {
-      setName(customerDetails.name);
-      setBillNumber(customerDetails.billNumber);
+      setName(customerDetails.name ?? "");
+      setBillNumber(customerDetails.billNumber ?? "");
     }
   }, [customerDetails]);
 

@@ -1,25 +1,27 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .App {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-height: 100vh; /* Full height */
-  }
-  
-  .main-content {
-    /* flex: 1; */
-    /* display: flex; */
-    /* flex-direction: column; */
-  }
-  
-  footer {
-    margin-top: auto; /* Pushes footer to the bottom */
-  }
-  
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  margin-top: 0;
+}
+
+header, footer {
+  text-align: center;
+  padding: 1rem;
+}
+
+header {
+  position: relative;
+  z-index: 10;
+}
+
+footer {
+  position: relative;
+  width: 100%;
+}

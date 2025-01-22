@@ -1,0 +1,74 @@
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .payment-buttons {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .payment-button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .payment-button:hover {
+    background: linear-gradient(45deg, #0056b3, #003d80);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .payment-button.selected {
+    background: linear-gradient(45deg, #28a745, #218838);
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 128, 0, 0.2);
+  }
+  
+  .payment-back-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #dc3545, #b32a34);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-back-button:hover {
+    background: linear-gradient(45deg, #b32a34, #921f28);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(255, 0, 0, 0.2);
+  }
+  
+  .payment-back-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  

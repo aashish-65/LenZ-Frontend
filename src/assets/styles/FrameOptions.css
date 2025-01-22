@@ -3,9 +3,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 25px;
-    max-width: 500px;
-    margin: 30px auto;
+    padding: 50px;
+    /* max-width: 500px; */
+    /* margin: 30px auto; */
     background: linear-gradient(135deg, #f9f9f9, #ffffff);
     border: 2px solid #e0e0e0;
     border-radius: 12px;
@@ -87,8 +87,8 @@
 /* Responsive Design */
 @media (max-width: 600px) {
     .frame-options-container {
-        padding: 20px;
-        max-width: 100%;
+        padding: 40px;
+        width: 80%;
         border-radius: 8px;
     }
 

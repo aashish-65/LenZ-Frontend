@@ -1,9 +1,7 @@
-/* PowerEntry.css */
-
 /* General container styles */
 .power-entry-container {
-    padding: 30px;
-    max-width: 700px;
+    width: 70%;
+    margin-top: 50px;
     margin: 0 auto;
     background-color: #ffffff;
     border-radius: 8px;
@@ -14,7 +12,7 @@
   .power-entry-title {
     font-size: 26px;
     font-weight: bold;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     text-align: center;
     color: #333333;
     text-transform: uppercase;
@@ -22,7 +20,7 @@
   
   /* Eye section styles */
   .eye-section {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     padding: 15px;
     background-color: #f7f7f7;
     border-radius: 6px;
@@ -37,7 +35,7 @@
   
   /* Input group container */
   .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   
   .input-label {
@@ -132,10 +130,18 @@
   }
   
   /* Adjust styles for smaller screens */
+  @media (max-width: 1024px) {
+    .power-entry-container {
+      margin-top: 280px;
+      padding: 20px;
+    }
+  }
+
   @media (max-width: 768px) {
     .power-entry-container {
       padding: 20px;
-      max-width: 90%;
+      width: 90%;
+      margin-top: 80px;
     }
   
     .title {
