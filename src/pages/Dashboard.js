@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import {
@@ -17,33 +17,33 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { motion } from "framer-motion";
-import apiCall from "../utils/api";
+// import apiCall from "../utils/api";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [orders, setOrders] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      if (user?._id) {
-        setLoading(true);
-        try {
-          const data = await apiCall(`/orders/get-order/${user._id}`);
-          setOrders(data.data);
-        } catch (error) {
-          console.error(error.message);
-          setError("Failed to load your orders.");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     if (user?._id) {
+  //       setLoading(true);
+  //       try {
+  //         const data = await apiCall(`/orders/get-order/${user._id}`);
+  //         setOrders(data.data);
+  //       } catch (error) {
+  //         console.error(error.message);
+  //         setError("Failed to load your orders.");
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     }
+  //   };
 
-    fetchOrders();
-  }, [user?._id]);
+  //   fetchOrders();
+  // }, [user?._id]);
 
   const handleCreateOrder = () => {
     navigate("/create-order");
