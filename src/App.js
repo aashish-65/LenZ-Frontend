@@ -6,85 +6,77 @@ import {
   Navigate,
 } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { AuthProvider, AuthContext } from "./AuthContext";
+import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
+import RouteGuard from "./routes/RouteGaurd";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme"; // Import your custom theme
+import { ClipLoader } from 'react-spinners';
+// import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from "./AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "./App.css"; // Optional: Your global styles
-const Signup = lazy(() => import("./pages/Signup")); // Ensure the Signup.js file is in the pages folder
-const Login = lazy(() => import("./pages/Login")); // Optional: Login page
-const Dashboard = lazy(() => import("./pages/Dashboard")); // Placeholder for the main app page after signup/login
+const Signup = lazy(() => import("./pages/Signup"));
+const Login = lazy(() => import("./pages/Login"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CreateOrder = lazy(() => import("./pages/CreateOrder"));
+const Orders = lazy(() => import("./pages/Orders"));
 
 // PublicRoute component to redirect logged-in users
-const PublicRoute = ({ children }) => {
-  const { authToken } = React.useContext(AuthContext);
-  return authToken ? <Navigate to="/dashboard" /> : children;
-};
+// const PublicRoute = ({ children }) => {
+//   const { authToken } = React.useContext(AuthContext);
+//   return authToken ? <Navigate to="/dashboard" /> : children;
+// };
 
-// PrivateRoute component to protect routes
-const PrivateRoute = ({ children }) => {
-  const { authToken } = React.useContext(AuthContext);
-  return authToken ? children : <Navigate to="/login" />;
-};
+// // PrivateRoute component to protect routes
+// const PrivateRoute = ({ children }) => {
+//   const { authToken } = React.useContext(AuthContext);
+//   return authToken ? children : <Navigate to="/login" />;
+// };
+
+// Route configuration
+const routes = [
+  { path: "/signup", component: <Signup />, isPublic: true },
+  { path: "/login", component: <Login />, isPublic: true },
+  { path: "/dashboard", component: <Dashboard />, isPublic: false },
+  { path: "/create-order", component: <CreateOrder />, isPublic: false },
+  { path: "/", component: <Navigate to="/signup" /> }, // Redirect to signup by default
+  { path: "/orders", component: <Orders />, isPublic: false },
+  { path: "*", component: <NotFound /> }, // 404 page
+];
 
 const App = () => {
   return (
     <Router>
-      <AuthProvider>
-        <div className="App">
-          <Header />
-          <div className="main-content">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Routes>
-                {/* Public routes (accessible only when not logged in) */}
-                <Route
-                  path="/signup"
-                  element={
-                    <PublicRoute>
-                      <Signup />
-                    </PublicRoute>
-                  }
-                />
-                <Route
-                  path="/login"
-                  element={
-                    <PublicRoute>
-                      <Login />
-                    </PublicRoute>
-                  }
-                />
-
-                {/* Private routes (accessible only when logged in) */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    <PrivateRoute>
-                      <Dashboard />
-                    </PrivateRoute>
-                  }
-                />
-
-                <Route
-                  path="/create-order"
-                  element={
-                    <PrivateRoute>
-                      <CreateOrder />
-                    </PrivateRoute>
-                  }
-                />
-
-                {/* Redirect root to signup */}
-                <Route path="/" element={<Navigate to="/signup" />} />
-
-                {/* Catch-all for 404 */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <div className="App">
+            <Header />
+            <div className="main-content">
+              <Suspense fallback={<ClipLoader color="#000" size={50} />}>
+                <ErrorBoundary>
+                  <Routes>
+                  {routes.map(({ path, component, isPublic }, index) => (
+                    <Route
+                      key={index}
+                      path={path}
+                      element={
+                        <RouteGuard isPublic={isPublic}>
+                          {component}
+                        </RouteGuard>
+                      }
+                    />
+                  ))}
+                  </Routes>
+                </ErrorBoundary>
+              </Suspense>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 };

@@ -12,6 +12,7 @@ import "../assets/styles/CreateOrder.css";
 import OrderSuccess from "../components/OrderSuccess";
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
+import { Button, Box, Typography, Container } from "@mui/material";
 
 const CreateOrder = () => {
   const [step, setStep] = useState(1);
@@ -34,7 +35,7 @@ const CreateOrder = () => {
 
   const { user } = useContext(AuthContext);
   const userId = user?._id;
-  
+
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
@@ -48,24 +49,45 @@ const CreateOrder = () => {
     nextStep();
   };
 
-  const orderDetails = { userId, customerDetails, frameOptions, shiftingOrFitting, purchaseLens, glassType, lensDetails, materialDetails, coatingDetails, powerDetails, powerType, powerEntryType, fittingCharge, shiftingCharge, totalAmount, paymentType, orderPlaced };
+  const orderDetails = {
+    userId,
+    customerDetails,
+    frameOptions,
+    shiftingOrFitting,
+    purchaseLens,
+    glassType,
+    lensDetails,
+    materialDetails,
+    coatingDetails,
+    powerDetails,
+    powerType,
+    powerEntryType,
+    fittingCharge,
+    shiftingCharge,
+    totalAmount,
+    paymentType,
+    orderPlaced,
+  };
 
   // console.log("Shifting Order Details:", shiftingOrderDetails);
-  
-  console.log("Payment Type",paymentType);
+
+  console.log("Payment Type", paymentType);
   const placeOrder = async () => {
     if (!userId) {
       alert("User not logged in. Please log in to place an order.");
       return;
     }
-  
+
     try {
-      const response = await axios.post("https://lenz-backend.onrender.com/api/orders/place-order", {
-        userId,
-        ...orderDetails, // Spread order details to include in the request
-      });
+      const response = await axios.post(
+        "https://lenz-backend.onrender.com/api/orders/place-order",
+        {
+          userId,
+          ...orderDetails, // Spread order details to include in the request
+        }
+      );
       console.log("Order Placed:", response.data);
-  
+
       setOrderPlaced(true);
       nextStep();
     } catch (error) {
@@ -112,7 +134,7 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 5 && shiftingOrFitting === "Shifting" &&(
+      {step === 5 && shiftingOrFitting === "Shifting" && (
         <PaymentType
           paymentType={paymentType}
           setPaymentType={setPaymentType}
@@ -121,63 +143,246 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 6 && orderPlaced && (
-        <OrderSuccess/>
-      )}
+      {step === 6 && orderPlaced && <OrderSuccess />}
       {step === 4 && shiftingOrFitting === "Fitting" && (
-        <div className="lens-options-container">
-          <h3 className="lens-options-title">Please Select a Option</h3>
-          <div className="lens-options-buttons">
-            <button
-              className={`lens-options-button ${
-                purchaseLens === false ? "selected" : ""
-              }`}
-              onClick={() => handleLensSelection(false)}
+        <Container maxWidth="sm">
+          <Box
+            sx={{
+              padding: 4,
+              backgroundColor: "#fff",
+              borderRadius: 5,
+              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
+              textAlign: "center",
+              transition: "all 0.3s ease",
+              ":hover": {
+                boxShadow: "0 14px 28px rgba(0, 0, 0, 0.2)",
+              },
+            }}
+          >
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{
+                fontWeight: "bold",
+                color: "#1a237e",
+                marginBottom: 3,
+                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+              }}
             >
-              I have the lens
-            </button>
-            <button
-              className={`lens-options-button ${
-                purchaseLens === true ? "selected" : ""
-              }`}
-              onClick={() => handleLensSelection(true)}
+              Choose Your Lens Option
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#424242",
+                marginBottom: 4,
+                lineHeight: 1.6,
+              }}
             >
-              Want to purchase the lens
-            </button>
-          </div>
-          <button className="lens-options-back-button" onClick={prevStep}>
-            Back
-          </button>
-        </div>
-      )}
-      {step === 5 &&
-        shiftingOrFitting === "Fitting" &&
-        purchaseLens !== null && (
-          <div className="glass-type-container">
-            <h3 className="glass-type-title">Select Glass Type</h3>
-            <div className="glass-type-buttons">
-              <button
-                className={`glass-type-button ${
-                  glassType === "Sunglass" ? "selected" : ""
-                }`}
-                onClick={() => handleGlassTypeSelection("Sunglass")}
+              Please select one of the options below to proceed. Your choice
+              will determine the next steps for your fitting process.
+            </Typography>
+            <Box
+              display="flex"
+              flexDirection={{ xs: "column", sm: "row" }}
+              justifyContent="center"
+              gap={{ xs: 3, sm: 4 }}
+              mb={4}
+            >
+              <Button
+                variant={purchaseLens === false ? "contained" : "outlined"}
+                onClick={() => handleLensSelection(false)}
+                sx={{
+                  padding: "14px 35px",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  borderRadius: 30,
+                  textTransform: "none",
+                  backgroundColor: purchaseLens === false ? "#3949ab" : "#fff",
+                  color: purchaseLens === false ? "#fff" : "#3949ab",
+                  borderColor: "#3949ab",
+                  boxShadow:
+                    purchaseLens === false
+                      ? "0 6px 12px rgba(57, 73, 171, 0.3)"
+                      : "none",
+                  transition: "all 0.3s ease",
+                  ":hover": {
+                    backgroundColor:
+                      purchaseLens === false ? "#283593" : "#f5f5f5",
+                    color: purchaseLens === false ? "#fff" : "#3949ab",
+                  },
+                }}
               >
-                Sunglass
-              </button>
-              <button
-                className={`glass-type-button ${
-                  glassType === "Normal" ? "selected" : ""
-                }`}
-                onClick={() => handleGlassTypeSelection("Normal")}
+                I have the lens
+              </Button>
+              <Button
+                variant={purchaseLens === true ? "contained" : "outlined"}
+                onClick={() => handleLensSelection(true)}
+                sx={{
+                  padding: "14px 35px",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  borderRadius: 30,
+                  textTransform: "none",
+                  backgroundColor: purchaseLens === true ? "#3949ab" : "#fff",
+                  color: purchaseLens === true ? "#fff" : "#3949ab",
+                  borderColor: "#3949ab",
+                  boxShadow:
+                    purchaseLens === true
+                      ? "0 6px 12px rgba(57, 73, 171, 0.3)"
+                      : "none",
+                  transition: "all 0.3s ease",
+                  ":hover": {
+                    backgroundColor:
+                      purchaseLens === true ? "#283593" : "#f5f5f5",
+                    color: purchaseLens === true ? "#fff" : "#3949ab",
+                  },
+                }}
               >
-                Normal
-              </button>
-            </div>
-            <button className="glass-type-back-button" onClick={prevStep}>
+                Purchase the lens
+              </Button>
+            </Box>
+            <Button
+              variant="outlined"
+              onClick={prevStep}
+              sx={{
+                padding: "12px 30px",
+                fontWeight: "bold",
+                borderRadius: 20,
+                textTransform: "none",
+                borderColor: "#3949ab",
+                color: "#3949ab",
+                ":hover": {
+                  backgroundColor: "#3949ab",
+                  color: "#fff",
+                },
+              }}
+            >
               Back
-            </button>
-          </div>
-        )}
+            </Button>
+          </Box>
+        </Container>
+      )}
+
+{step === 5 &&
+  shiftingOrFitting === "Fitting" &&
+  purchaseLens !== null && (
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          padding: 4,
+          backgroundColor: "#fff",
+          borderRadius: 5,
+          boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
+          textAlign: "center",
+          transition: "all 0.3s ease",
+          ":hover": {
+            boxShadow: "0 14px 28px rgba(0, 0, 0, 0.2)",
+          },
+        }}
+      >
+        <Typography
+          variant="h5"
+          gutterBottom
+          sx={{
+            fontWeight: "bold",
+            color: "#1a237e",
+            marginBottom: 3,
+            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          Select Glass Type
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "#424242",
+            marginBottom: 4,
+            lineHeight: 1.6,
+          }}
+        >
+          Choose the glass type that suits your needs.
+        </Typography>
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }}
+          justifyContent="center"
+          gap={{ xs: 3, sm: 4 }}
+          mb={4}
+        >
+          <Button
+            variant={glassType === "Sunglass" ? "contained" : "outlined"}
+            onClick={() => handleGlassTypeSelection("Sunglass")}
+            sx={{
+              padding: "14px 35px",
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              borderRadius: 30,
+              textTransform: "none",
+              backgroundColor: glassType === "Sunglass" ? "#3949ab" : "#fff",
+              color: glassType === "Sunglass" ? "#fff" : "#3949ab",
+              borderColor: "#3949ab",
+              boxShadow:
+                glassType === "Sunglass"
+                  ? "0 6px 12px rgba(57, 73, 171, 0.3)"
+                  : "none",
+              transition: "all 0.3s ease",
+              ":hover": {
+                backgroundColor: glassType === "Sunglass" ? "#283593" : "#f5f5f5",
+                color: glassType === "Sunglass" ? "#fff" : "#3949ab",
+              },
+            }}
+          >
+            Sunglass
+          </Button>
+          <Button
+            variant={glassType === "Normal" ? "contained" : "outlined"}
+            onClick={() => handleGlassTypeSelection("Normal")}
+            sx={{
+              padding: "14px 35px",
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              borderRadius: 30,
+              textTransform: "none",
+              backgroundColor: glassType === "Normal" ? "#3949ab" : "#fff",
+              color: glassType === "Normal" ? "#fff" : "#3949ab",
+              borderColor: "#3949ab",
+              boxShadow:
+                glassType === "Normal"
+                  ? "0 6px 12px rgba(57, 73, 171, 0.3)"
+                  : "none",
+              transition: "all 0.3s ease",
+              ":hover": {
+                backgroundColor: glassType === "Normal" ? "#283593" : "#f5f5f5",
+                color: glassType === "Normal" ? "#fff" : "#3949ab",
+              },
+            }}
+          >
+            Normal
+          </Button>
+        </Box>
+        <Button
+          variant="outlined"
+          onClick={prevStep}
+          sx={{
+            padding: "12px 30px",
+            fontWeight: "bold",
+            borderRadius: 20,
+            textTransform: "none",
+            borderColor: "#3949ab",
+            color: "#3949ab",
+            ":hover": {
+              backgroundColor: "#3949ab",
+              color: "#fff",
+            },
+          }}
+        >
+          Back
+        </Button>
+      </Box>
+    </Container>
+  )}
+
       {step === 6 && glassType && (
         <LensSelection
           setLensDetails={setLensDetails}
@@ -214,7 +419,7 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 9 && glassType === "Sunglass" &&(
+      {step === 9 && glassType === "Sunglass" && (
         <PaymentType
           paymentType={paymentType}
           setPaymentType={setPaymentType}
@@ -223,9 +428,7 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 10 && orderPlaced && (
-        <OrderSuccess/>
-      )}
+      {step === 10 && orderPlaced && <OrderSuccess />}
       {step === 7 && glassType === "Normal" && (
         <MaterialSelection
           setMaterialDetails={setMaterialDetails}
@@ -268,20 +471,19 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-        {step === 10 && glassType === "Normal" &&
+      {step === 10 &&
+        glassType === "Normal" &&
         materialDetails &&
-        purchaseLens === false &&(
-        <PaymentType
-          paymentType={paymentType}
-          setPaymentType={setPaymentType}
-          placeOrder={placeOrder}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-      {step === 11 && orderPlaced && (
-        <OrderSuccess/>
-      )}
+        purchaseLens === false && (
+          <PaymentType
+            paymentType={paymentType}
+            setPaymentType={setPaymentType}
+            placeOrder={placeOrder}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+      {step === 11 && orderPlaced && <OrderSuccess />}
       {step === 8 &&
         glassType === "Normal" &&
         materialDetails &&
@@ -328,20 +530,19 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-        {step === 11 && glassType === "Normal" &&
+      {step === 11 &&
+        glassType === "Normal" &&
         materialDetails &&
-        purchaseLens === true &&(
-        <PaymentType
-          paymentType={paymentType}
-          setPaymentType={setPaymentType}
-          placeOrder={placeOrder}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-      {step === 12 && orderPlaced && (
-        <OrderSuccess/>
-      )}
+        purchaseLens === true && (
+          <PaymentType
+            paymentType={paymentType}
+            setPaymentType={setPaymentType}
+            placeOrder={placeOrder}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+      {step === 12 && orderPlaced && <OrderSuccess />}
     </div>
   );
 };

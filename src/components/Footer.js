@@ -1,19 +1,101 @@
-import React from 'react'; 
+import React from 'react';
 import { Link } from 'react-router-dom';
-import '../assets/styles/Footer.css'; // Import the CSS file for styling
+import { Box, Typography, Button, Container, IconButton } from '@mui/material';
+import PhoneIcon from '@mui/icons-material/Phone';
+import PolicyIcon from '@mui/icons-material/Policy';
+import TermsIcon from '@mui/icons-material/Description';
+import { Facebook, Twitter, Instagram } from '@mui/icons-material';
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <p className="footer-text">© 2024 LenZ. All rights reserved.</p>
-        <p className="footer-phone">Contact us: <a href="tel:+918967310388" className="footer-phone-link">+91-8967310388</a></p>
-        <div className="footer-links">
-          <Link to="/privacy-policy" className="footer-link">Privacy Policy</Link>
-          <Link to="/terms-of-service" className="footer-link">Terms of Service</Link>
-        </div>
-      </div>
-    </footer>
+    <Box
+      sx={{
+        background: 'linear-gradient(to right, #3f51b5, #1e40af)', // Gradient background
+        color: 'white',
+        padding: 3,
+        marginTop: 'auto',  // Ensures it stays at the bottom of the page
+      }}
+    >
+      <Container maxWidth="lg">
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {/* Copyright Text */}
+          <Typography variant="body2" align="center" sx={{ marginBottom: 2 }}>
+            © 2024 LenZ. All rights reserved.
+          </Typography>
+
+          {/* Contact Info */}
+          <Typography variant="body2" align="center" sx={{ marginBottom: 2, display: 'flex', alignItems: 'center' }}>
+            <PhoneIcon sx={{ marginRight: 1 }} />
+            Contact us: 
+            <Button
+              component="a"
+              href="tel:+918967310388"
+              sx={{
+                color: 'white',
+                textDecoration: 'none',
+                marginLeft: 1,
+                '&:hover': { color: '#ffeb3b' },  // Color change on hover
+              }}
+            >
+              +91-8967310388
+            </Button>
+          </Typography>
+
+          {/* Footer Links */}
+          <Box sx={{ display: 'flex', gap: 3, marginBottom: 3 }}>
+            <Button 
+              component={Link} 
+              to="/privacy-policy" 
+              startIcon={<PolicyIcon />} // Icon added to the link
+              sx={{
+                color: 'white',
+                textDecoration: 'none',
+                '&:hover': { backgroundColor: '#1e40af' },
+              }}
+            >
+              Privacy Policy
+            </Button>
+            <Button 
+              component={Link} 
+              to="/terms-of-service" 
+              startIcon={<TermsIcon />} // Icon added to the link
+              sx={{
+                color: 'white',
+                textDecoration: 'none',
+                '&:hover': { backgroundColor: '#1e40af' },
+              }}
+            >
+              Terms of Service
+            </Button>
+          </Box>
+
+          {/* Social Media Links */}
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <IconButton 
+              component="a" 
+              href="https://facebook.com"
+              sx={{ color: 'white', '&:hover': { backgroundColor: '#3b5998' } }}
+            >
+              <Facebook />
+            </IconButton>
+            <IconButton 
+              component="a" 
+              href="https://twitter.com"
+              sx={{ color: 'white', '&:hover': { backgroundColor: '#00acee' } }}
+            >
+              <Twitter />
+            </IconButton>
+            <IconButton 
+              component="a" 
+              href="https://instagram.com"
+              sx={{ color: 'white', '&:hover': { backgroundColor: '#e1306c' } }}
+            >
+              <Instagram />
+            </IconButton>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

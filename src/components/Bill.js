@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from "react";
-import "../assets/styles/Bill.css";
-import axios from "axios";
+import {
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardHeader,
+  Button,
+  Grid,
+  Divider,
+  CircularProgress,
+  Alert,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  useMediaQuery,
+} from "@mui/material";
+import apiCall from "../utils/api";
+import { useTheme } from "@mui/material/styles";
 
 const Bill = ({
   customerDetails,
@@ -29,16 +49,19 @@ const Bill = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   useEffect(() => {
-    // Fetch the charges from the API
     const fetchCharges = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.get("https://lenz-backend.onrender.com/api/charges/");
-        setCharges(response.data);
-        setIsLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch charges:", err);
+        const data = await apiCall("/charges/");
+        setCharges(data);
+      } catch (error) {
+        console.error("Failed to fetch charges:", error.message);
         setError("Failed to load charges");
+      } finally {
         setIsLoading(false);
       }
     };
@@ -46,10 +69,9 @@ const Bill = ({
     fetchCharges();
   }, []);
 
-  // Helper function to determine frameTypeKey
   const getFrameTypeKey = () => {
     if (frameType === "Rimless") {
-      if(glassType === "Sunglass") return "Sunglass";
+      if (glassType === "Sunglass") return "Sunglass";
       if (
         materialDetails === "Poly" &&
         (lensDetails === "SV" || lensDetails === "KT")
@@ -68,167 +90,193 @@ const Bill = ({
   let fittingAmt = 0;
 
   if (shiftingOrFitting === "Shifting" && !isLoading) {
-    shiftingAmt = charges[0].data[frameType] || 0;
+    shiftingAmt = charges[0]?.data[frameType] || 0;
     setShiftingCharge(shiftingAmt);
     total += shiftingAmt;
     setTotalAmount(total);
   } else if (shiftingOrFitting === "Fitting" && !isLoading) {
-    const frameCategory = charges[1].data[frameType];
+    const frameCategory = charges[1]?.data[frameType];
     const frameTypeKey = getFrameTypeKey();
-    fittingAmt = frameCategory?.[frameTypeKey]?.[powerType]?.[powerEntryType] || 0;
+    fittingAmt =
+      frameCategory?.[frameTypeKey]?.[powerType]?.[powerEntryType] || 0;
     setFittingCharge(fittingAmt);
     total += fittingAmt;
     setTotalAmount(total);
   }
 
   if (isLoading) {
-    return <p>Loading charges...</p>;
+    return (
+      <Container sx={{ textAlign: "center", mt: 4 }}>
+        <CircularProgress />
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Loading charges...
+        </Typography>
+      </Container>
+    );
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return (
+      <Container sx={{ textAlign: "center", mt: 4 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
   }
 
   return (
-    <div className="bill-container">
-      <div className="bill-header">
-        <h2 className="bill-title">Invoice</h2>
-        <p className="customer-info">
-          <strong>Customer Name:</strong> {name} <br />
-          <strong>Bill Number:</strong> {billNumber}
-        </p>
-      </div>
+    <Container maxWidth="md" sx={{ mt: isMobile ? 20 : 6, mb: isMobile ? 1 : 0}}>
+      <Card sx={{ mt: 4, borderRadius: 2, overflow: "hidden", boxShadow: 6 }}>
+        <CardHeader
+          title="Invoice"
+          subheader="LenZ Spectacle Store"
+          titleTypographyProps={{
+            align: "center",
+            variant: "h4",
+            color: "primary",
+          }}
+          subheaderTypographyProps={{
+            align: "center",
+            variant: "subtitle1",
+            color: "text.secondary",
+          }}
+          sx={{ backgroundColor: "#f4f4f4", paddingY: 2 }}
+        />
+        <CardContent>
+          {/* Customer Details */}
+          <Box mb={3}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography variant="body1">
+                  <strong>Customer Name:</strong> {name}
+                </Typography>
+              </Grid>
+              <Grid item xs={6} textAlign="right">
+                <Typography variant="body1">
+                  <strong>Bill Number:</strong> {billNumber}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
 
-      <div className="bill-body">
-        <section className="bill-section">
-          <h3>Frame Information</h3>
-          <p>
-            <strong>Frame Type:</strong> {frameType}
-          </p>
-        </section>
+          <Divider sx={{ my: 3 }} />
 
-        {shiftingOrFitting && (
-          <section className="bill-section">
-            <h3>{shiftingOrFitting} Charges</h3>
-            <p>
-              <strong>Charge Amount:</strong> Rs{" "}
-              {shiftingOrFitting === "Shifting"
-                ? shiftingCharge
-                : fittingCharge}
-            </p>
-          </section>
-        )}
+          {/* Frame Information */}
+          <Box mb={3}>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              Frame Information
+            </Typography>
+            <Typography variant="body1">
+              <strong>Frame Type:</strong> {frameType}
+            </Typography>
+          </Box>
 
-        {lensDetails && (
-          <section className="bill-section">
-            <h3>Lens Details</h3>
-            <p>
-              <strong>Lens Type:</strong> {lensDetails}
-            </p>
-          </section>
-        )}
+          {/* Charges */}
+          {shiftingOrFitting && (
+            <Box mb={3}>
+              <Typography variant="h6" color="text.secondary" gutterBottom>
+                {shiftingOrFitting} Charges
+              </Typography>
+              <Typography variant="body1">
+                <strong>Charge Amount:</strong> Rs{" "}
+                {shiftingOrFitting === "Shifting"
+                  ? shiftingCharge
+                  : fittingCharge}
+              </Typography>
+            </Box>
+          )}
 
-        {materialDetails && (
-          <section className="bill-section">
-            <h3>Material</h3>
-            <p>
-              <strong>Material:</strong> {materialDetails}
-            </p>
-          </section>
-        )}
+          {/* Lens Details */}
+          {lensDetails && (
+            <Box mb={3}>
+              <Typography variant="h6" color="text.secondary" gutterBottom>
+                Lens Details
+              </Typography>
+              <Typography variant="body1">
+                <strong>Lens Type:</strong> {lensDetails}
+              </Typography>
+            </Box>
+          )}
 
-        {coatingDetails && (
-          <section className="bill-section">
-            <h3>Coating</h3>
-            <p>
-              <strong>Coating:</strong> {coatingDetails}
-            </p>
-          </section>
-        )}
+          {/* Power Details */}
+          {powerDetails && (
+            <Box mb={3}>
+              <Typography variant="h6" color="text.secondary" gutterBottom>
+                Power Details
+              </Typography>
+              <TableContainer component={Paper} elevation={3}>
+                <Table size="small">
+                  <TableBody>
+                    {powerDetails.right && (
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="subtitle2">
+                            Right Eye
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {Object.entries(powerDetails.right).map(
+                            ([key, value]) => (
+                              <Typography key={key}>
+                                <strong>{key}:</strong> {value}
+                              </Typography>
+                            )
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {powerDetails.left && (
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="subtitle2">
+                            Left Eye
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {Object.entries(powerDetails.left).map(
+                            ([key, value]) => (
+                              <Typography key={key}>
+                                <strong>{key}:</strong> {value}
+                              </Typography>
+                            )
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          )}
 
-        {powerDetails && (
-          <section className="bill-section power-details">
-            <h3>Power Details</h3>
-            <div className="power-info">
-              {powerDetails.right && (
-                <div className="eye-details">
-                  <h4>Right Eye</h4>
-                  <ul>
-                    {powerDetails.right.spherical && (
-                      <li>
-                        <strong>Spherical:</strong>{" "}
-                        {powerDetails.right.spherical}
-                      </li>
-                    )}
-                    {powerDetails.right.cylindrical && (
-                      <li>
-                        <strong>Cylindrical:</strong>{" "}
-                        {powerDetails.right.cylindrical}
-                      </li>
-                    )}
-                    {powerDetails.right.axis && (
-                      <li>
-                        <strong>Axis:</strong> {powerDetails.right.axis}
-                      </li>
-                    )}
-                    {powerDetails.right.addition && (
-                      <li>
-                        <strong>Addition:</strong> {powerDetails.right.addition}
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-              {powerDetails.left && (
-                <div className="eye-details">
-                  <h4>Left Eye</h4>
-                  <ul>
-                    {powerDetails.left.spherical && (
-                      <li>
-                        <strong>Spherical:</strong>{" "}
-                        {powerDetails.left.spherical}
-                      </li>
-                    )}
-                    {powerDetails.left.cylindrical && (
-                      <li>
-                        <strong>Cylindrical:</strong>{" "}
-                        {powerDetails.left.cylindrical}
-                      </li>
-                    )}
-                    {powerDetails.left.axis && (
-                      <li>
-                        <strong>Axis:</strong> {powerDetails.left.axis}
-                      </li>
-                    )}
-                    {powerDetails.left.addition && (
-                      <li>
-                        <strong>Addition:</strong> {powerDetails.left.addition}
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
+          {/* Total Amount */}
+          <Box textAlign="center" my={4}>
+            <Typography
+              variant="h5"
+              sx={{
+                backgroundColor: "#e0f7fa",
+                padding: 2,
+                borderRadius: 1,
+                color: "teal",
+              }}
+            >
+              Total Amount: Rs {totalAmount}
+            </Typography>
+          </Box>
+        </CardContent>
 
-        <section className="bill-total">
-          <h3>Total Amount</h3>
-          <p>
-            <strong>Rs {totalAmount}</strong>
-          </p>
-        </section>
-      </div>
+        <Divider />
 
-      <div className="bill-footer">
-        <button className="prev-button" onClick={prevStep}>
-          Back
-        </button>
-        <button className="next-button" onClick={nextStep}>
-          Next
-        </button>
-      </div>
-    </div>
+        {/* Actions */}
+        <Box display="flex" justifyContent="space-between" p={2}>
+          <Button variant="outlined" color="secondary" onClick={prevStep}>
+            Back
+          </Button>
+          <Button variant="contained" color="primary" onClick={nextStep}>
+            Next
+          </Button>
+        </Box>
+      </Card>
+    </Container>
   );
 };
 

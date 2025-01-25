@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../assets/styles/PowerEntry.css";
+import {
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Paper,
+  Divider
+} from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
 const PowerEntry = ({
   lensType,
@@ -318,124 +327,153 @@ const PowerEntry = ({
   };
 
   return (
-    <div className="power-entry-container">
-      <h3 className="power-entry-title">Enter Power Details</h3>
-      <div>
-        <h4>Selected Lens Type: {lensType}</h4>
-      </div>
+    <Paper
+      elevation={3}
+      sx={{
+        maxWidth: 700,
+        margin: "20px auto",
+        padding: 3,
+        borderRadius: 2,
+        backgroundColor: "#fdfdfd",
+      }}
+    >
+      <Typography variant="h4" gutterBottom textAlign="center">
+        Enter Power Details
+      </Typography>
+      <Typography variant="h6" textAlign="center" gutterBottom>
+        Selected Lens Type: <strong>{lensType}</strong>
+      </Typography>
+
+      <Divider sx={{ my: 3 }} />
+
       {["right", "left"].map((eye) => (
-        <div key={eye} className="eye-section">
-          <h4 className="eye-title">
+        <div key={eye} style={{ marginBottom: "20px" }}>
+          <Typography variant="h5" color="primary" gutterBottom>
             {eye.charAt(0).toUpperCase() + eye.slice(1)} Eye
-          </h4>
+          </Typography>
 
           {/* Spherical Power */}
-          <div className="input-group">
-            <label className="input-label">Spherical Power:</label>
-            <MyNumberInput
-              value={eyePower[eye].spherical}
-              onChange={(e) => handleChange(eye, "spherical", e.target.value)}
-              onBlur={() => handleBlur(eye, "spherical")}
-            />
-            {errors[eye]?.spherical && (
-              <span className="error-message">{errors[eye].spherical}</span>
-            )}
-            {sphericalErrorPowerRange[eye]?.spherical && (
-              <span className="error-message">
-                {sphericalErrorPowerRange[eye].spherical}
-              </span>
-            )}
-          </div>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Spherical Power"
+                type="number"
+                variant="outlined"
+                fullWidth
+                value={eyePower[eye].spherical}
+                onChange={(e) => handleChange(eye, "spherical", e.target.value)}
+                onBlur={() => handleBlur(eye, "spherical")}
+                error={Boolean(errors[eye]?.spherical || sphericalErrorPowerRange[eye]?.spherical)}
+                helperText={errors[eye]?.spherical || sphericalErrorPowerRange[eye]?.spherical}
+              />
+            </Grid>
+          </Grid>
 
           {/* Cylindrical Power */}
-          <div className="input-group">
-            <label className="input-label">Cylindrical Power:</label>
-            <MyNumberInput
-              value={eyePower[eye].cylindrical}
-              onChange={(e) => handleChange(eye, "cylindrical", e.target.value)}
-              onBlur={() => handleBlur(eye, "cylindrical")}
-            />
-            {errors[eye]?.cylindrical && (
-              <span className="error-message">{errors[eye].cylindrical}</span>
-            )}
-            {cylindricalErrorPowerRange[eye]?.cylindrical && (
-              <span className="error-message">
-                {cylindricalErrorPowerRange[eye].cylindrical}
-              </span>
-            )}
-          </div>
+          <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Cylindrical Power"
+                type="number"
+                variant="outlined"
+                fullWidth
+                value={eyePower[eye].cylindrical}
+                onChange={(e) => handleChange(eye, "cylindrical", e.target.value)}
+                onBlur={() => handleBlur(eye, "cylindrical")}
+                error={Boolean(errors[eye]?.cylindrical || cylindricalErrorPowerRange[eye]?.cylindrical)}
+                helperText={errors[eye]?.cylindrical || cylindricalErrorPowerRange[eye]?.cylindrical}
+              />
+            </Grid>
+          </Grid>
 
           {/* Axis Power */}
           {eyePower[eye].cylindrical !== "" && (
-            <div className="input-group">
-              <label className="input-label">Axis Power:</label>
-              <MyNumberInput
-                value={eyePower[eye].axis}
-                onChange={(e) => handleChange(eye, "axis", e.target.value)}
-              />
-              {errors[eye]?.axis && (
-                <span className="error-message">{errors[eye].axis}</span>
-              )}
-              {axisErrorPowerRange[eye]?.axis && (
-                <span className="error-message">
-                  {axisErrorPowerRange[eye].axis}
-                </span>
-              )}
-            </div>
+            <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Axis Power"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  value={eyePower[eye].axis}
+                  onChange={(e) => handleChange(eye, "axis", e.target.value)}
+                  error={Boolean(errors[eye]?.axis || axisErrorPowerRange[eye]?.axis)}
+                  helperText={errors[eye]?.axis || axisErrorPowerRange[eye]?.axis}
+                />
+              </Grid>
+            </Grid>
           )}
 
           {/* Addition (for specific lens types) */}
           {["KT", "PR"].includes(lensType) && (
-            <div className="input-group">
-              <label className="input-label">Addition:</label>
-              <MyNumberInput
-                value={eyePower[eye].addition}
-                onChange={(e) => handleChange(eye, "addition", e.target.value)}
-                onBlur={() => handleBlur(eye, "addition")}
-              />
-              {errors[eye]?.addition && (
-                <span className="error-message">{errors[eye].addition}</span>
-              )}
-              {additionErrorPowerRange[eye]?.addition && (
-                <span className="error-message">
-                  {additionErrorPowerRange[eye].addition}
-                </span>
-              )}
-            </div>
+            <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Addition"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  value={eyePower[eye].addition}
+                  onChange={(e) => handleChange(eye, "addition", e.target.value)}
+                  onBlur={() => handleBlur(eye, "addition")}
+                  error={Boolean(errors[eye]?.addition || additionErrorPowerRange[eye]?.addition)}
+                  helperText={errors[eye]?.addition || additionErrorPowerRange[eye]?.addition}
+                />
+              </Grid>
+            </Grid>
           )}
         </div>
       ))}
-      <div className="button-container">
-        <button className="prev-button" onClick={prevStep}>
-          Previous
-        </button>
-        <button className="next-button" onClick={nextStep} disabled={!isValid}>
-          Next
-        </button>
-      </div>
-    </div>
+
+      {/* Button Section */}
+      <Grid container spacing={2} justifyContent="center" sx={{ mt: 3 }}>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<ArrowBack />}
+            onClick={prevStep}
+            sx={{ paddingX: 3 }}
+          >
+            Previous
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            endIcon={<ArrowForward />}
+            onClick={nextStep}
+            disabled={!isValid}
+            sx={{ paddingX: 3 }}
+          >
+            Next
+          </Button>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 };
 
-const MyNumberInput = ({ value, onChange, onBlur }) => {
-  const numberInputOnWheelPreventChange = (e) => {
-    e.target.blur();
-    e.stopPropagation();
-    setTimeout(() => {
-      e.target.focus();
-    }, 0);
-  };
+// const MyNumberInput = ({ value, onChange, onBlur }) => {
+//   const numberInputOnWheelPreventChange = (e) => {
+//     e.target.blur();
+//     e.stopPropagation();
+//     setTimeout(() => {
+//       e.target.focus();
+//     }, 0);
+//   };
 
-  return (
-    <input
-      type="number"
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      onWheel={numberInputOnWheelPreventChange}
-      className="input-field"
-    />
-  );
-};
+//   return (
+//     <input
+//       type="number"
+//       value={value}
+//       onChange={onChange}
+//       onBlur={onBlur}
+//       onWheel={numberInputOnWheelPreventChange}
+//       className="input-field"
+//     />
+//   );
+// };
 
 export default PowerEntry;

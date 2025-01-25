@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "../assets/styles/FrameOptions.css";
+import {
+  Container,
+  Paper,
+  Typography,
+  Grid,
+  Button,
+  Box,
+  Slide,
+  Divider,
+  useMediaQuery,
+} from "@mui/material";
+import { motion } from "framer-motion";
+import { useTheme } from "@mui/material/styles";
 
-const FrameOptions = ({
-  frameOptions,
-  setFrameOptions,
-  nextStep,
-  prevStep,
-}) => {
+const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => {
   const [selectedFrame, setSelectedFrame] = useState(frameOptions?.type || "");
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    // Set selectedFrame if frameOptions is updated (when user navigates back)
     if (frameOptions?.type) {
       setSelectedFrame(frameOptions.type);
     }
@@ -22,39 +30,147 @@ const FrameOptions = ({
     nextStep();
   };
 
+  const frameData = [
+    { 
+      label: "Full Frame", 
+      description: "Sturdy and reliable design.", 
+      image: "/images/full-frame.png" 
+    },
+    { 
+      label: "Supra", 
+      description: "Minimal and lightweight.", 
+      image: "/images/supra.png" 
+    },
+    { 
+      label: "Rimless", 
+      description: "Elegant and modern style.", 
+      image: "/images/rimless.png" 
+    },
+  ];
+
   return (
-    <div className="frame-options-container">
-      <h3 className="frame-options-title">Select Frame Type</h3>
-      <div className="frame-options-buttons">
-        <button
-          className={`frame-option-button ${
-            selectedFrame === "Full Frame" ? "selected" : ""
-          }`}
-          onClick={() => handleFrameSelection("Full Frame")}
+    <motion.div
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+    >
+      <Container maxWidth="md" sx={{ mt: isMobile ? 25 : 0, mb: isMobile ? 1 : 0}}>
+        <Paper
+          elevation={6}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: "#fdfdfd",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+          }}
         >
-          Full Frame
-        </button>
-        <button
-          className={`frame-option-button ${
-            selectedFrame === "Supra" ? "selected" : ""
-          }`}
-          onClick={() => handleFrameSelection("Supra")}
-        >
-          Supra
-        </button>
-        <button
-          className={`frame-option-button ${
-            selectedFrame === "Rimless" ? "selected" : ""
-          }`}
-          onClick={() => handleFrameSelection("Rimless")}
-        >
-          Rimless
-        </button>
-      </div>
-      <button className="frame-options-back-button" onClick={prevStep}>
-        Back
-      </button>
-    </div>
+          <Slide direction="down" in={true} mountOnEnter unmountOnExit>
+            <Box>
+              <Box textAlign="center" mb={3}>
+                <Typography variant="h4" component="h2" color="primary" gutterBottom>
+                  Select Frame Type
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  Choose the frame type that best suits your preference.
+                </Typography>
+              </Box>
+
+              <Divider sx={{ mb: 3 }} />
+
+              <Grid container spacing={3} justifyContent="center">
+                {frameData.map((frame) => (
+                  <Grid item xs={12} sm={4} key={frame.label}>
+                    <motion.div
+                      whileHover={{
+                        scale: 1.05,
+                        transition: { duration: 0.3 },
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Paper
+                        elevation={selectedFrame === frame.label ? 8 : 4}
+                        sx={{
+                          p: 3,
+                          borderRadius: 2,
+                          cursor: "pointer",
+                          backgroundColor:
+                            selectedFrame === frame.label
+                              ? "rgba(25, 118, 210, 0.1)"
+                              : "#fff",
+                          border: selectedFrame === frame.label
+                            ? "2px solid #1976d2"
+                            : "2px solid transparent",
+                          textAlign: "center",
+                          height: "160px", // Set a fixed height for all cards
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                        }}
+                        onClick={() => handleFrameSelection(frame.label)}
+                      >
+                        <img
+                          src={frame.image}
+                          alt={frame.label}
+                          style={{
+                            width: "100%",
+                            height: "auto",
+                            borderRadius: "8px",
+                            marginBottom: "16px",
+                          }}
+                        />
+                        <Typography variant="h6" color="textPrimary">
+                          {frame.label}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                          {frame.description}
+                        </Typography>
+                      </Paper>
+                    </motion.div>
+                  </Grid>
+                ))}
+              </Grid>
+
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                mt={4}
+                sx={{ gap: 2 }}
+              >
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={prevStep}
+                  sx={{
+                    py: 1.2,
+                    px: 4,
+                    borderRadius: 2,
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Back
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={!selectedFrame}
+                  onClick={nextStep}
+                  sx={{
+                    py: 1.2,
+                    px: 4,
+                    borderRadius: 2,
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Next
+                </Button>
+              </Box>
+            </Box>
+          </Slide>
+        </Paper>
+      </Container>
+    </motion.div>
   );
 };
 
