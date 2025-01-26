@@ -9,13 +9,13 @@ import {
   CardContent,
   Grid,
   Divider,
-  IconButton,
-  Tooltip,
+  // IconButton,
+  // Tooltip,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import SettingsIcon from "@mui/icons-material/Settings";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
+// import SettingsIcon from "@mui/icons-material/Settings";
+// import EmailIcon from "@mui/icons-material/Email";
+// import PhoneIcon from "@mui/icons-material/Phone";
 import { motion } from "framer-motion";
 // import apiCall from "../utils/api";
 
