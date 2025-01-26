@@ -5,6 +5,7 @@ import {
   Typography,
   Button,
   Grid,
+  InputAdornment,
   Card,
   CardContent,
   Divider,
@@ -19,7 +20,18 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { Edit, Lock, Person } from "@mui/icons-material";
+import {
+  Edit,
+  Lock,
+  Person,
+  AccountCircle,
+  Email,
+  Phone,
+  Business,
+  Home,
+  LocationCity,
+  LocationOn,
+} from "@mui/icons-material";
 
 const ProfilePage = () => {
   const [profileData, setProfileData] = useState({
@@ -103,6 +115,16 @@ const ProfilePage = () => {
           if (name === "alternatePhone" && value === profileData.phone)
             error =
               "Alternate phone number cannot be the same as phone number.";
+          break;
+        case "password":
+          if (value.length < 8 || value.length > 13)
+            error += "Password must be 8-13 characters long. ";
+          if (!/[A-Z]/.test(value))
+            error += " Password must contain at least one uppercase letter.";
+          if (!/[0-9]/.test(value))
+            error += "Password must contain at least one number. ";
+          if (!/[!@#$%^&*]/.test(value))
+            error += "Password must contain at least one special character.";
           break;
         case "address.pinCode":
           if (!/^\d{6}$/.test(value)) error = "Pin code must be 6 digits.";
@@ -277,6 +299,13 @@ const ProfilePage = () => {
         return;
       }
 
+      // Validate new password
+      const passwordError = validate("password", newPassword);
+      if (passwordError) {
+        setError(passwordError);
+        return;
+      }
+
       if (newPassword !== confirmPassword) {
         setError("New password and confirm password do not match.");
         return;
@@ -310,7 +339,14 @@ const ProfilePage = () => {
         setLoading(false);
       }
     },
-    [oldPassword, newPassword, confirmPassword, otpVerified, requestOTP]
+    [
+      oldPassword,
+      newPassword,
+      confirmPassword,
+      otpVerified,
+      requestOTP,
+      validate,
+    ]
   );
 
   // Re-trigger update after OTP verification
@@ -472,6 +508,13 @@ const ProfilePage = () => {
                     error={!!errors.name}
                     helperText={errors.name}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountCircle />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -488,6 +531,13 @@ const ProfilePage = () => {
                     error={!!errors.email}
                     helperText={errors.email}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Email />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -503,6 +553,13 @@ const ProfilePage = () => {
                     error={!!errors.phone}
                     helperText={errors.phone}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Phone />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -516,6 +573,13 @@ const ProfilePage = () => {
                     error={!!errors.alternatePhone}
                     helperText={errors.alternatePhone}
                     onChange={handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Phone />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -528,6 +592,13 @@ const ProfilePage = () => {
                     value={profileData.shopName}
                     onChange={handleChange}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Business />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -540,6 +611,13 @@ const ProfilePage = () => {
                     value={profileData.address.line1}
                     onChange={handleChange}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Home />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -551,6 +629,13 @@ const ProfilePage = () => {
                     name="address.line2"
                     value={profileData.address.line2}
                     onChange={handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Home />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -562,6 +647,13 @@ const ProfilePage = () => {
                     name="address.landmark"
                     value={profileData.address.landmark}
                     onChange={handleChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LocationOn />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -574,6 +666,13 @@ const ProfilePage = () => {
                     value={profileData.address.city}
                     onChange={handleChange}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LocationCity />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
 
@@ -626,6 +725,13 @@ const ProfilePage = () => {
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Lock />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -634,8 +740,24 @@ const ProfilePage = () => {
                     label="New Password"
                     type="password"
                     value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    onChange={(e) => {
+                      setNewPassword(e.target.value);
+                      const error = validate("password", e.target.value);
+                      setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        newPassword: error,
+                      }));
+                    }}
+                    error={!!errors.newPassword}
+                    helperText={errors.newPassword}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Lock />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -646,6 +768,13 @@ const ProfilePage = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Lock />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
               </Grid>
