@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import {
   Box,
@@ -14,6 +14,10 @@ import {
   TextField,
   CircularProgress,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { Edit, Lock, Person } from "@mui/icons-material";
 
@@ -41,29 +45,22 @@ const ProfilePage = () => {
   const [success, setSuccess] = useState("");
   const [tab, setTab] = useState(0); // Tabs: 0 - View, 1 - Update, 2 - Password
 
-  const validate = (name, value) => {
-    let error = "";
-    switch (name) {
-      case "name":
-        if (!value.trim()) error = "Name is required.";
-        break;
-      case "email":
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = "Enter a valid email.";
-        break;
-      case "phone":
-      case "alternatePhone":
-        if (!/^\+91\d{10}$/.test(value)) error = "Enter a valid 10-digit phone number.";
-        if (name === "alternatePhone" && value === profileData.phone)
-          error = "Alternate phone number cannot be the same as phone number.";
-        break;
-      case "address.pinCode":
-        if (!/^\d{6}$/.test(value)) error = "Pin code must be 6 digits.";
-        break;
-      default:
-        break;
-    }
-    return error;
-  };
+  // OTP Verification State
+  // const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [pendingUpdate, setPendingUpdate] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(300); // 5 minutes in seconds
+  const [canResendOtp, setCanResendOtp] = useState(true); // Allow resend OTP
+
+  // Change Password State
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Timer Interval Ref
+  const timerInterval = useRef(null);
 
   // Fetch Profile Data
   useEffect(() => {
@@ -87,12 +84,45 @@ const ProfilePage = () => {
     fetchProfile();
   }, []);
 
+  // Validate Input Fields
+  const validate = useCallback(
+    (name, value) => {
+      let error = "";
+      switch (name) {
+        case "name":
+          if (!value.trim()) error = "Name is required.";
+          break;
+        case "email":
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+            error = "Enter a valid email.";
+          break;
+        case "phone":
+        case "alternatePhone":
+          if (!/^\+91\d{10}$/.test(value))
+            error = "Enter a valid 10-digit phone number.";
+          if (name === "alternatePhone" && value === profileData.phone)
+            error =
+              "Alternate phone number cannot be the same as phone number.";
+          break;
+        case "address.pinCode":
+          if (!/^\d{6}$/.test(value)) error = "Pin code must be 6 digits.";
+          break;
+        default:
+          break;
+      }
+      return error;
+    },
+    [profileData.phone]
+  );
+
+  // Handle Tab Change
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
     setError("");
     setSuccess("");
   };
 
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -114,10 +144,62 @@ const ProfilePage = () => {
     }
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  // Request OTP
+  const requestOTP = useCallback(async () => {
+    try {
+      const emailError = validate("email", profileData.email);
+      if (emailError) {
+        setError(emailError);
+        return;
+      }
 
-    const newErrors = {};
+      const token = localStorage.getItem("authToken");
+      await axios.post(
+        "https://lenz-backend.onrender.com/api/otp/request-otp",
+        { email: profileData.email },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // setIsOtpSent(true);
+      setShowOtpModal(true);
+      setError("");
+      setOtpTimer(300); // Reset timer to 5 minutes
+      setCanResendOtp(false); // Disable resend button temporarily
+      setTimeout(() => setCanResendOtp(true), 30000); // Enable resend after 30 seconds
+    } catch (err) {
+      setError("Failed to send OTP. Please try again.");
+    }
+  }, [profileData.email, validate]);
+
+  // Verify OTP
+  const verifyOTP = async () => {
+    try {
+      // Validate OTP before verification
+      if (!otp || otp.length !== 6) {
+        setError("Please enter a valid 6-digit OTP.");
+        return;
+      }
+      const token = localStorage.getItem("authToken");
+      await axios.post(
+        "https://lenz-backend.onrender.com/api/otp/verify-otp",
+        { email: profileData.email, otp },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setOtpVerified(true);
+      setShowOtpModal(false);
+      setError("");
+      clearInterval(timerInterval.current);
+    } catch (err) {
+      setError("Invalid OTP. Please try again.");
+    }
+  };
+
+  // Handle Update Profile
+  const handleUpdate = useCallback(
+    async (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+
+      // Validate fields
+      const newErrors = {};
       for (const [key, value] of Object.entries(profileData)) {
         if (key === "address") {
           for (const [subKey, subValue] of Object.entries(
@@ -138,34 +220,106 @@ const ProfilePage = () => {
         return;
       }
 
-    try {
-      setLoading(true);
+      // Request OTP if not verified
+      if (!otpVerified) {
+        setPendingUpdate(true);
+        await requestOTP();
+        return;
+      }
 
-      const token = localStorage.getItem("authToken");
-      const { data } = await axios.put(
-        "https://lenz-backend.onrender.com/api/profile/",
-        profileData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setProfileData(data);
-      setSuccess("Profile updated successfully");
-      setError("");
-      setLoading(false);
-      setTab(0);
-    } catch (err) {
-      setError("Failed to update profile");
-      setSuccess("");
-      setLoading(false);
+      // Proceed with profile update
+      try {
+        // console.log(profileData);
+        setLoading(true);
+        const token = localStorage.getItem("authToken");
+        const { data } = await axios.put(
+          "https://lenz-backend.onrender.com/api/profile/",
+          profileData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setProfileData(data);
+        setSuccess("Profile updated successfully");
+        setError("");
+        setLoading(false);
+        setTab(0);
+        setOtpVerified(false); // Reset OTP verification
+        setPendingUpdate(false);
+      } catch (err) {
+        setError("Failed to update profile");
+        setSuccess("");
+        setLoading(false);
+      }
+    },
+    [profileData, otpVerified, requestOTP, validate]
+  );
+
+  // Timer for OTP Expiry
+  useEffect(() => {
+    // let timerInterval;
+    if (showOtpModal && otpTimer > 0) {
+      timerInterval.current = setInterval(() => {
+        setOtpTimer((prev) => prev - 1);
+      }, 1000);
     }
-  };
+    return () => clearInterval(timerInterval.current);
+  }, [showOtpModal, otpTimer]);
 
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    // Logic for password change
-    setSuccess("Password updated successfully!");
-  };
+  // Handle Change Password
+  const handleChangePassword = useCallback(
+    async (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+
+      // Validate inputs
+      if (!oldPassword || !newPassword || !confirmPassword) {
+        setError("All fields are required.");
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        setError("New password and confirm password do not match.");
+        return;
+      }
+
+      // If OTP is not verified, request OTP and set pending update
+      if (!otpVerified) {
+        setPendingUpdate(true); // Mark update as pending
+        await requestOTP();
+        return;
+      }
+
+      // Proceed with password change
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("authToken");
+        console.log(token);
+        const { data } = await axios.post(
+          "https://lenz-backend.onrender.com/api/profile/change-password",
+          { oldPassword, newPassword },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setSuccess(data.message || "Password updated successfully!");
+        setError("");
+        setLoading(false);
+        setOtpVerified(false); // Reset OTP verification
+        setPendingUpdate(false); // Reset pending update
+      } catch (err) {
+        setError(err.response?.data?.error || "Failed to update password.");
+        setSuccess("");
+        setLoading(false);
+      }
+    },
+    [oldPassword, newPassword, confirmPassword, otpVerified, requestOTP]
+  );
+
+  // Re-trigger update after OTP verification
+  useEffect(() => {
+    if (otpVerified && pendingUpdate) {
+      if (tab === 1) handleUpdate(); // Re-trigger profile update
+      if (tab === 2) handleChangePassword(); // Re-trigger password change
+    }
+  }, [otpVerified, pendingUpdate, handleUpdate, handleChangePassword, tab]);
 
   if (loading) {
     return (
@@ -187,6 +341,39 @@ const ProfilePage = () => {
           {success}
         </Alert>
       )}
+
+      {/* OTP Verification Modal */}
+      <Dialog open={showOtpModal} onClose={() => setShowOtpModal(false)}>
+        <DialogTitle>Verify OTP</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            sx={{ mt: 2 }}
+            error={!!error}
+            helperText={error}
+          />
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            OTP expires in: {Math.floor(otpTimer / 60)}:{otpTimer % 60}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowOtpModal(false)}>Cancel</Button>
+          <Button onClick={verifyOTP} variant="contained" color="primary">
+            Verify
+          </Button>
+          <Button
+            onClick={requestOTP}
+            disabled={!canResendOtp}
+            variant="outlined"
+            color="secondary"
+          >
+            Resend OTP
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Card sx={{ mb: 3 }}>
         <CardContent sx={{ textAlign: "center" }}>
@@ -411,7 +598,7 @@ const ProfilePage = () => {
                     value={profileData.address.pinCode}
                     onChange={handleChange}
                     helperText={errors["address.pinCode"]}
-                error={!!errors["address.pinCode"]}
+                    error={!!errors["address.pinCode"]}
                     required
                   />
                 </Grid>
@@ -436,6 +623,8 @@ const ProfilePage = () => {
                     fullWidth
                     label="Old Password"
                     type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
                     required
                   />
                 </Grid>
@@ -444,6 +633,8 @@ const ProfilePage = () => {
                     fullWidth
                     label="New Password"
                     type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
                     required
                   />
                 </Grid>
@@ -452,6 +643,8 @@ const ProfilePage = () => {
                     fullWidth
                     label="Confirm New Password"
                     type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                   />
                 </Grid>
