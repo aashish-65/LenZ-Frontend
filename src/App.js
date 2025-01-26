@@ -23,6 +23,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CreateOrder = lazy(() => import("./pages/CreateOrder"));
 const Orders = lazy(() => import("./pages/Orders"));
+const Profile = lazy(() => import("./pages/ProfilePage"));
 
 // PublicRoute component to redirect logged-in users
 // const PublicRoute = ({ children }) => {
@@ -44,6 +45,7 @@ const routes = [
   { path: "/create-order", component: <CreateOrder />, isPublic: false },
   { path: "/", component: <Navigate to="/signup" /> }, // Redirect to signup by default
   { path: "/orders", component: <Orders />, isPublic: false },
+  { path: "/profile", component: <Profile />, isPublic: false },
   { path: "*", component: <NotFound /> }, // 404 page
 ];
 
