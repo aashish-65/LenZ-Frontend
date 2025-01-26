@@ -165,7 +165,6 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Create Order Section */}
         <Grid item xs={12}>
           <Card
             component={motion.div}
@@ -205,8 +204,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Settings Section */}
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} md={6}>
           <Card
             component={motion.div}
             variants={cardVariants}
@@ -252,7 +250,6 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Support Section */}
         <Grid item xs={12} md={6}>
           <Card
             sx={{
@@ -290,7 +287,7 @@ const Dashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );

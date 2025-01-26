@@ -20,7 +20,7 @@ const Footer = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {/* Copyright Text */}
           <Typography variant="body2" align="center" sx={{ marginBottom: 2 }}>
-            © 2024 LenZ. All rights reserved.
+            © 2025 LenZ. All rights reserved.
           </Typography>
 
           {/* Contact Info */}
