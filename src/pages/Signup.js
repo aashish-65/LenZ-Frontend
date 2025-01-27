@@ -13,6 +13,7 @@ import {
   CircularProgress,
   Grid,
   InputAdornment,
+  IconButton,
 } from "@mui/material";
 import {
   AccountCircle,
@@ -23,6 +24,8 @@ import {
   Home,
   LocationCity,
   LocationOn,
+  Visibility,
+  VisibilityOff,
 } from "@mui/icons-material";
 
 const Signup = () => {
@@ -48,6 +51,8 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const validate = (name, value) => {
     let error = "";
@@ -146,6 +151,10 @@ const Signup = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleClickShowPassword = (field) => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -282,7 +291,7 @@ const Signup = () => {
               <TextField
                 label="Password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 variant="outlined"
                 value={formData.password}
                 onChange={handleChange}
@@ -294,6 +303,16 @@ const Signup = () => {
                   startAdornment: (
                     <InputAdornment position="start">
                       <Lock />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => handleClickShowPassword()}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
                     </InputAdornment>
                   ),
                 }}

@@ -9,7 +9,16 @@ import {
   Typography,
   CircularProgress,
   Paper,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+
+import {
+  AccountCircle,
+  Lock,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 
 const Login = () => {
   const [formData, setFormData] = useState({ userId: "", password: "" });
@@ -17,6 +26,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +55,10 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleClickShowPassword = (field) => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -96,12 +111,17 @@ const Login = () => {
             required
             InputProps={{
               style: { borderRadius: "8px" },
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
             }}
           />
           <TextField
             label="Password"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={formData.password}
             onChange={handleChange}
             variant="outlined"
@@ -110,6 +130,21 @@ const Login = () => {
             required
             InputProps={{
               style: { borderRadius: "8px" },
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => handleClickShowPassword()}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
           />
           <Button
@@ -132,7 +167,11 @@ const Login = () => {
             }}
             disabled={isLoading}
           >
-            {isLoading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
         {error && (

@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
 } from "@mui/material";
 import {
   Edit,
@@ -31,6 +32,8 @@ import {
   Home,
   LocationCity,
   LocationOn,
+  Visibility,
+  VisibilityOff,
 } from "@mui/icons-material";
 
 const ProfilePage = () => {
@@ -70,6 +73,11 @@ const ProfilePage = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // State for password visibility
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Timer Interval Ref
   const timerInterval = useRef(null);
@@ -356,6 +364,23 @@ const ProfilePage = () => {
       if (tab === 2) handleChangePassword(); // Re-trigger password change
     }
   }, [otpVerified, pendingUpdate, handleUpdate, handleChangePassword, tab]);
+
+  // Toggle password visibility
+  const handleClickShowPassword = (field) => {
+    switch (field) {
+      case "oldPassword":
+        setShowOldPassword((prev) => !prev);
+        break;
+      case "newPassword":
+        setShowNewPassword((prev) => !prev);
+        break;
+      case "confirmPassword":
+        setShowConfirmPassword((prev) => !prev);
+        break;
+      default:
+        break;
+    }
+  };
 
   if (loading) {
     return (
@@ -721,7 +746,7 @@ const ProfilePage = () => {
                   <TextField
                     fullWidth
                     label="Old Password"
-                    type="password"
+                    type={showOldPassword ? "text" : "password"}
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
                     required
@@ -731,6 +756,16 @@ const ProfilePage = () => {
                           <Lock />
                         </InputAdornment>
                       ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleClickShowPassword("oldPassword")}
+                            edge="end"
+                          >
+                            {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     }}
                   />
                 </Grid>
@@ -738,7 +773,7 @@ const ProfilePage = () => {
                   <TextField
                     fullWidth
                     label="New Password"
-                    type="password"
+                    type={showNewPassword ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => {
                       setNewPassword(e.target.value);
@@ -757,6 +792,16 @@ const ProfilePage = () => {
                           <Lock />
                         </InputAdornment>
                       ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleClickShowPassword("newPassword")}
+                            edge="end"
+                          >
+                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     }}
                   />
                 </Grid>
@@ -764,7 +809,7 @@ const ProfilePage = () => {
                   <TextField
                     fullWidth
                     label="Confirm New Password"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -772,6 +817,16 @@ const ProfilePage = () => {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Lock />
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleClickShowPassword("confirmPassword")}
+                            edge="end"
+                          >
+                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
                         </InputAdornment>
                       ),
                     }}
