@@ -160,7 +160,8 @@ const Dashboard = () => {
                     borderRadius: "8px",
                     borderColor: "#6a11cb",
                     color: "#6a11cb",
-                    marginRight: 2, // Add spacing between buttons
+                    marginRight: 2,
+                    marginBottom: 2,
                   }}
                 >
                   View Orders
