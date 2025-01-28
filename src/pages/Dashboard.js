@@ -53,6 +53,10 @@ const Dashboard = () => {
     navigate("/orders");
   };
 
+  const handleBookForPickup = () => {
+    navigate("/pickup-orders");
+  };
+
   // Animation variants for Framer Motion
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -156,9 +160,25 @@ const Dashboard = () => {
                     borderRadius: "8px",
                     borderColor: "#6a11cb",
                     color: "#6a11cb",
+                    marginRight: 2, // Add spacing between buttons
                   }}
                 >
                   View Orders
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  onClick={handleBookForPickup}
+                  sx={{
+                    padding: 2,
+                    fontSize: "16px",
+                    borderRadius: "8px",
+                    borderColor: "#6a11cb",
+                    color: "#fff",
+                    background: "linear-gradient(to right,rgb(44, 57, 79),rgb(134, 20, 255))",
+                  }}
+                >
+                  Book For Pickup
                 </Button>
               </Box>
             </CardContent>

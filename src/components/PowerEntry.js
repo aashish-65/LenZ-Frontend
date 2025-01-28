@@ -6,9 +6,11 @@ import {
   Button,
   Grid,
   Paper,
-  Divider
+  Divider,
+  useMediaQuery,
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 const PowerEntry = ({
   lensType,
@@ -51,6 +53,8 @@ const PowerEntry = ({
     useState(true);
   const [isValid, setIsValid] = useState(false);
   const [isValidPowerRange, setIsValidPowerRange] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const lensRanges = {
     SV: {
@@ -326,15 +330,25 @@ const PowerEntry = ({
     }
   };
 
+  const numberInputOnWheelPreventChange = (e) => {
+    e.target.blur();
+    e.stopPropagation();
+    setTimeout(() => {
+      e.target.focus();
+    }, 0);
+  };
+
   return (
     <Paper
       elevation={3}
       sx={{
-        maxWidth: 700,
+        maxWidth: { xs: 700, md: 1000 }, // Wider on laptops
         margin: "20px auto",
-        padding: 3,
+        padding: { xs: 3, md: 5 }, // Adjust padding for larger screens
         borderRadius: 2,
         backgroundColor: "#fdfdfd",
+        mt: lensType !== "SV" ? (isMobile ? 30 : 0) : 0,
+        // mb: isMobile ? 1 : 0,
       }}
     >
       <Typography variant="h4" gutterBottom textAlign="center">
@@ -352,8 +366,9 @@ const PowerEntry = ({
             {eye.charAt(0).toUpperCase() + eye.slice(1)} Eye
           </Typography>
 
-          {/* Spherical Power */}
-          <Grid container spacing={2} alignItems="center">
+          {/* Power Entry Fields */}
+          <Grid container spacing={3}>
+            {/* Spherical Power */}
             <Grid item xs={12} md={6}>
               <TextField
                 label="Spherical Power"
@@ -363,14 +378,19 @@ const PowerEntry = ({
                 value={eyePower[eye].spherical}
                 onChange={(e) => handleChange(eye, "spherical", e.target.value)}
                 onBlur={() => handleBlur(eye, "spherical")}
-                error={Boolean(errors[eye]?.spherical || sphericalErrorPowerRange[eye]?.spherical)}
-                helperText={errors[eye]?.spherical || sphericalErrorPowerRange[eye]?.spherical}
+                error={Boolean(
+                  errors[eye]?.spherical ||
+                    sphericalErrorPowerRange[eye]?.spherical
+                )}
+                helperText={
+                  errors[eye]?.spherical ||
+                  sphericalErrorPowerRange[eye]?.spherical
+                }
+                onWheel={(e) => numberInputOnWheelPreventChange(e)}
               />
             </Grid>
-          </Grid>
 
-          {/* Cylindrical Power */}
-          <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
+            {/* Cylindrical Power */}
             <Grid item xs={12} md={6}>
               <TextField
                 label="Cylindrical Power"
@@ -378,17 +398,24 @@ const PowerEntry = ({
                 variant="outlined"
                 fullWidth
                 value={eyePower[eye].cylindrical}
-                onChange={(e) => handleChange(eye, "cylindrical", e.target.value)}
+                onChange={(e) =>
+                  handleChange(eye, "cylindrical", e.target.value)
+                }
                 onBlur={() => handleBlur(eye, "cylindrical")}
-                error={Boolean(errors[eye]?.cylindrical || cylindricalErrorPowerRange[eye]?.cylindrical)}
-                helperText={errors[eye]?.cylindrical || cylindricalErrorPowerRange[eye]?.cylindrical}
+                error={Boolean(
+                  errors[eye]?.cylindrical ||
+                    cylindricalErrorPowerRange[eye]?.cylindrical
+                )}
+                helperText={
+                  errors[eye]?.cylindrical ||
+                  cylindricalErrorPowerRange[eye]?.cylindrical
+                }
+                onWheel={(e) => numberInputOnWheelPreventChange(e)}
               />
             </Grid>
-          </Grid>
 
-          {/* Axis Power */}
-          {eyePower[eye].cylindrical !== "" && (
-            <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
+            {/* Axis Power */}
+            {eyePower[eye].cylindrical !== "" && (
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Axis Power"
@@ -397,16 +424,19 @@ const PowerEntry = ({
                   fullWidth
                   value={eyePower[eye].axis}
                   onChange={(e) => handleChange(eye, "axis", e.target.value)}
-                  error={Boolean(errors[eye]?.axis || axisErrorPowerRange[eye]?.axis)}
-                  helperText={errors[eye]?.axis || axisErrorPowerRange[eye]?.axis}
+                  error={Boolean(
+                    errors[eye]?.axis || axisErrorPowerRange[eye]?.axis
+                  )}
+                  helperText={
+                    errors[eye]?.axis || axisErrorPowerRange[eye]?.axis
+                  }
+                  onWheel={(e) => numberInputOnWheelPreventChange(e)}
                 />
               </Grid>
-            </Grid>
-          )}
+            )}
 
-          {/* Addition (for specific lens types) */}
-          {["KT", "PR"].includes(lensType) && (
-            <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
+            {/* Addition (for specific lens types) */}
+            {["KT", "PR"].includes(lensType) && (
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Addition"
@@ -414,14 +444,23 @@ const PowerEntry = ({
                   variant="outlined"
                   fullWidth
                   value={eyePower[eye].addition}
-                  onChange={(e) => handleChange(eye, "addition", e.target.value)}
+                  onChange={(e) =>
+                    handleChange(eye, "addition", e.target.value)
+                  }
                   onBlur={() => handleBlur(eye, "addition")}
-                  error={Boolean(errors[eye]?.addition || additionErrorPowerRange[eye]?.addition)}
-                  helperText={errors[eye]?.addition || additionErrorPowerRange[eye]?.addition}
+                  error={Boolean(
+                    errors[eye]?.addition ||
+                      additionErrorPowerRange[eye]?.addition
+                  )}
+                  helperText={
+                    errors[eye]?.addition ||
+                    additionErrorPowerRange[eye]?.addition
+                  }
+                  onWheel={(e) => numberInputOnWheelPreventChange(e)}
                 />
               </Grid>
-            </Grid>
-          )}
+            )}
+          </Grid>
         </div>
       ))}
 
