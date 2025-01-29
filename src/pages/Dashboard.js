@@ -150,7 +150,7 @@ const Dashboard = () => {
                 Your Orders
               </Typography>
               <Divider sx={{ marginY: 2 }} />
-              <Box textAlign="center">
+              <Box textAlign="center" display="flex" justifyContent="center" gap={1}>
                 <Button
                   variant="outlined"
                   onClick={handleGoToOrders}
@@ -160,8 +160,6 @@ const Dashboard = () => {
                     borderRadius: "8px",
                     borderColor: "#6a11cb",
                     color: "#6a11cb",
-                    marginRight: 2,
-                    marginBottom: 2,
                   }}
                 >
                   View Orders

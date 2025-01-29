@@ -17,6 +17,8 @@ import { AuthProvider } from "./AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "./App.css"; // Optional: Your global styles
+import GroupOrderList from "./components/GroupOrderList";
+import GroupOrderDetails from "./components/GroupOrderDetails";
 const Signup = lazy(() => import("./pages/Signup"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -47,8 +49,10 @@ const routes = [
   { path: "/", component: <Navigate to="/signup" /> }, // Redirect to signup by default
   { path: "/orders", component: <Orders />, isPublic: false },
   { path: "/pickup-orders", component: <GroupOrder />, isPublic: false },
+  { path: "/group-orders", component: <GroupOrderList />, isPublic: false },
+  { path: "/group-orders/:groupOrderId", component: <GroupOrderDetails />, isPublic: false },
   { path: "/profile", component: <Profile />, isPublic: false },
-  { path: "*", component: <NotFound /> }, // 404 page
+  { path: "*", component: <NotFound /> },
 ];
 
 const App = () => {
