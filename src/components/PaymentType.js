@@ -1,22 +1,18 @@
 import React from "react";
-import {
-  Typography,
-  Button,
-  Box,
-  Grid,
-  Paper,
-} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Typography, Button, Box, Grid, Paper } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
 const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
+
+  const navigate = useNavigate();
   const handleCOD = () => {
     setPaymentType("COD");
     placeOrder();
   };
 
   const handleOnlinePayment = () => {
-    setPaymentType("Online");
-    placeOrder();
+    navigate("/");
   };
 
   return (
@@ -32,7 +28,7 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
     >
       {/* Title */}
       <Typography variant="h4" color="primary" fontWeight="bold" gutterBottom>
-        Select Payment Type
+        Create The Order
       </Typography>
       <Typography
         variant="subtitle1"
@@ -40,7 +36,8 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
         gutterBottom
         sx={{ mb: 4 }}
       >
-        Please choose your preferred payment method
+        Please press the CONFIRM button to create the order or press CANCEL
+        button to cancle it.
       </Typography>
 
       {/* Payment Buttons */}
@@ -57,7 +54,7 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
             }}
             onClick={handleCOD}
           >
-            Cash on Delivery
+            Confirm
           </Button>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -68,11 +65,12 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
             sx={{
               py: 1.5,
               fontSize: "16px",
-              borderColor: paymentType === "Online" ? "secondary.main" : undefined,
+              borderColor:
+                paymentType === "Online" ? "secondary.main" : undefined,
             }}
             onClick={handleOnlinePayment}
           >
-            Online Payment
+            Cancle
           </Button>
         </Grid>
       </Grid>
