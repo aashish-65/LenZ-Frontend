@@ -24,6 +24,14 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close"; // For close button in the hamburger
 import { useTheme } from "@mui/material/styles";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import HomeIcon from "@mui/icons-material/Home";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ViewOrderIcon from "@mui/icons-material/ViewList";
+import GroupOrderIcon from "@mui/icons-material/ListAlt";
+import BookPickupIcon from "@mui/icons-material/ShoppingCartCheckout";
+import LoginIcon from "@mui/icons-material/Login";
+import SignupIcon from "@mui/icons-material/AppRegistration";
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
@@ -32,7 +40,8 @@ const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false); // State to control the drawer
   const [ordersMenuAnchor, setOrdersMenuAnchor] = useState(null);
 
-  const handleOrdersMenuOpen = (event) => setOrdersMenuAnchor(event.currentTarget);
+  const handleOrdersMenuOpen = (event) =>
+    setOrdersMenuAnchor(event.currentTarget);
   const handleOrdersMenuClose = () => setOrdersMenuAnchor(null);
 
   // Handle Drawer Toggle
@@ -58,73 +67,309 @@ const Header = () => {
         {!user ? (
           <>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/signup">
-                <ListItemText primary="Signup" />
+              <ListItemButton
+                component={Link}
+                to="/"
+                sx={{
+                  borderRadius: "8px",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#acceff", // Darker blue on hover
+                    transform: "scale(1.05)", // Slight zoom
+                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                  },
+                }}
+              >
+                <HomeIcon
+                  sx={{
+                    color: "#3f51b5",
+                    marginRight: 1,
+                    transition: "color 0.3s ease , transform 0.3s ease",
+                    "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                  }}
+                />
+                <ListItemText primary="Home" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/login">
+              <ListItemButton
+                component={Link}
+                to="/login"
+                sx={{
+                  borderRadius: "8px",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#acceff", // Darker blue on hover
+                    transform: "scale(1.05)", // Slight zoom
+                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                  },
+                }}
+              >
+                <LoginIcon
+                  sx={{
+                    color: "#3f51b5",
+                    marginRight: 1,
+                    transition: "color 0.3s ease , transform 0.3s ease",
+                    "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                  }}
+                />
                 <ListItemText primary="Login" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                component={Link}
+                to="/signup"
+                sx={{
+                  borderRadius: "8px",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#acceff",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
+                  },
+                }}
+              >
+                <SignupIcon
+                  sx={{
+                    color: "#3f51b5",
+                    marginRight: 1,
+                    transition: "color 0.3s ease , transform 0.3s ease",
+                    "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                  }}
+                />
+                <ListItemText primary="Signup" />
               </ListItemButton>
             </ListItem>
           </>
         ) : (
           <>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/profile">
-                <ListItemText primary="Profile" />
+              <ListItemButton
+                component={Link}
+                to="/"
+                sx={{
+                  borderRadius: "8px",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#acceff", // Darker blue on hover
+                    transform: "scale(1.05)", // Slight zoom
+                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                  },
+                }}
+              >
+                <HomeIcon
+                  sx={{
+                    color: "#3f51b5",
+                    marginRight: 1,
+                    transition: "color 0.3s ease , transform 0.3s ease",
+                    "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                  }}
+                />
+                <ListItemText primary="Home" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/dashboard">
+              <ListItemButton
+                component={Link}
+                to="/dashboard"
+                sx={{
+                  borderRadius: "8px",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "#acceff", // Darker blue on hover
+                    transform: "scale(1.05)", // Slight zoom
+                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                  },
+                }}
+              >
+                <DashboardIcon
+                  sx={{
+                    color: "#3f51b5",
+                    marginRight: 1,
+                    transition: "color 0.3s ease , transform 0.3s ease",
+                    "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                  }}
+                />
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={logout}>
-                <ListItemText primary="Logout" />
-              </ListItemButton>
-            </ListItem>
+
+            <Divider sx={{ my: 1 }} />
+            <Typography
+              sx={{
+                pl: 2,
+                pt: 1,
+                pb: 1,
+                fontWeight: "bold",
+                fontSize: 14,
+                color: "gray",
+              }}
+            >
+              Orders
+            </Typography>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton
+                  component={Link}
+                  to="/orders"
+                  sx={{
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "#acceff", // Darker blue on hover
+                      transform: "scale(1.05)", // Slight zoom
+                      boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                    },
+                  }}
+                >
+                  <ViewOrderIcon
+                    sx={{
+                      color: "#3f51b5",
+                      marginRight: 1,
+                      transition: "color 0.3s ease , transform 0.3s ease",
+                      "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                    }}
+                  />
+                  <ListItemText primary="View Orders" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  component={Link}
+                  to="/pickup-orders"
+                  sx={{
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      background:
+                        "linear-gradient(to right,rgb(139, 154, 181),rgb(134, 20, 255))",
+                      transform: "scale(1.05)", // Slight zoom
+                      boxShadow: "0px 4px 10px rgba(106, 63, 181, 0.4)", // Shadow effect
+                    },
+                  }}
+                >
+                  <BookPickupIcon
+                    sx={{
+                      color: "#3f51b5",
+                      marginRight: 1,
+                      transition: "color 0.3s ease , transform 0.3s ease",
+                      "&:hover": { color: "#fff", transform: "scale(1.1)" },
+                    }}
+                  />
+                  <ListItemText
+                    primary="Book For Pickup"
+                    sx={{
+                      fontWeight: "bold",
+                      transition: "color 0.3s ease",
+                      color: "rgb(94, 0, 165)",
+                      "&:hover": { color: "#fff" }, // Text turns darker red on hover
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  component={Link}
+                  to="/group-orders"
+                  sx={{
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "#acceff", // Darker blue on hover
+                      transform: "scale(1.05)", // Slight zoom
+                      boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                    },
+                  }}
+                >
+                  <GroupOrderIcon
+                    sx={{
+                      color: "#3f51b5",
+                      marginRight: 1,
+                      transition: "color 0.3s ease , transform 0.3s ease",
+                      "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                    }}
+                  />
+                  <ListItemText primary="View Group Orders" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider sx={{ my: 1 }} />
+            <Typography
+              sx={{
+                pl: 2,
+                pt: 1,
+                pb: 1,
+                fontWeight: "bold",
+                fontSize: 14,
+                color: "gray",
+              }}
+            >
+              Account
+            </Typography>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton
+                  component={Link}
+                  to="/profile"
+                  sx={{
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "#acceff",
+                      transform: "scale(1.05)",
+                      boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
+                    },
+                  }}
+                >
+                  <AccountCircleIcon
+                    sx={{
+                      color: "#3f51b5",
+                      marginRight: 1,
+                      transition: "color 0.3s ease , transform 0.3s ease",
+                      "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
+                    }}
+                  />
+                  <ListItemText primary="Profile" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  onClick={logout}
+                  sx={{
+                    borderRadius: "8px",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "#ffebee",
+                      transform: "scale(1.05)",
+                      boxShadow: "0px 4px 10px rgba(211, 47, 47, 0.3)",
+                    },
+                  }}
+                >
+                  <LogoutIcon
+                    sx={{
+                      color: "#3f51b5",
+                      marginRight: 1,
+                      transition: "color 0.3s ease , transform 0.3s ease", // Smooth color transition
+                      "&:hover": {
+                        color: "#d32f2f",
+                        transform: "scale(1.1) rotate(10deg)",
+                      }, // Red color on hover
+                    }}
+                  />
+                  <ListItemText
+                    primary="Logout"
+                    sx={{
+                      fontWeight: "bold",
+                      transition: "color 0.3s ease",
+                      "&:hover": { color: "#b71c1c" }, // Text turns darker red on hover
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </List>
           </>
         )}
-      </List>
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton component={Link} to="/">
-            <ListItemText primary="Home" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Divider sx={{ my: 1 }} />
-      <Typography
-        sx={{
-          pl: 2,
-          pt: 1,
-          pb: 1,
-          fontWeight: "bold",
-          fontSize: 14,
-          color: "gray",
-        }}
-      >
-        Orders
-      </Typography>
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton component={Link} to="/orders">
-            <ListItemText primary="View Orders" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component={Link} to="/pickup-orders">
-            <ListItemText primary="Book For Pickup" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component={Link} to="/group-orders">
-            <ListItemText primary="View Group Orders" />
-          </ListItemButton>
-        </ListItem>
       </List>
     </Box>
   );
@@ -180,6 +425,17 @@ const Header = () => {
                     color="inherit"
                     sx={{ "&:hover": { backgroundColor: "#1e40af" } }}
                   >
+                    <SignupIcon
+                      sx={{
+                        color: "#fff",
+                        marginRight: 1,
+                        transition: "color 0.3s ease , transform 0.3s ease",
+                        "&:hover": {
+                          color: "powderblue",
+                          transform: "scale(1.1)",
+                        },
+                      }}
+                    />
                     Signup
                   </Button>
                   <Button
@@ -188,6 +444,17 @@ const Header = () => {
                     color="inherit"
                     sx={{ "&:hover": { backgroundColor: "#1e40af" } }}
                   >
+                    <LoginIcon
+                      sx={{
+                        color: "ffffff",
+                        marginRight: 1,
+                        transition: "color 0.3s ease , transform 0.3s ease",
+                        "&:hover": {
+                          color: "powderblue",
+                          transform: "scale(1.1)",
+                        },
+                      }}
+                    />
                     Login
                   </Button>
                 </>
@@ -232,14 +499,89 @@ const Header = () => {
                     MenuListProps={{ onMouseLeave: handleOrdersMenuClose }} // Close on mouse leave
                     sx={{ mt: 1 }}
                   >
-                    <MenuItem component={Link} to="/orders" onClick={handleOrdersMenuClose} sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}>
-                    📄 View Orders
+                    <MenuItem
+                      component={Link}
+                      to="/orders"
+                      onClick={handleOrdersMenuClose}
+                      sx={{
+                        borderRadius: "25px",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          backgroundColor: "#acceff",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
+                        },
+                      }}
+                    >
+                      <ViewOrderIcon
+                        sx={{
+                          color: "#3f51b5",
+                          marginRight: 1,
+                          transition: "color 0.3s ease , transform 0.3s ease",
+                          "&:hover": {
+                            color: "#303f9f",
+                            transform: "scale(1.1)",
+                          },
+                        }}
+                      />
+                      View Orders
                     </MenuItem>
-                    <MenuItem component={Link} to="/pickup-orders" onClick={handleOrdersMenuClose} sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}>
-                    📦 Book For Pickup
+                    <MenuItem
+                      component={Link}
+                      to="/pickup-orders"
+                      onClick={handleOrdersMenuClose}
+                      sx={{
+                        borderRadius: "25px",
+                        transition: "all 0.3s ease",
+                        color: "rgb(94, 0, 165)",
+                        "&:hover": {
+                          color: "black",
+                          background:
+                            "linear-gradient(to right,rgb(139, 154, 181),rgb(134, 20, 255))",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
+                        },
+                      }}
+                    >
+                      <BookPickupIcon
+                        sx={{
+                          color: "#3f51b5",
+                          marginRight: 1,
+                          transition: "color 0.3s ease , transform 0.3s ease",
+                          "&:hover": {
+                            color: "#303f9f",
+                            transform: "scale(1.1)",
+                          },
+                        }}
+                      />
+                      Book For Pickup
                     </MenuItem>
-                    <MenuItem component={Link} to="/group-orders" onClick={handleOrdersMenuClose} sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}>
-                    🛒 View Group Orders
+                    <MenuItem
+                      component={Link}
+                      to="/group-orders"
+                      onClick={handleOrdersMenuClose}
+                      sx={{
+                        borderRadius: "25px",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          backgroundColor: "#acceff",
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
+                        },
+                      }}
+                    >
+                      <GroupOrderIcon
+                        sx={{
+                          color: "#3f51b5",
+                          marginRight: 1,
+                          transition: "color 0.3s ease , transform 0.3s ease",
+                          "&:hover": {
+                            color: "#303f9f",
+                            transform: "scale(1.1)",
+                          },
+                        }}
+                      />
+                      View Group Orders
                     </MenuItem>
                   </Menu>
 
