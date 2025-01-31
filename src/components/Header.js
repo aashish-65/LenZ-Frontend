@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   AppBar,
@@ -17,6 +17,7 @@ import {
   useMediaQuery,
   Menu,
   MenuItem,
+  Fade,
 } from "@mui/material";
 import { AuthContext } from "../AuthContext";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -33,7 +34,7 @@ import BookPickupIcon from "@mui/icons-material/ShoppingCartCheckout";
 import LoginIcon from "@mui/icons-material/Login";
 import SignupIcon from "@mui/icons-material/AppRegistration";
 
-const Header = () => {
+const Header = memo(() => {
   const { user, logout } = useContext(AuthContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if it's a mobile screen
@@ -107,14 +108,10 @@ const Header = () => {
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
                   backgroundColor:
-                    location.pathname === "/login"
-                      ? "#303f9f"
-                      : "transparent",
-                  color:
-                    location.pathname === "/login" ? "white" : "inherit",
+                    location.pathname === "/login" ? "#303f9f" : "transparent",
+                  color: location.pathname === "/login" ? "white" : "inherit",
                   "&:hover": {
-                    color:
-                      location.pathname === "/login" ? "#3f51b5" : "black",
+                    color: location.pathname === "/login" ? "#3f51b5" : "black",
                     backgroundColor: "#acceff", // Darker blue on hover
                     transform: "scale(1.05)", // Slight zoom
                     boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -123,8 +120,7 @@ const Header = () => {
               >
                 <LoginIcon
                   sx={{
-                    color:
-                      location.pathname === "/login" ? "white" : "#3f51b5",
+                    color: location.pathname === "/login" ? "white" : "#3f51b5",
                     marginRight: 1,
                     transition: "color 0.3s ease , transform 0.3s ease",
                     "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -141,11 +137,8 @@ const Header = () => {
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
                   backgroundColor:
-                    location.pathname === "/signup"
-                      ? "#303f9f"
-                      : "transparent",
-                  color:
-                    location.pathname === "/signup" ? "white" : "inherit",
+                    location.pathname === "/signup" ? "#303f9f" : "transparent",
+                  color: location.pathname === "/signup" ? "white" : "inherit",
                   "&:hover": {
                     color:
                       location.pathname === "/signup" ? "#3f51b5" : "black",
@@ -181,8 +174,7 @@ const Header = () => {
                     location.pathname === "/" ? "#303f9f" : "transparent",
                   color: location.pathname === "/" ? "white" : "inherit",
                   "&:hover": {
-                    color:
-                      location.pathname === "/" ? "#3f51b5" : "black",
+                    color: location.pathname === "/" ? "#3f51b5" : "black",
                     backgroundColor: "#acceff", // Darker blue on hover
                     transform: "scale(1.05)", // Slight zoom
                     boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -264,7 +256,7 @@ const Header = () => {
                       location.pathname === "/orders" ? "white" : "inherit",
                     "&:hover": {
                       color:
-                      location.pathname === "/orders" ? "#3f51b5" : "black",
+                        location.pathname === "/orders" ? "#3f51b5" : "black",
                       backgroundColor: "#acceff", // Darker blue on hover
                       transform: "scale(1.05)", // Slight zoom
                       boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -274,7 +266,7 @@ const Header = () => {
                   <ViewOrderIcon
                     sx={{
                       color:
-                      location.pathname === "/orders" ? "white" : "#3f51b5",
+                        location.pathname === "/orders" ? "white" : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -313,7 +305,9 @@ const Header = () => {
                   <BookPickupIcon
                     sx={{
                       color:
-                      location.pathname === "/pickup-orders" ? "white" : "#3f51b5",
+                        location.pathname === "/pickup-orders"
+                          ? "white"
+                          : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#fff", transform: "scale(1.1)" },
@@ -339,10 +333,14 @@ const Header = () => {
                         ? "#303f9f"
                         : "transparent",
                     color:
-                      location.pathname === "/group-orders" ? "white" : "inherit",
+                      location.pathname === "/group-orders"
+                        ? "white"
+                        : "inherit",
                     "&:hover": {
                       color:
-                      location.pathname === "/group-orders" ? "#3f51b5" : "black",
+                        location.pathname === "/group-orders"
+                          ? "#3f51b5"
+                          : "black",
                       backgroundColor: "#acceff",
                       transform: "scale(1.05)",
                       boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
@@ -352,7 +350,9 @@ const Header = () => {
                   <GroupOrderIcon
                     sx={{
                       color:
-                      location.pathname === "/group-orders" ? "white" : "#3f51b5",
+                        location.pathname === "/group-orders"
+                          ? "white"
+                          : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -391,7 +391,7 @@ const Header = () => {
                       location.pathname === "/profile" ? "white" : "inherit",
                     "&:hover": {
                       color:
-                      location.pathname === "/profile" ? "#3f51b5" : "black",
+                        location.pathname === "/profile" ? "#3f51b5" : "black",
                       backgroundColor: "#acceff",
                       transform: "scale(1.05)",
                       boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
@@ -401,7 +401,7 @@ const Header = () => {
                   <AccountCircleIcon
                     sx={{
                       color:
-                      location.pathname === "/profile" ? "white" : "#3f51b5",
+                        location.pathname === "/profile" ? "white" : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -500,7 +500,26 @@ const Header = () => {
                     component={Link}
                     to="/signup"
                     color="inherit"
-                    sx={{ "&:hover": { backgroundColor: "#1e40af" } }}
+                    sx={{
+                      position: "relative",
+                      "&:hover": { backgroundColor: "#1e40af" },
+                      backgroundColor:
+                        location.pathname === "/signup"
+                          ? "#1e40af"
+                          : "transparent",
+                      transition: "background-color 0.3s ease",
+                      "&::after": {
+                        content: '""',
+                        display: "block",
+                        height: "2px",
+                        width: location.pathname === "/signup" ? "100%" : "0",
+                        background: "#ffffff",
+                        transition: "width 0.3s ease",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                      },
+                    }}
                   >
                     <SignupIcon
                       sx={{
@@ -519,11 +538,30 @@ const Header = () => {
                     component={Link}
                     to="/login"
                     color="inherit"
-                    sx={{ "&:hover": { backgroundColor: "#1e40af" } }}
+                    sx={{
+                      position: "relative",
+                      "&:hover": { backgroundColor: "#1e40af" },
+                      backgroundColor:
+                        location.pathname === "/login"
+                          ? "#1e40af"
+                          : "transparent",
+                      transition: "background-color 0.3s ease",
+                      "&::after": {
+                        content: '""',
+                        display: "block",
+                        height: "2px",
+                        width: location.pathname === "/login" ? "100%" : "0",
+                        background: "#ffffff",
+                        transition: "width 0.3s ease",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                      },
+                    }}
                   >
                     <LoginIcon
                       sx={{
-                        color: "ffffff",
+                        color: "#ffffff",
                         marginRight: 1,
                         transition: "color 0.3s ease , transform 0.3s ease",
                         "&:hover": {
@@ -541,7 +579,26 @@ const Header = () => {
                     component={Link}
                     to="/profile"
                     color="inherit"
-                    sx={{ "&:hover": { backgroundColor: "#1e40af" } }}
+                    sx={{
+                      position: "relative",
+                      "&:hover": { backgroundColor: "#1e40af" },
+                      backgroundColor:
+                        location.pathname === "/profile"
+                          ? "#1e40af"
+                          : "transparent",
+                      transition: "background-color 0.3s ease",
+                      "&::after": {
+                        content: '""',
+                        display: "block",
+                        height: "2px",
+                        width: location.pathname === "/profile" ? "100%" : "0",
+                        background: "#ffffff",
+                        transition: "width 0.3s ease",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                      },
+                    }}
                   >
                     <AccountCircleIcon
                       sx={{ color: "white", marginRight: 1 }}
@@ -552,7 +609,27 @@ const Header = () => {
                     component={Link}
                     to="/dashboard"
                     color="inherit"
-                    sx={{ "&:hover": { backgroundColor: "#1e40af" } }}
+                    sx={{
+                      position: "relative",
+                      "&:hover": { backgroundColor: "#1e40af" },
+                      backgroundColor:
+                        location.pathname === "/dashboard"
+                          ? "#1e40af"
+                          : "transparent",
+                      transition: "background-color 0.3s ease",
+                      "&::after": {
+                        content: '""',
+                        display: "block",
+                        height: "2px",
+                        width:
+                          location.pathname === "/dashboard" ? "100%" : "0",
+                        background: "#ffffff",
+                        transition: "width 0.3s ease",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                      },
+                    }}
                   >
                     Dashboard
                   </Button>
@@ -562,8 +639,27 @@ const Header = () => {
                     onClick={handleOrdersMenuOpen}
                     endIcon={<ArrowDropDownIcon />} // Add dropdown indicator
                     sx={{
+                      position: "relative",
                       "&:hover": { backgroundColor: "#1e40af" },
                       position: "relative",
+                      transition: "background-color 0.3s ease",
+                      transition: "background-color 0.3s ease",
+                      "&::after": {
+                        content: '""',
+                        display: "block",
+                        height: "2px",
+                        width:
+                          location.pathname === "/orders" ||
+                          location.pathname === "/pickup-orders" ||
+                          location.pathname === "/group-orders"
+                            ? "100%"
+                            : "0",
+                        background: "#ffffff",
+                        transition: "width 0.3s ease-in-out",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                      },
                     }}
                   >
                     Orders
@@ -575,14 +671,21 @@ const Header = () => {
                     onClose={handleOrdersMenuClose}
                     MenuListProps={{ onMouseLeave: handleOrdersMenuClose }} // Close on mouse leave
                     sx={{ mt: 1 }}
+                    TransitionComponent={Fade}
                   >
                     <MenuItem
                       component={Link}
                       to="/orders"
                       onClick={handleOrdersMenuClose}
                       sx={{
+                        marginBottom: 1,
+                        padding: "8px 16px",
                         borderRadius: "25px",
                         transition: "all 0.3s ease",
+                        backgroundColor:
+                          location.pathname === "/orders"
+                            ? "#acceff"
+                            : "transparent",
                         "&:hover": {
                           backgroundColor: "#acceff",
                           transform: "scale(1.05)",
@@ -608,8 +711,14 @@ const Header = () => {
                       to="/pickup-orders"
                       onClick={handleOrdersMenuClose}
                       sx={{
+                        marginBottom: 1,
+                        padding: "8px 16px",
                         borderRadius: "25px",
                         transition: "all 0.3s ease",
+                        backgroundColor:
+                          location.pathname === "/pickup-orders"
+                            ? "#acceff"
+                            : "transparent",
                         color: "rgb(94, 0, 165)",
                         "&:hover": {
                           color: "black",
@@ -638,8 +747,13 @@ const Header = () => {
                       to="/group-orders"
                       onClick={handleOrdersMenuClose}
                       sx={{
+                        padding: "8px 16px",
                         borderRadius: "25px",
                         transition: "all 0.3s ease",
+                        backgroundColor:
+                          location.pathname === "/group-orders"
+                            ? "#acceff"
+                            : "transparent",
                         "&:hover": {
                           backgroundColor: "#acceff",
                           transform: "scale(1.05)",
@@ -677,6 +791,6 @@ const Header = () => {
       </Toolbar>
     </AppBar>
   );
-};
+});
 
 export default Header;
