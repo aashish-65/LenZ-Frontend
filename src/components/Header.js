@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -39,6 +39,7 @@ const Header = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check if it's a mobile screen
   const [drawerOpen, setDrawerOpen] = useState(false); // State to control the drawer
   const [ordersMenuAnchor, setOrdersMenuAnchor] = useState(null);
+  const location = useLocation();
 
   const handleOrdersMenuOpen = (event) =>
     setOrdersMenuAnchor(event.currentTarget);
@@ -73,16 +74,23 @@ const Header = () => {
                 sx={{
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
+                  backgroundColor:
+                    location.pathname === "/dashboard"
+                      ? "#303f9f"
+                      : "transparent",
+                  color:
+                    location.pathname === "/dashboard" ? "white" : "inherit",
                   "&:hover": {
-                    backgroundColor: "#acceff", // Darker blue on hover
-                    transform: "scale(1.05)", // Slight zoom
-                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                    backgroundColor: "#acceff",
+                    transform: "scale(1.05)",
+                    boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
                   },
                 }}
               >
                 <HomeIcon
                   sx={{
-                    color: "#3f51b5",
+                    color:
+                      location.pathname === "/dashboard" ? "white" : "#3f51b5",
                     marginRight: 1,
                     transition: "color 0.3s ease , transform 0.3s ease",
                     "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -98,7 +106,15 @@ const Header = () => {
                 sx={{
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
+                  backgroundColor:
+                    location.pathname === "/login"
+                      ? "#303f9f"
+                      : "transparent",
+                  color:
+                    location.pathname === "/login" ? "white" : "inherit",
                   "&:hover": {
+                    color:
+                      location.pathname === "/login" ? "#3f51b5" : "black",
                     backgroundColor: "#acceff", // Darker blue on hover
                     transform: "scale(1.05)", // Slight zoom
                     boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -107,7 +123,8 @@ const Header = () => {
               >
                 <LoginIcon
                   sx={{
-                    color: "#3f51b5",
+                    color:
+                      location.pathname === "/login" ? "white" : "#3f51b5",
                     marginRight: 1,
                     transition: "color 0.3s ease , transform 0.3s ease",
                     "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -123,7 +140,15 @@ const Header = () => {
                 sx={{
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
+                  backgroundColor:
+                    location.pathname === "/signup"
+                      ? "#303f9f"
+                      : "transparent",
+                  color:
+                    location.pathname === "/signup" ? "white" : "inherit",
                   "&:hover": {
+                    color:
+                      location.pathname === "/signup" ? "#3f51b5" : "black",
                     backgroundColor: "#acceff",
                     transform: "scale(1.05)",
                     boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
@@ -132,7 +157,8 @@ const Header = () => {
               >
                 <SignupIcon
                   sx={{
-                    color: "#3f51b5",
+                    color:
+                      location.pathname === "/signup" ? "white" : "#3f51b5",
                     marginRight: 1,
                     transition: "color 0.3s ease , transform 0.3s ease",
                     "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -151,7 +177,12 @@ const Header = () => {
                 sx={{
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
+                  backgroundColor:
+                    location.pathname === "/" ? "#303f9f" : "transparent",
+                  color: location.pathname === "/" ? "white" : "inherit",
                   "&:hover": {
+                    color:
+                      location.pathname === "/" ? "#3f51b5" : "black",
                     backgroundColor: "#acceff", // Darker blue on hover
                     transform: "scale(1.05)", // Slight zoom
                     boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -160,7 +191,7 @@ const Header = () => {
               >
                 <HomeIcon
                   sx={{
-                    color: "#3f51b5",
+                    color: location.pathname === "/" ? "white" : "#3f51b5",
                     marginRight: 1,
                     transition: "color 0.3s ease , transform 0.3s ease",
                     "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -169,14 +200,22 @@ const Header = () => {
                 <ListItemText primary="Home" />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ marginTop: 1 }}>
               <ListItemButton
                 component={Link}
                 to="/dashboard"
                 sx={{
                   borderRadius: "8px",
                   transition: "all 0.3s ease",
+                  backgroundColor:
+                    location.pathname === "/dashboard"
+                      ? "#303f9f"
+                      : "transparent",
+                  color:
+                    location.pathname === "/dashboard" ? "white" : "inherit",
                   "&:hover": {
+                    color:
+                      location.pathname === "/dashboard" ? "#3f51b5" : "black",
                     backgroundColor: "#acceff", // Darker blue on hover
                     transform: "scale(1.05)", // Slight zoom
                     boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -185,7 +224,8 @@ const Header = () => {
               >
                 <DashboardIcon
                   sx={{
-                    color: "#3f51b5",
+                    color:
+                      location.pathname === "/dashboard" ? "white" : "#3f51b5",
                     marginRight: 1,
                     transition: "color 0.3s ease , transform 0.3s ease",
                     "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -216,7 +256,15 @@ const Header = () => {
                   sx={{
                     borderRadius: "8px",
                     transition: "all 0.3s ease",
+                    backgroundColor:
+                      location.pathname === "/orders"
+                        ? "#303f9f"
+                        : "transparent",
+                    color:
+                      location.pathname === "/orders" ? "white" : "inherit",
                     "&:hover": {
+                      color:
+                      location.pathname === "/orders" ? "#3f51b5" : "black",
                       backgroundColor: "#acceff", // Darker blue on hover
                       transform: "scale(1.05)", // Slight zoom
                       boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
@@ -225,7 +273,8 @@ const Header = () => {
                 >
                   <ViewOrderIcon
                     sx={{
-                      color: "#3f51b5",
+                      color:
+                      location.pathname === "/orders" ? "white" : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -234,14 +283,26 @@ const Header = () => {
                   <ListItemText primary="View Orders" />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding>
+              <ListItem disablePadding sx={{ marginTop: 1 }}>
                 <ListItemButton
                   component={Link}
                   to="/pickup-orders"
                   sx={{
                     borderRadius: "8px",
                     transition: "all 0.3s ease",
+                    background:
+                      location.pathname === "/pickup-orders"
+                        ? "linear-gradient(to right,rgb(139, 154, 181),rgb(134, 20, 255))"
+                        : "transparent",
+                    color:
+                      location.pathname === "/pickup-orders"
+                        ? "white"
+                        : "rgb(94, 0, 165)",
                     "&:hover": {
+                      color:
+                        location.pathname === "/pickup-orders"
+                          ? "white"
+                          : "white",
                       background:
                         "linear-gradient(to right,rgb(139, 154, 181),rgb(134, 20, 255))",
                       transform: "scale(1.05)", // Slight zoom
@@ -251,7 +312,8 @@ const Header = () => {
                 >
                   <BookPickupIcon
                     sx={{
-                      color: "#3f51b5",
+                      color:
+                      location.pathname === "/pickup-orders" ? "white" : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#fff", transform: "scale(1.1)" },
@@ -261,30 +323,36 @@ const Header = () => {
                     primary="Book For Pickup"
                     sx={{
                       fontWeight: "bold",
-                      transition: "color 0.3s ease",
-                      color: "rgb(94, 0, 165)",
-                      "&:hover": { color: "#fff" }, // Text turns darker red on hover
                     }}
                   />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding>
+              <ListItem disablePadding sx={{ marginTop: 1 }}>
                 <ListItemButton
                   component={Link}
                   to="/group-orders"
                   sx={{
                     borderRadius: "8px",
                     transition: "all 0.3s ease",
+                    backgroundColor:
+                      location.pathname === "/group-orders"
+                        ? "#303f9f"
+                        : "transparent",
+                    color:
+                      location.pathname === "/group-orders" ? "white" : "inherit",
                     "&:hover": {
-                      backgroundColor: "#acceff", // Darker blue on hover
-                      transform: "scale(1.05)", // Slight zoom
-                      boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)", // Shadow effect
+                      color:
+                      location.pathname === "/group-orders" ? "#3f51b5" : "black",
+                      backgroundColor: "#acceff",
+                      transform: "scale(1.05)",
+                      boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
                     },
                   }}
                 >
                   <GroupOrderIcon
                     sx={{
-                      color: "#3f51b5",
+                      color:
+                      location.pathname === "/group-orders" ? "white" : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -315,7 +383,15 @@ const Header = () => {
                   sx={{
                     borderRadius: "8px",
                     transition: "all 0.3s ease",
+                    backgroundColor:
+                      location.pathname === "/profile"
+                        ? "#303f9f"
+                        : "transparent",
+                    color:
+                      location.pathname === "/profile" ? "white" : "inherit",
                     "&:hover": {
+                      color:
+                      location.pathname === "/profile" ? "#3f51b5" : "black",
                       backgroundColor: "#acceff",
                       transform: "scale(1.05)",
                       boxShadow: "0px 4px 10px rgba(63, 81, 181, 0.4)",
@@ -324,7 +400,8 @@ const Header = () => {
                 >
                   <AccountCircleIcon
                     sx={{
-                      color: "#3f51b5",
+                      color:
+                      location.pathname === "/profile" ? "white" : "#3f51b5",
                       marginRight: 1,
                       transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": { color: "#303f9f", transform: "scale(1.1)" },
@@ -333,14 +410,16 @@ const Header = () => {
                   <ListItemText primary="Profile" />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding>
+              <ListItem disablePadding sx={{ marginTop: 1 }}>
                 <ListItemButton
                   onClick={logout}
                   sx={{
                     borderRadius: "8px",
                     transition: "all 0.3s ease",
+                    backgroundColor: "#d32f2f",
+                    color: "white",
                     "&:hover": {
-                      backgroundColor: "#ffebee",
+                      backgroundColor: "#f24b4b",
                       transform: "scale(1.05)",
                       boxShadow: "0px 4px 10px rgba(211, 47, 47, 0.3)",
                     },
@@ -348,21 +427,19 @@ const Header = () => {
                 >
                   <LogoutIcon
                     sx={{
-                      color: "#3f51b5",
+                      color: "white",
                       marginRight: 1,
-                      transition: "color 0.3s ease , transform 0.3s ease", // Smooth color transition
+                      transition: "color 0.3s ease , transform 0.3s ease",
                       "&:hover": {
-                        color: "#d32f2f",
+                        color: "#fc9999",
                         transform: "scale(1.1) rotate(10deg)",
-                      }, // Red color on hover
+                      },
                     }}
                   />
                   <ListItemText
                     primary="Logout"
                     sx={{
                       fontWeight: "bold",
-                      transition: "color 0.3s ease",
-                      "&:hover": { color: "#b71c1c" }, // Text turns darker red on hover
                     }}
                   />
                 </ListItemButton>
