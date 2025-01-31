@@ -641,8 +641,6 @@ const Header = memo(() => {
                     sx={{
                       position: "relative",
                       "&:hover": { backgroundColor: "#1e40af" },
-                      position: "relative",
-                      transition: "background-color 0.3s ease",
                       transition: "background-color 0.3s ease",
                       "&::after": {
                         content: '""',
