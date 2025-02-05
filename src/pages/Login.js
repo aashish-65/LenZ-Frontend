@@ -21,7 +21,7 @@ import {
 } from "@mui/icons-material";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ userId: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useContext(AuthContext);
@@ -37,7 +37,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.userId || !formData.password) {
+    if (!formData.email || !formData.password) {
       setError("Both fields are required");
       return;
     }
@@ -51,7 +51,8 @@ const Login = () => {
       login(response.data.token, response.data.user);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.error || "Login failed");
+      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -101,14 +102,15 @@ const Login = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
-            label="User ID"
-            name="userId"
-            value={formData.userId}
+            label="Email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             variant="outlined"
             fullWidth
             margin="normal"
             required
+            autoComplete="username"
             InputProps={{
               style: { borderRadius: "8px" },
               startAdornment: (
@@ -128,6 +130,7 @@ const Login = () => {
             fullWidth
             margin="normal"
             required
+            autoComplete="current-password"
             InputProps={{
               style: { borderRadius: "8px" },
               startAdornment: (

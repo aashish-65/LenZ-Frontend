@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {
-  Box,
   TextField,
   Button,
   Typography,
@@ -26,14 +25,16 @@ import {
   LocationOn,
   Visibility,
   VisibilityOff,
+  CheckCircle,
 } from "@mui/icons-material";
+import SignupSuccess from "./SignupSuccess";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "+91",
-    alternatePhone: "+91",
+    alternatePhone: "",
     password: "",
     plan: "",
     shopName: "",
@@ -53,6 +54,13 @@ const Signup = () => {
   const [apiError, setApiError] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showVerifyButton, setShowVerifyButton] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState("");
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [otpVerified, setOtpVerified] = useState(false);
 
   const validate = (name, value) => {
     let error = "";
@@ -61,13 +69,17 @@ const Signup = () => {
         if (!value.trim()) error = "Name is required.";
         break;
       case "email":
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           error = "Enter a valid email.";
+        }
         break;
       case "phone":
-      case "alternatePhone":
         if (!/^\+91\d{10}$/.test(value))
-          error = "Enter a valid 10-digit phone number.";
+          error = "Enter a valid 10-digit phone number with +91.";
+        break;
+      case "alternatePhone":
+        if (value && !/^\+91\d{10}$/.test(value))
+          error = "Enter a valid 10-digit phone number with +91.";
         if (name === "alternatePhone" && value === formData.phone)
           error = "Alternate phone number cannot be the same as phone number.";
         break;
@@ -112,11 +124,22 @@ const Signup = () => {
         [name]: validate(name, value),
       }));
     }
+    if (name === "email" && !validate(name, value)) {
+      setShowVerifyButton(true);
+    } else {
+      setShowVerifyButton(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (!otpVerified) {
+      setApiError("Please verify your email with OTP first.");
+      setLoading(false);
+      return;
+    }
 
     // Final validation before submission
     const newErrors = {};
@@ -142,7 +165,13 @@ const Signup = () => {
     try {
       const response = await axios.post(
         "https://lenz-backend.onrender.com/api/auth/signup",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+          },
+        }
       );
       setUserId(response.data.userId);
       setApiError(""); // Clear any API error
@@ -155,6 +184,78 @@ const Signup = () => {
 
   const handleClickShowPassword = (field) => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleVerifyEmail = async () => {
+    try {
+      setLoading(true);
+      // Send OTP to the email
+      await axios.post(
+        "https://lenz-backend.onrender.com/api/otp/request-otp",
+        {
+          email: formData.email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+          },
+        }
+      );
+      setOtpSent(true);
+      setApiError("");
+    } catch (err) {
+      setApiError(err.response?.data?.error || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      setLoading(true);
+      // Verify OTP
+      const response = await axios.post(
+        "https://lenz-backend.onrender.com/api/otp/verify-otp",
+        {
+          email: formData.email,
+          otp,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+          },
+        }
+      );
+      console.log(response.data);
+      if (response.data.confirmation) {
+        setOtpError("");
+        setOtpVerified(true);
+        setApiError("");
+      } else {
+        setOtpError("Invalid OTP");
+      }
+    } catch (err) {
+      setOtpError(err.response?.data?.error || "Failed to verify OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setResendDisabled(true);
+    await handleVerifyEmail();
+    let cooldown = 10;
+    setResendCooldown(cooldown);
+    const interval = setInterval(() => {
+      cooldown -= 1;
+      setResendCooldown(cooldown);
+      if (cooldown === 0) {
+        clearInterval(interval);
+        setResendDisabled(false);
+      }
+    }, 1000);
   };
 
   return (
@@ -186,21 +287,7 @@ const Signup = () => {
       </Typography>
 
       {userId ? (
-        <Box
-          sx={{
-            textAlign: "center",
-            padding: 2,
-            backgroundColor: "#dff0d8",
-            borderRadius: 2,
-          }}
-        >
-          <Typography variant="h6" sx={{ color: "#3c763d", marginBottom: 1 }}>
-            Signup Successful!
-          </Typography>
-          <Typography variant="body1" sx={{ color: "#3c763d" }}>
-            Your Unique ID: <strong>{userId}</strong>
-          </Typography>
-        </Box>
+        <SignupSuccess userId={userId} />
       ) : (
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -235,6 +322,8 @@ const Signup = () => {
                 onChange={handleChange}
                 fullWidth
                 required
+                disabled={otpSent || otpVerified}
+                autoComplete="email"
                 helperText={errors.email}
                 error={!!errors.email}
                 InputProps={{
@@ -243,8 +332,59 @@ const Signup = () => {
                       <Email />
                     </InputAdornment>
                   ),
+                  endAdornment: otpVerified && (
+                    <InputAdornment position="end">
+                      <CheckCircle sx={{ color: "green" }} /> {/* Green tick */}
+                    </InputAdornment>
+                  ),
                 }}
               />
+              {showVerifyButton && !otpSent && !otpVerified && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleVerifyEmail}
+                  disabled={loading}
+                  sx={{ m: 1 }}
+                >
+                  Verify Email
+                </Button>
+              )}
+              {otpSent && !otpVerified && (
+                <>
+                  <TextField
+                    label="Enter OTP"
+                    variant="outlined"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    fullWidth
+                    required
+                    helperText={otpError}
+                    error={!!otpError}
+                    sx={{ mt: 2 }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleVerifyOtp}
+                    disabled={loading}
+                    sx={{ m: 1 }}
+                  >
+                    Verify OTP
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleResendOtp}
+                    disabled={resendDisabled || loading}
+                    sx={{ m: 1 }}
+                  >
+                    {resendDisabled
+                      ? `Resend OTP in ${resendCooldown}s`
+                      : "Resend OTP"}
+                  </Button>
+                </>
+              )}
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -297,6 +437,7 @@ const Signup = () => {
                 onChange={handleChange}
                 fullWidth
                 required
+                autoComplete="new-password"
                 helperText={errors.password}
                 error={!!errors.password}
                 InputProps={{
@@ -476,7 +617,7 @@ const Signup = () => {
               backgroundColor: "#007bff",
               "&:hover": { backgroundColor: "#0056b3" },
             }}
-            disabled={loading}
+            disabled={loading || !otpVerified}
           >
             {loading ? (
               <CircularProgress size={24} color="inherit" />

@@ -25,7 +25,7 @@ const CreateOrder = () => {
   const [powerDetails, setPowerDetails] = useState({});
   const [powerType, setPowerType] = useState("");
   const [powerEntryType, setPowerEntryType] = useState("");
-  const [purchaseLens, setPurchaseLens] = useState();
+  const purchaseLens = false;
   const [glassType, setGlassType] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -39,10 +39,10 @@ const CreateOrder = () => {
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
-  const handleLensSelection = (selection) => {
-    setPurchaseLens(selection);
-    nextStep();
-  };
+  // const handleLensSelection = (selection) => {
+  //   setPurchaseLens(selection);
+  //   nextStep();
+  // };
 
   const handleGlassTypeSelection = (type) => {
     setGlassType(type);
@@ -54,7 +54,7 @@ const CreateOrder = () => {
     customerDetails,
     frameOptions,
     shiftingOrFitting,
-    purchaseLens,
+    purchaseLens: false,
     glassType,
     lensDetails,
     materialDetails,
@@ -144,7 +144,7 @@ const CreateOrder = () => {
         />
       )}
       {step === 6 && orderPlaced && <OrderSuccess />}
-      {step === 4 && shiftingOrFitting === "Fitting" && (
+      {/* {step === 4 && shiftingOrFitting === "Fitting" && (
         <Container maxWidth="sm">
           <Box
             sx={{
@@ -262,9 +262,9 @@ const CreateOrder = () => {
             </Button>
           </Box>
         </Container>
-      )}
+      )} */}
 
-{step === 5 &&
+{step === 4 &&
   shiftingOrFitting === "Fitting" &&
   purchaseLens !== null && (
     <Container maxWidth="sm">
@@ -383,7 +383,7 @@ const CreateOrder = () => {
     </Container>
   )}
 
-      {step === 6 && glassType && (
+      {step === 5 && glassType && (
         <LensSelection
           setLensDetails={setLensDetails}
           nextStep={nextStep}
@@ -391,7 +391,7 @@ const CreateOrder = () => {
           glassType={glassType}
         />
       )}
-      {step === 7 && glassType === "Sunglass" && (
+      {step === 6 && glassType === "Sunglass" && (
         <PowerEntry
           onPowerDataChange={setPowerDetails}
           onPowerTypeChange={setPowerType}
@@ -401,7 +401,7 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 8 && glassType === "Sunglass" && (
+      {step === 7 && glassType === "Sunglass" && (
         <Bill
           customerDetails={customerDetails}
           frameOptions={frameOptions}
@@ -419,7 +419,7 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 9 && glassType === "Sunglass" && (
+      {step === 8 && glassType === "Sunglass" && (
         <PaymentType
           paymentType={paymentType}
           setPaymentType={setPaymentType}
@@ -428,8 +428,8 @@ const CreateOrder = () => {
           prevStep={prevStep}
         />
       )}
-      {step === 10 && orderPlaced && <OrderSuccess />}
-      {step === 7 && glassType === "Normal" && (
+      {step === 9 && orderPlaced && <OrderSuccess />}
+      {step === 6 && glassType === "Normal" && (
         <MaterialSelection
           setMaterialDetails={setMaterialDetails}
           nextStep={nextStep}
@@ -437,7 +437,7 @@ const CreateOrder = () => {
           frameOptions={frameOptions}
         />
       )}
-      {step === 8 &&
+      {step === 7 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === false && (
@@ -450,7 +450,7 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-      {step === 9 &&
+      {step === 8 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === false && (
@@ -471,7 +471,7 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-      {step === 10 &&
+      {step === 9 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === false && (
@@ -483,8 +483,8 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-      {step === 11 && orderPlaced && <OrderSuccess />}
-      {step === 8 &&
+      {step === 10 && orderPlaced && <OrderSuccess />}
+      {step === 7 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens && (
@@ -495,7 +495,7 @@ const CreateOrder = () => {
             materialDetails={materialDetails}
           />
         )}
-      {step === 9 &&
+      {step === 8 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === true && (
@@ -508,7 +508,7 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-      {step === 10 &&
+      {step === 9 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === true && (
@@ -530,7 +530,7 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-      {step === 11 &&
+      {step === 10 &&
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === true && (
@@ -542,7 +542,7 @@ const CreateOrder = () => {
             prevStep={prevStep}
           />
         )}
-      {step === 12 && orderPlaced && <OrderSuccess />}
+      {step === 11 && orderPlaced && <OrderSuccess />}
     </div>
   );
 };

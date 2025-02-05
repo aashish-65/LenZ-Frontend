@@ -183,11 +183,13 @@ const ProfilePage = () => {
         return;
       }
 
-      const token = localStorage.getItem("authToken");
+      // const token = localStorage.getItem("authToken");
       await axios.post(
         "https://lenz-backend.onrender.com/api/otp/request-otp",
         { email: profileData.email },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: {
+          "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+        }, }
       );
       // setIsOtpSent(true);
       setShowOtpModal(true);
@@ -208,11 +210,13 @@ const ProfilePage = () => {
         setError("Please enter a valid 6-digit OTP.");
         return;
       }
-      const token = localStorage.getItem("authToken");
+      // const token = localStorage.getItem("authToken");
       await axios.post(
         "https://lenz-backend.onrender.com/api/otp/verify-otp",
         { email: profileData.email, otp },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: {
+          "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+        }, }
       );
       setOtpVerified(true);
       setShowOtpModal(false);
@@ -573,7 +577,7 @@ const ProfilePage = () => {
                     label="Phone"
                     name="phone"
                     value={profileData.phone}
-                    disabled
+                    // disabled
                     onChange={handleChange}
                     error={!!errors.phone}
                     helperText={errors.phone}

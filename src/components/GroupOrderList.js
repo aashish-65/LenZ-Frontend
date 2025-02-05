@@ -23,6 +23,7 @@ import {
   Container,
   Grid,
   useMediaQuery,
+  useTheme,
   Skeleton,
   IconButton,
   Tooltip,
@@ -31,19 +32,26 @@ import { saveAs } from "file-saver";
 import Papa from "papaparse";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { FileDownload as FileDownloadIcon, PictureAsPdf as PdfIcon } from "@mui/icons-material";
+import {
+  FileDownload as FileDownloadIcon,
+  PictureAsPdf as PdfIcon,
+} from "@mui/icons-material";
 
 const GroupOrderList = () => {
   const [groupOrders, setGroupOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState(""); // Filtering state
-  const [sortConfig, setSortConfig] = useState({ key: "date", direction: "asc" }); // Sorting state
+  const [sortConfig, setSortConfig] = useState({
+    key: "date",
+    direction: "desc",
+  }); // Sorting state
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 5; // Pagination limit
+  const ordersPerPage = 10; // Pagination limit
 
   const navigate = useNavigate();
   const { authToken } = useAuth();
+  const theme = useTheme();
   const isMobile = useMediaQuery("(max-width:600px)"); // Check for mobile view
 
   useEffect(() => {
@@ -89,33 +97,82 @@ const GroupOrderList = () => {
 
   // 📊 **Export as CSV**
   const exportToCSV = () => {
-    const csv = Papa.unparse(
-      groupOrders.map(({ _id, tracking_status, finalAmount, createdAt }) => ({
-        ID: _id,
-        Status: tracking_status,
-        "Total Amount (₹)": finalAmount,
-        Date: new Date(createdAt).toLocaleDateString(),
-      }))
-    );
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, "group_orders.csv");
+    if (!groupOrders.length) {
+      alert("No orders available for export.");
+      return;
+    }
+
+    try {
+      const csv = Papa.unparse(
+        groupOrders.map(({ _id, tracking_status, finalAmount, createdAt }) => ({
+          ID: _id,
+          Status: tracking_status,
+          "Total Amount (₹)": finalAmount,
+          Date: new Date(createdAt).toLocaleDateString("en-GB"),
+        }))
+      );
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const filename = `group_orders_${new Date()
+        .toISOString()
+        .slice(0, 10)}.csv`;
+
+      saveAs(blob, filename);
+    } catch (error) {
+      console.error("Error exporting CSV:", error);
+      alert("Failed to export CSV. Please try again.");
+    }
   };
 
   // 📜 **Export as PDF**
   const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.text("Group Orders", 14, 15);
-    doc.autoTable({
-      head: [["ID", "Status", "Total Amount (₹)", "Date"]],
-      body: groupOrders.map(({ _id, tracking_status, finalAmount, createdAt }) => [
-        _id,
-        tracking_status,
-        `₹${finalAmount}`,
-        new Date(createdAt).toLocaleDateString(),
-      ]),
-    });
-    doc.save("group_orders.pdf");
-  };
+    if (!groupOrders.length) {
+      alert("No orders available for export.");
+      return;
+    }
+  
+    try {
+      const doc = new jsPDF();
+  
+      // Reset text color for main content
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(18);
+      doc.text("Group Orders", 14, 15);
+
+      // Add watermark
+      doc.setTextColor(230, 230, 230); // Light gray color
+      doc.setFontSize(200);
+      doc.text("LenZ", 25, 100, { angle: 45, opacity: 5 });
+
+      doc.setTextColor(230, 230, 230); // Light gray color
+      doc.setFontSize(250);
+      doc.text("LenZ", 45, 230, { angle: 45, opacity: 5 });
+
+      doc.setTextColor(230, 230, 230); // Light gray color
+      doc.setFontSize(200);
+      doc.text("LenZ", 100, 300, { angle: 45, opacity: 5 });
+  
+      // AutoTable for structured data
+      doc.autoTable({
+        startY: 30,
+        head: [["ID", "Status", "Total Amount (₹)", "Date"]],
+        body: groupOrders.map(({ _id, tracking_status, finalAmount, createdAt }) => [
+          _id,
+          tracking_status,
+          `₹${finalAmount.toLocaleString()}`, // Format currency
+          new Date(createdAt).toLocaleDateString("en-GB"),
+        ]),
+        theme: "striped",
+      });
+  
+      // Save file with date
+      const filename = `group_orders_${new Date().toISOString().slice(0, 10)}.pdf`;
+      doc.save(filename);
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      alert("Failed to export PDF. Please try again.");
+    }
+  };  
 
   // 🎨 **Color for Tracking Status**
   const getStatusColor = (status) => {
@@ -151,7 +208,11 @@ const GroupOrderList = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "powderblue" }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ fontWeight: "bold", color: "powderblue" }}
+      >
         Your Group Orders
       </Typography>
 
@@ -160,24 +221,123 @@ const GroupOrderList = () => {
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>
             <FormControl fullWidth>
-              <InputLabel shrink={true} sx={{ fontWeight: "bold" }}>Status Filter</InputLabel>
+              <InputLabel
+                shrink={true}
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  color: theme.palette.text.primary,
+                  backgroundColor: theme.palette.background.paper,
+                  padding: "0 4px",
+                  borderRadius: 1,
+                  transform: "translate(14px, -9px) scale(0.9)",
+                  "&.Mui-focused": {
+                    color: theme.palette.primary.main, // Change color when focused
+                  },
+                }}
+              >
+                Status Filter
+              </InputLabel>
               <Select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 displayEmpty
+                sx={{
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: theme.palette.divider,
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: theme.palette.primary.main,
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: theme.palette.primary.main,
+                    borderWidth: 2,
+                  },
+                }}
               >
                 <MenuItem value="">All</MenuItem>
-                <MenuItem value="Order Placed For Pickup">Order Placed For Pickup</MenuItem>
-                <MenuItem value="Pickup Accepted">Pickup Accepted</MenuItem>
-                <MenuItem value="Order Picked Up">Order Picked Up</MenuItem>
-                <MenuItem value="Order Received By Admin">Order Received By Admin</MenuItem>
-                <MenuItem value="Work Completed">Work Completed</MenuItem>
-                <MenuItem value="Out For Delivery">Out For Delivery</MenuItem>
-                <MenuItem value="Order Completed">Order Completed</MenuItem>
+                <MenuItem
+                  value="Order Placed For Pickup"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Order Placed For Pickup
+                </MenuItem>
+                <MenuItem
+                  value="Pickup Accepted"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Pickup Accepted
+                </MenuItem>
+                <MenuItem
+                  value="Order Picked Up"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Order Picked Up
+                </MenuItem>
+                <MenuItem
+                  value="Order Received By Admin"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Order Received By Admin
+                </MenuItem>
+                <MenuItem
+                  value="Work Completed"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Work Completed
+                </MenuItem>
+                <MenuItem
+                  value="Out For Delivery"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Out For Delivery
+                </MenuItem>
+                <MenuItem
+                  value="Order Completed"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  }}
+                >
+                  Order Completed
+                </MenuItem>
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6} md={8} sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={8}
+            sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}
+          >
             <Tooltip title="Export CSV">
               <IconButton color="primary" onClick={exportToCSV}>
                 <FileDownloadIcon />
@@ -197,7 +357,11 @@ const GroupOrderList = () => {
         // Mobile View: Card Layout
         <Box>
           {currentOrders.map((order) => (
-            <Card key={order._id} onClick={() => navigate(`/group-orders/${order._id}`)}  sx={{ mb: 2, p: 2 }}>
+            <Card
+              key={order._id}
+              onClick={() => navigate(`/group-orders/${order._id}`)}
+              sx={{ mb: 2, p: 2 }}
+            >
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                 Order ID: {order._id}
               </Typography>
@@ -205,7 +369,9 @@ const GroupOrderList = () => {
                 Status: {order.tracking_status}
               </Typography>
               <Typography>Total Amount: ₹{order.finalAmount}</Typography>
-              <Typography>Date: {new Date(order.createdAt).toLocaleDateString()}</Typography>
+              <Typography>
+                Date: {new Date(order.createdAt).toLocaleDateString()}
+              </Typography>
               <Button
                 variant="outlined"
                 size="small"
@@ -220,45 +386,80 @@ const GroupOrderList = () => {
       ) : (
         // Desktop View: Table Layout
         <Card>
-          <TableContainer component={Paper} sx={{ maxHeight: "60vh", overflow: "auto" }}>
+          <TableContainer
+            component={Paper}
+            sx={{ maxHeight: "60vh", overflow: "auto" }}
+          >
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: "primary.main", color: "white" }}>
+                  <TableCell
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "primary.main",
+                      color: "white",
+                    }}
+                  >
                     ID
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: "primary.main", color: "white" }}>
+                  <TableCell
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "primary.main",
+                      color: "white",
+                    }}
+                  >
                     Status
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: "primary.main", color: "white" }}>
-                  <TableSortLabel
-                    active={sortConfig.key === "amount"}
-                    direction={sortConfig.direction}
-                    onClick={() =>
-                      setSortConfig({
-                        key: "amount",
-                        direction: sortConfig.direction === "asc" ? "desc" : "asc",
-                      })
-                    }
+                  <TableCell
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "primary.main",
+                      color: "white",
+                    }}
                   >
-                    Total Amount (₹)
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", backgroundColor: "primary.main", color: "white" }}>
-                  <TableSortLabel
-                    active={sortConfig.key === "date"}
-                    direction={sortConfig.direction}
-                    onClick={() =>
-                      setSortConfig({
-                        key: "date",
-                        direction: sortConfig.direction === "asc" ? "desc" : "asc",
-                      })
-                    }
+                    <TableSortLabel
+                      active={sortConfig.key === "amount"}
+                      direction={sortConfig.direction}
+                      onClick={() =>
+                        setSortConfig({
+                          key: "amount",
+                          direction:
+                            sortConfig.direction === "asc" ? "desc" : "asc",
+                        })
+                      }
+                    >
+                      Total Amount (₹)
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "primary.main",
+                      color: "white",
+                    }}
                   >
-                    Date
-                  </TableSortLabel>
-                </TableCell>
-                  <TableCell sx={{ fontWeight: "bold", backgroundColor: "primary.main", color: "white" }}>
+                    <TableSortLabel
+                      active={sortConfig.key === "date"}
+                      direction={sortConfig.direction}
+                      onClick={() =>
+                        setSortConfig({
+                          key: "date",
+                          direction:
+                            sortConfig.direction === "asc" ? "desc" : "asc",
+                        })
+                      }
+                    >
+                      Date
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      fontWeight: "bold",
+                      backgroundColor: "primary.main",
+                      color: "white",
+                    }}
+                  >
                     Actions
                   </TableCell>
                 </TableRow>
@@ -268,15 +469,22 @@ const GroupOrderList = () => {
                   <TableRow
                     key={order._id}
                     hover
-                    sx={{ cursor: "pointer", "&:hover": { backgroundColor: "action.hover" } }}
+                    sx={{
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "action.hover" },
+                    }}
                     onClick={() => navigate(`/group-orders/${order._id}`)}
                   >
                     <TableCell>{order._id}</TableCell>
-                    <TableCell sx={{ color: getStatusColor(order.tracking_status) }}>
+                    <TableCell
+                      sx={{ color: getStatusColor(order.tracking_status) }}
+                    >
                       {order.tracking_status}
                     </TableCell>
                     <TableCell>₹{order.finalAmount}</TableCell>
-                    <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant="outlined"
@@ -306,7 +514,10 @@ const GroupOrderList = () => {
 
       {/* 🚨 **No Orders Found** */}
       {currentOrders.length === 0 && (
-        <Typography variant="h6" sx={{ textAlign: "center", mt: 4, color: "text.secondary" }}>
+        <Typography
+          variant="h6"
+          sx={{ textAlign: "center", mt: 4, color: "text.secondary" }}
+        >
           No orders found.
         </Typography>
       )}

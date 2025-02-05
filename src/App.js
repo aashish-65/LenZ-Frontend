@@ -11,7 +11,7 @@ import RouteGuard from "./routes/RouteGaurd";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme"; // Import your custom theme
 import { ClipLoader } from 'react-spinners';
-// import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from "./AuthContext";
 import Header from "./components/Header";
@@ -19,14 +19,16 @@ import Footer from "./components/Footer";
 import "./App.css"; // Optional: Your global styles
 import GroupOrderList from "./components/GroupOrderList";
 import GroupOrderDetails from "./components/GroupOrderDetails";
+import Orders from "./pages/Orders";
 const Signup = lazy(() => import("./pages/Signup"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CreateOrder = lazy(() => import("./pages/CreateOrder"));
-const Orders = lazy(() => import("./pages/Orders"));
+// const Orders = lazy(() => import("./pages/Orders"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
 const GroupOrder = lazy(() => import("./components/GroupOrder"));
+// toast.configure();
 
 // PublicRoute component to redirect logged-in users
 // const PublicRoute = ({ children }) => {
@@ -62,6 +64,7 @@ const App = () => {
         <AuthProvider>
           <div className="App">
             <Header />
+            <ToastContainer position="top-right" autoClose={3000} />
             <div className="main-content">
               <Suspense fallback={<ClipLoader color="#000" size={50} />}>
                 <ErrorBoundary>
