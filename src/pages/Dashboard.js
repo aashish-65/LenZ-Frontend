@@ -110,9 +110,16 @@ const Dashboard = () => {
             sx={{
               background: "#fff",
               borderRadius: 3,
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
               boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
               overflow: "hidden",
+              cursor: "pointer",
+              "&:hover": {
+                transform: "scale(1.05)",
+                boxShadow: "0px 6px 15px rgba(173, 216, 230, 0.8)",
+              },
             }}
+            onClick={() => navigate("/profile")}
           >
             <CardContent>
               <Typography variant="h5" gutterBottom>
@@ -150,7 +157,12 @@ const Dashboard = () => {
                 Your Orders
               </Typography>
               <Divider sx={{ marginY: 2 }} />
-              <Box textAlign="center" display="flex" justifyContent="center" gap={1}>
+              <Box
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                gap={1}
+              >
                 <Button
                   variant="outlined"
                   onClick={handleGoToOrders}
@@ -174,7 +186,8 @@ const Dashboard = () => {
                     borderRadius: "8px",
                     borderColor: "#6a11cb",
                     color: "#fff",
-                    background: "linear-gradient(to right,rgb(44, 57, 79),rgb(134, 20, 255))",
+                    background:
+                      "linear-gradient(to right,rgb(44, 57, 79),rgb(134, 20, 255))",
                   }}
                 >
                   Book For Pickup

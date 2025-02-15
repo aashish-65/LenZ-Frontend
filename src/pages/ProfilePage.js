@@ -20,6 +20,8 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  Paper,
+  Skeleton,
 } from "@mui/material";
 import {
   Edit,
@@ -34,6 +36,10 @@ import {
   LocationOn,
   Visibility,
   VisibilityOff,
+  CardMembership,
+  AccountBalanceWallet,
+  PinDrop,
+  VpnKey,
 } from "@mui/icons-material";
 
 const ProfilePage = () => {
@@ -53,6 +59,8 @@ const ProfilePage = () => {
       pinCode: "",
     },
     plan: "",
+    distance: 0,
+    creditBalance: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -68,6 +76,7 @@ const ProfilePage = () => {
   const [pendingUpdate, setPendingUpdate] = useState(false);
   const [otpTimer, setOtpTimer] = useState(300); // 5 minutes in seconds
   const [canResendOtp, setCanResendOtp] = useState(true); // Allow resend OTP
+  const [resending, setResending] = useState(false);
 
   // Change Password State
   const [oldPassword, setOldPassword] = useState("");
@@ -117,9 +126,12 @@ const ProfilePage = () => {
             error = "Enter a valid email.";
           break;
         case "phone":
-        case "alternatePhone":
           if (!/^\+91\d{10}$/.test(value))
-            error = "Enter a valid 10-digit phone number.";
+            error = "Enter a valid 10-digit phone number with +91.";
+          break;
+        case "alternatePhone":
+          if (value && !/^\+91\d{10}$/.test(value))
+            error = "Enter a valid 10-digit phone number with +91.";
           if (name === "alternatePhone" && value === profileData.phone)
             error =
               "Alternate phone number cannot be the same as phone number.";
@@ -187,9 +199,11 @@ const ProfilePage = () => {
       await axios.post(
         "https://lenz-backend.onrender.com/api/otp/request-otp",
         { email: profileData.email },
-        { headers: {
-          "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
-        }, }
+        {
+          headers: {
+            "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+          },
+        }
       );
       // setIsOtpSent(true);
       setShowOtpModal(true);
@@ -214,9 +228,11 @@ const ProfilePage = () => {
       await axios.post(
         "https://lenz-backend.onrender.com/api/otp/verify-otp",
         { email: profileData.email, otp },
-        { headers: {
-          "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
-        }, }
+        {
+          headers: {
+            "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+          },
+        }
       );
       setOtpVerified(true);
       setShowOtpModal(false);
@@ -361,6 +377,20 @@ const ProfilePage = () => {
     ]
   );
 
+  // Handle Resend OTP with Loading Effect
+  const handleResendOTP = async () => {
+    setResending(true);
+    await requestOTP();
+    setResending(false);
+  };
+
+  // Format OTP Timer (MM:SS)
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${minutes}:${sec < 10 ? "0" : ""}${sec}`;
+  };
+
   // Re-trigger update after OTP verification
   useEffect(() => {
     if (otpVerified && pendingUpdate) {
@@ -386,13 +416,131 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) {
+  // Skeleton Loader for Profile Details
+  const renderSkeleton = () => {
     return (
-      <Box textAlign="center" mt={5}>
-        <CircularProgress />
-      </Box>
+      <Paper elevation={4} sx={{ p: 4, borderRadius: 2, bgcolor: "#fff" }}>
+        <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
+          <Skeleton variant="circular" width={100} height={100} />
+        </Box>
+        <Grid container spacing={3}>
+          {/* Shop Name */}
+          <Grid item xs={12} sm={6}>
+            <Skeleton variant="rectangular" width="100%" height={60} />
+          </Grid>
+          {/* Unique User ID */}
+          <Grid item xs={12} sm={6}>
+            <Skeleton variant="rectangular" width="100%" height={60} />
+          </Grid>
+          {/* Phone */}
+          <Grid item xs={12} sm={6}>
+            <Skeleton variant="rectangular" width="100%" height={60} />
+          </Grid>
+          {/* Alternate Phone */}
+          <Grid item xs={12} sm={6}>
+            <Skeleton variant="rectangular" width="100%" height={60} />
+          </Grid>
+          {/* Address */}
+          <Grid item xs={12}>
+            <Skeleton variant="rectangular" width="100%" height={60} />
+          </Grid>
+          {/* Distance */}
+          <Grid item xs={12} sm={4}>
+            <Skeleton variant="rectangular" width="100%" height={80} />
+          </Grid>
+          {/* Plan */}
+          <Grid item xs={12} sm={4}>
+            <Skeleton variant="rectangular" width="100%" height={80} />
+          </Grid>
+          {/* Credit Balance */}
+          <Grid item xs={12} sm={4}>
+            <Skeleton variant="rectangular" width="100%" height={80} />
+          </Grid>
+        </Grid>
+      </Paper>
     );
+  };
+
+  if (loading) {
+    return renderSkeleton();
   }
+
+  // Reusable Detail Item Component
+  const DetailItem = ({ icon, label, value }) => (
+    <Box
+      display="flex"
+      alignItems="center"
+      gap={2}
+      bgcolor="#f9f9f9"
+      p={2}
+      borderRadius={2}
+      boxShadow={1}
+    >
+      {icon}
+      <Box>
+        <Typography variant="body2" fontWeight="bold" color="primary.main">
+          {label}
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          {value}
+        </Typography>
+      </Box>
+    </Box>
+  );
+
+  // Reusable Box for Uniform Size (Distance, Plan, Credit Balance)
+  const DetailBox = ({ icon, label, value }) => (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      bgcolor="#f9f9f9"
+      p={3}
+      borderRadius={2}
+      boxShadow={1}
+      minWidth={100} // Ensures consistent width
+      minHeight={80} // Ensures consistent height
+      textAlign="center"
+    >
+      {icon}
+      <Typography variant="body2" fontWeight="bold" color="primary.main" mt={1}>
+        {label}
+      </Typography>
+      <Typography variant="body1" color="text.secondary">
+        {value}
+      </Typography>
+    </Box>
+  );
+
+  // Reusable TextField Component
+  const CustomTextField = ({
+    label,
+    name,
+    value,
+    onChange,
+    error,
+    icon,
+    disabled,
+    type,
+  }) => (
+    <TextField
+      fullWidth
+      label={label}
+      name={name}
+      type={type || "text"}
+      value={value || ""}
+      onChange={onChange}
+      disabled={disabled}
+      error={!!error}
+      helperText={error}
+      InputProps={{
+        startAdornment: icon && (
+          <InputAdornment position="start">{icon}</InputAdornment>
+        ),
+      }}
+    />
+  );
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", p: 3 }}>
@@ -408,9 +556,21 @@ const ProfilePage = () => {
       )}
 
       {/* OTP Verification Modal */}
-      <Dialog open={showOtpModal} onClose={() => setShowOtpModal(false)}>
-        <DialogTitle>Verify OTP</DialogTitle>
+      <Dialog
+        open={showOtpModal}
+        onClose={() => setShowOtpModal(false)}
+        sx={{ "& .MuiPaper-root": { borderRadius: 3, p: 2, minWidth: 350 } }}
+      >
+        <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
+          🔐 Verify OTP
+        </DialogTitle>
+
         <DialogContent>
+          <Typography variant="body2" color="text.secondary" textAlign="center">
+            Enter the OTP sent to your registered number.
+          </Typography>
+
+          {/* OTP Input Field */}
           <TextField
             fullWidth
             label="Enter OTP"
@@ -419,431 +579,550 @@ const ProfilePage = () => {
             sx={{ mt: 2 }}
             error={!!error}
             helperText={error}
+            inputProps={{ maxLength: 6 }}
           />
-          <Typography variant="body2" sx={{ mt: 2 }}>
-            OTP expires in: {Math.floor(otpTimer / 60)}:{otpTimer % 60}
-          </Typography>
+
+          {/* OTP Expiry Timer */}
+          <Box textAlign="center" mt={2}>
+            <Typography
+              variant="body2"
+              color={otpTimer > 10 ? "text.secondary" : "error"}
+            >
+              ⏳ OTP expires in: <strong>{formatTime(otpTimer)}</strong>
+            </Typography>
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowOtpModal(false)}>Cancel</Button>
+
+        <DialogActions sx={{ justifyContent: "center", pb: 2 }}>
+          <Button onClick={() => setShowOtpModal(false)} color="error">
+            Cancel
+          </Button>
           <Button onClick={verifyOTP} variant="contained" color="primary">
             Verify
           </Button>
           <Button
-            onClick={requestOTP}
-            disabled={!canResendOtp}
+            onClick={handleResendOTP}
+            disabled={!canResendOtp || resending}
             variant="outlined"
             color="secondary"
+            startIcon={resending ? <CircularProgress size={18} /> : null}
           >
-            Resend OTP
+            {resending ? "Resending..." : "Resend OTP"}
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Card sx={{ mb: 3 }}>
-        <CardContent sx={{ textAlign: "center" }}>
-          <Avatar
+      <Card
+        sx={{
+          mb: 3,
+          borderRadius: 4,
+          boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.15)",
+          mx: "auto",
+          textAlign: "center",
+          p: 3,
+          bgcolor: "background.default",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.03)",
+          },
+        }}
+      >
+        <CardContent>
+          {/* Avatar with Glow & Hover Effect */}
+          <Box
             sx={{
-              width: 80,
-              height: 80,
-              margin: "auto",
-              bgcolor: "primary.main",
+              display: "flex",
+              justifyContent: "center",
               mb: 2,
             }}
           >
-            <Person fontSize="large" />
-          </Avatar>
-          <Typography variant="h5" fontWeight="bold">
+            <Avatar
+              sx={{
+                width: 100,
+                height: 100,
+                background:
+                  "linear-gradient(135deg, #1976D2, #64B5F6, #42A5F5)",
+                color: "white",
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                  boxShadow: "0px 6px 16px rgba(0, 0, 0, 0.25)",
+                },
+              }}
+            >
+              <Person fontSize="large" />
+            </Avatar>
+          </Box>
+
+          {/* User Name */}
+          <Typography variant="h5" fontWeight="bold" gutterBottom>
             {profileData.name}
           </Typography>
-          <Typography variant="body1" color="textSecondary">
+
+          {/* Email */}
+          <Typography variant="body1" color="text.secondary">
             {profileData.email}
           </Typography>
+
+          {/* Subtle Divider */}
+          <Box
+            sx={{
+              mt: 2,
+              height: 3,
+              width: "60%",
+              mx: "auto",
+              bgcolor: "primary.light",
+              borderRadius: 2,
+            }}
+          />
         </CardContent>
       </Card>
 
-      <Card>
+      <Card
+        sx={{
+          mx: "auto",
+          p: 2,
+          borderRadius: 4,
+          boxShadow: 3,
+          bgcolor: "background.paper",
+        }}
+      >
+        {/* Tabs Section */}
         <Tabs
           value={tab}
           onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
           variant="fullWidth"
+          sx={{
+            "& .MuiTab-root": {
+              textTransform: "none",
+              fontWeight: "bold",
+              fontSize: "15px",
+              minHeight: 50,
+              transition: "0.3s",
+              borderRadius: 2,
+              "&:hover": {
+                bgcolor: "action.hover",
+              },
+            },
+            "& .MuiTabs-indicator": {
+              height: 4,
+              borderRadius: 2,
+              bgcolor: "primary.main",
+            },
+          }}
         >
-          <Tab label="View Profile" icon={<Person />} />
-          <Tab label="Update Profile" icon={<Edit />} />
-          <Tab label="Change Password" icon={<Lock />} />
+          <Tab label="View Profile" icon={<Person />} iconPosition="start" />
+          <Tab label="Update Profile" icon={<Edit />} iconPosition="start" />
+          <Tab label="Change Password" icon={<Lock />} iconPosition="start" />
         </Tabs>
+
         <Divider />
-        <CardContent>
-          {tab === 0 && (
-            <Box>
-              <Typography variant="h6" mb={2}>
-                Profile Details
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography>
-                    <strong>Unique User ID:</strong> {profileData.userId}
+        <CardContent sx={{ p: 1, mt: 1 }}>
+          <Box
+            sx={{
+              opacity: 0,
+              transform: "translateY(10px)",
+              animation: "fadeIn 0.3s ease-in-out forwards",
+              "@keyframes fadeIn": {
+                "100%": { opacity: 1, transform: "translateY(0)" },
+              },
+            }}
+          >
+            {tab === 0 && (
+              <Paper
+                elevation={4}
+                sx={{ p: 4, borderRadius: 2, bgcolor: "#fff" }}
+              >
+                {/* Profile Header */}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  mb={3}
+                  gap={1}
+                >
+                  <AccountCircle sx={{ fontSize: 32, color: "primary.main" }} />
+                  <Typography variant="h5" color="primary">
+                    Profile Details
                   </Typography>
+                </Box>
+
+                <Grid container spacing={3}>
+                  {/* Shop Name */}
+                  <Grid item xs={12} sm={6}>
+                    <DetailItem
+                      icon={<Business sx={{ color: "#ff9800" }} />}
+                      label="Shop Name"
+                      value={profileData.shopName}
+                    />
+                  </Grid>
+
+                  {/* Unique User ID */}
+                  <Grid item xs={12} sm={6}>
+                    <DetailItem
+                      icon={<AccountCircle sx={{ color: "#6a11cb" }} />}
+                      label="Unique User ID"
+                      value={profileData.userId}
+                    />
+                  </Grid>
+
+                  {/* Phone */}
+                  <Grid item xs={12} sm={6}>
+                    <DetailItem
+                      icon={<Phone sx={{ color: "#2575fc" }} />}
+                      label="Phone"
+                      value={profileData.phone}
+                    />
+                  </Grid>
+
+                  {/* Alternate Phone */}
+                  <Grid item xs={12} sm={6}>
+                    <DetailItem
+                      icon={<Phone sx={{ color: "#2575fc" }} />}
+                      label="Alternate Phone"
+                      value={profileData.alternatePhone || "N/A"}
+                    />
+                  </Grid>
+
+                  {/* Address */}
+                  <Grid item xs={12}>
+                    <DetailItem
+                      icon={<Home sx={{ color: "#4caf50" }} />}
+                      label="Address"
+                      value={`${profileData.address.line1}, ${
+                        profileData.address.line2 || ""
+                      }, ${profileData.address.city}, ${
+                        profileData.address.state
+                      } - ${profileData.address.pinCode}`}
+                    />
+                  </Grid>
+
+                  {/* Distance */}
+                  <Grid item xs={12} sm={4}>
+                    <DetailBox
+                      icon={<LocationOn sx={{ color: "#e91e63" }} />}
+                      label="Distance"
+                      value={`${profileData.distance} km`}
+                    />
+                  </Grid>
+
+                  {/* Plan */}
+                  <Grid item xs={12} sm={4}>
+                    <DetailBox
+                      icon={<CardMembership sx={{ color: "#009688" }} />}
+                      label="Plan"
+                      value={profileData.plan}
+                    />
+                  </Grid>
+
+                  {/* Credit Balance */}
+                  <Grid item xs={12} sm={4}>
+                    <DetailBox
+                      icon={<AccountBalanceWallet sx={{ color: "#673ab7" }} />}
+                      label="Credit Balance"
+                      value={`₹ ${profileData.creditBalance}`}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography>
-                    <strong>Phone:</strong> {profileData.phone}
+              </Paper>
+            )}
+
+            {tab === 1 && (
+              <Paper
+                elevation={4}
+                sx={{ p: 4, borderRadius: 3, bgcolor: "#fff" }}
+              >
+                {/* Header */}
+                <Box display="flex" alignItems="center" gap={1} mb={3}>
+                  <AccountCircle sx={{ fontSize: 32, color: "primary.main" }} />
+                  <Typography variant="h5" color="primary">
+                    Update Profile
                   </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography>
-                    <strong>Alternate Phone:</strong>{" "}
-                    {profileData.alternatePhone || "N/A"}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    <strong>Shop Name:</strong> {profileData.shopName}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    <strong>Address:</strong> {profileData.address.line1},{" "}
-                    {profileData.address.line2 || ""},{" "}
-                    {profileData.address.city}, {profileData.address.state} -{" "}
-                    {profileData.address.pinCode}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    <strong>Plan:</strong> {profileData.plan}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Box>
-          )}
+                </Box>
 
-          {tab === 1 && (
-            <Box component="form" onSubmit={handleUpdate}>
-              <Typography variant="h6" mb={2}>
-                Update Profile
-              </Typography>
-              <Grid container spacing={2}>
-                {/* Name Field */}
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Name"
-                    name="name"
-                    value={profileData.name}
-                    onChange={handleChange}
-                    error={!!errors.name}
-                    helperText={errors.name}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                <Box component="form" onSubmit={handleUpdate}>
+                  <Grid container spacing={2}>
+                    {/* Name */}
+                    <Grid item xs={12}>
+                      <CustomTextField
+                        label="Name"
+                        name="name"
+                        value={profileData.name}
+                        onChange={handleChange}
+                        error={errors.name}
+                        icon={<AccountCircle />}
+                      />
+                    </Grid>
+
+                    {/* Email (Disabled) */}
+                    <Grid item xs={12}>
+                      <CustomTextField
+                        label="Email"
+                        name="email"
+                        type="email"
+                        value={profileData.email}
+                        onChange={handleChange}
+                        error={errors.email}
+                        icon={<Email />}
+                        disabled
+                      />
+                    </Grid>
+
+                    {/* Phone Numbers */}
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        label="Phone"
+                        name="phone"
+                        value={profileData.phone}
+                        onChange={handleChange}
+                        error={errors.phone}
+                        icon={<Phone />}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        label="Alternate Phone"
+                        name="alternatePhone"
+                        value={profileData.alternatePhone}
+                        onChange={handleChange}
+                        error={errors.alternatePhone}
+                        icon={<Phone />}
+                      />
+                    </Grid>
+
+                    {/* Shop Name */}
+                    <Grid item xs={12}>
+                      <CustomTextField
+                        label="Shop Name"
+                        name="shopName"
+                        value={profileData.shopName}
+                        onChange={handleChange}
+                        icon={<Business />}
+                      />
+                    </Grid>
+
+                    {/* Address Fields */}
+                    <Grid item xs={12}>
+                      <CustomTextField
+                        label="Address Line 1"
+                        name="address.line1"
+                        value={profileData.address.line1}
+                        onChange={handleChange}
+                        icon={<Home />}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <CustomTextField
+                        label="Address Line 2 (Optional)"
+                        name="address.line2"
+                        value={profileData.address.line2}
+                        onChange={handleChange}
+                        icon={<Home />}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <CustomTextField
+                        label="Landmark (Optional)"
+                        name="address.landmark"
+                        value={profileData.address.landmark}
+                        onChange={handleChange}
+                        icon={<LocationOn />}
+                      />
+                    </Grid>
+
+                    {/* City & State */}
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        label="City"
+                        name="address.city"
+                        value={profileData.address.city}
+                        onChange={handleChange}
+                        icon={<LocationCity />}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        label="State"
+                        name="address.state"
+                        value={profileData.address.state}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+
+                    {/* Pin Code */}
+                    <Grid item xs={12} sm={6}>
+                      <CustomTextField
+                        label="Pin Code"
+                        name="address.pinCode"
+                        value={profileData.address.pinCode}
+                        onChange={handleChange}
+                        error={errors["address.pinCode"]}
+                        icon={<PinDrop />}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  {/* Submit Button */}
+                  <Box textAlign="center" mt={4}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      sx={{ px: 4, py: 1.5, fontSize: 16, borderRadius: 2 }}
+                    >
+                      Save Changes
+                    </Button>
+                  </Box>
+                </Box>
+              </Paper>
+            )}
+
+            {tab === 2 && (
+              <Box
+                component="form"
+                onSubmit={handleChangePassword}
+                sx={{
+                  backgroundColor: "#fff",
+                  p: 3,
+                  borderRadius: 2,
+                  boxShadow: 2,
+                }}
+              >
+                <Typography variant="h5" mb={3} color="primary">
+                  Change Password
+                </Typography>
+                <Grid container spacing={2}>
+                  {/* Old Password */}
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Old Password"
+                      type={showOldPassword ? "text" : "password"}
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <VpnKey color="primary" />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                handleClickShowPassword("oldPassword")
+                              }
+                              edge="end"
+                            >
+                              {showOldPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+
+                  {/* New Password */}
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="New Password"
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => {
+                        setNewPassword(e.target.value);
+                        const error = validate("password", e.target.value);
+                        setErrors((prevErrors) => ({
+                          ...prevErrors,
+                          newPassword: error,
+                        }));
+                      }}
+                      error={!!errors.newPassword}
+                      helperText={errors.newPassword}
+                      required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Lock color="primary" />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                handleClickShowPassword("newPassword")
+                              }
+                              edge="end"
+                            >
+                              {showNewPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+
+                  {/* Confirm Password */}
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Confirm New Password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Lock color="primary" />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                handleClickShowPassword("confirmPassword")
+                              }
+                              edge="end"
+                            >
+                              {showConfirmPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
                 </Grid>
 
-                {/* Email Field */}
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Email"
-                    name="email"
-                    type="email"
-                    value={profileData.email}
-                    disabled
-                    onChange={handleChange}
-                    error={!!errors.email}
-                    helperText={errors.email}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Email />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* Phone Field */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Phone"
-                    name="phone"
-                    value={profileData.phone}
-                    // disabled
-                    onChange={handleChange}
-                    error={!!errors.phone}
-                    helperText={errors.phone}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Phone />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* Alternate Phone Field */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Alternate Phone"
-                    name="alternatePhone"
-                    value={profileData.alternatePhone}
-                    error={!!errors.alternatePhone}
-                    helperText={errors.alternatePhone}
-                    onChange={handleChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Phone />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* Shop Name */}
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Shop Name"
-                    name="shopName"
-                    value={profileData.shopName}
-                    onChange={handleChange}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Business />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* Address Line 1 */}
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Address Line 1"
-                    name="address.line1"
-                    value={profileData.address.line1}
-                    onChange={handleChange}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Home />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* Address Line 2 */}
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Address Line 2 (Optional)"
-                    name="address.line2"
-                    value={profileData.address.line2}
-                    onChange={handleChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Home />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* Landmark */}
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Landmark (Optional)"
-                    name="address.landmark"
-                    value={profileData.address.landmark}
-                    onChange={handleChange}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LocationOn />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* City */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="City"
-                    name="address.city"
-                    value={profileData.address.city}
-                    onChange={handleChange}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LocationCity />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-
-                {/* State */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="State"
-                    name="address.state"
-                    value={profileData.address.state}
-                    onChange={handleChange}
-                    required
-                  />
-                </Grid>
-
-                {/* Pin Code */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Pin Code"
-                    name="address.pinCode"
-                    value={profileData.address.pinCode}
-                    onChange={handleChange}
-                    helperText={errors["address.pinCode"]}
-                    error={!!errors["address.pinCode"]}
-                    required
-                  />
-                </Grid>
-              </Grid>
-
-              <Box textAlign="center" mt={3}>
-                <Button variant="contained" color="primary" type="submit">
-                  Save Changes
-                </Button>
+                {/* Update Button */}
+                <Box textAlign="center" mt={3}>
+                  <Button variant="contained" color="primary" type="submit">
+                    Update Password
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          )}
-
-          {tab === 2 && (
-            <Box component="form" onSubmit={handleChangePassword}>
-              <Typography variant="h6" mb={2}>
-                Change Password
-              </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Old Password"
-                    type={showOldPassword ? "text" : "password"}
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Lock />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => handleClickShowPassword("oldPassword")}
-                            edge="end"
-                          >
-                            {showOldPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="New Password"
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => {
-                      setNewPassword(e.target.value);
-                      const error = validate("password", e.target.value);
-                      setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        newPassword: error,
-                      }));
-                    }}
-                    error={!!errors.newPassword}
-                    helperText={errors.newPassword}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Lock />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => handleClickShowPassword("newPassword")}
-                            edge="end"
-                          >
-                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Confirm New Password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Lock />
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => handleClickShowPassword("confirmPassword")}
-                            edge="end"
-                          >
-                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Box textAlign="center" mt={3}>
-                <Button variant="contained" color="primary" type="submit">
-                  Update Password
-                </Button>
-              </Box>
-            </Box>
-          )}
+            )}
+          </Box>
         </CardContent>
       </Card>
     </Box>

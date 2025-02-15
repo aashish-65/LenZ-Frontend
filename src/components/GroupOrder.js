@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import apiCall from "../utils/api";
 import axios from "axios";
 import {
   Box,
@@ -70,11 +72,19 @@ const Orders = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [anchorEl, setAnchorEl] = useState(null);
   // const [expandedOrderId, setExpandedOrderId] = useState(null);
+
+  // Delete confirmation dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const currency = "INR";
   const receiptId = "qwsaq1";
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check for mobile view
+
+  const navigate = useNavigate();
 
   // Fetch user's orders and filter out grouped orders
   useEffect(() => {
@@ -321,9 +331,40 @@ const Orders = () => {
   // Handle actions
   const handleViewDetails = (orderId) => {
     console.log("View details for order:", orderId);
+    navigate(`/orders/${orderId}/details`);
   };
-  const handleDeleteOrder = (orderId) => {
-    console.log("Delete order:", orderId);
+  const handleDeleteOrder = async () => {
+    if (!orderToDelete) return;
+    console.log("Delete order:", orderToDelete);
+    setIsDeleting(true);
+    try {
+      // Call the delete API
+      await apiCall(`/orders/delete-order/${orderToDelete}`, "DELETE");
+      // Remove the order from the state with animation
+      setOrders((prevOrders) =>
+        prevOrders.filter((order) => order._id !== orderToDelete)
+      );
+      toast.success("Order deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete order:", error);
+      toast.error("Failed to delete order. Please try again.");
+    } finally {
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
+      setOrderToDelete(null);
+    }
+  };
+
+  // Open delete confirmation dialog
+  const openDeleteDialog = (orderId) => {
+    setOrderToDelete(orderId);
+    setDeleteDialogOpen(true);
+  };
+
+  // Close delete confirmation dialog
+  const closeDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setOrderToDelete(null);
   };
 
   // Sorting menu
@@ -656,7 +697,7 @@ const Orders = () => {
                                 size="small"
                                 variant="outlined"
                                 color="error"
-                                onClick={() => handleDeleteOrder(order._id)}
+                                onClick={() => openDeleteDialog(order._id)}
                               >
                                 Delete
                               </Button>
@@ -975,6 +1016,26 @@ const Orders = () => {
           </DialogActions>
         </Dialog>
       )}
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
+        <DialogTitle>Delete Order</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this order?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} disabled={isDeleting}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteOrder}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={20} /> : null}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

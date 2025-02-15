@@ -257,7 +257,7 @@ const GroupOrderList = () => {
                   },
                 }}
               >
-                <MenuItem value="">All</MenuItem>
+                <MenuItem value="">All Orders</MenuItem>
                 <MenuItem
                   value="Order Placed For Pickup"
                   sx={{

@@ -20,6 +20,7 @@ import "./App.css"; // Optional: Your global styles
 import GroupOrderList from "./components/GroupOrderList";
 import GroupOrderDetails from "./components/GroupOrderDetails";
 import Orders from "./pages/Orders";
+import OrderDetails from "./pages/OrderDetails";
 const Signup = lazy(() => import("./pages/Signup"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -54,6 +55,7 @@ const routes = [
   { path: "/group-orders", component: <GroupOrderList />, isPublic: false },
   { path: "/group-orders/:groupOrderId", component: <GroupOrderDetails />, isPublic: false },
   { path: "/profile", component: <Profile />, isPublic: false },
+  { path: "/orders/:orderId/details", component: <OrderDetails />, isPublic: false },
   { path: "*", component: <NotFound /> },
 ];
 

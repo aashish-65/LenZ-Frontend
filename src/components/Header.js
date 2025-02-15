@@ -580,6 +580,7 @@ const Header = memo(() => {
                     to="/profile"
                     color="inherit"
                     sx={{
+                      textTransform: "none",
                       position: "relative",
                       "&:hover": { backgroundColor: "#1e40af" },
                       backgroundColor:
@@ -603,6 +604,7 @@ const Header = memo(() => {
                     <AccountCircleIcon
                       sx={{ color: "white", marginRight: 1 }}
                     />
+                    {/* {user.name.split(" ")[0]} */}
                     {user.name}
                   </Button>
                   <Button
@@ -610,6 +612,7 @@ const Header = memo(() => {
                     to="/dashboard"
                     color="inherit"
                     sx={{
+                      textTransform: "none",
                       position: "relative",
                       "&:hover": { backgroundColor: "#1e40af" },
                       backgroundColor:
@@ -639,6 +642,7 @@ const Header = memo(() => {
                     onClick={handleOrdersMenuOpen}
                     endIcon={<ArrowDropDownIcon />} // Add dropdown indicator
                     sx={{
+                      textTransform: "none",
                       position: "relative",
                       "&:hover": { backgroundColor: "#1e40af" },
                       transition: "background-color 0.3s ease",
@@ -779,6 +783,17 @@ const Header = memo(() => {
                     color="inherit"
                     sx={{ "&:hover": { backgroundColor: "#b23b3b" } }}
                   >
+                    <LogoutIcon
+                      sx={{
+                        color: "#fff",
+                        marginRight: 0.5,
+                        transition: "color 0.3s ease , transform 0.3s ease",
+                        "&:hover": {
+                          color: "powderblue",
+                          transform: "scale(1.1) rotate(10deg)",
+                        },
+                      }}
+                    />
                     Logout
                   </Button>
                 </>

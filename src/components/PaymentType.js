@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Button, Box, Grid, Paper } from "@mui/material";
+import {
+  Typography,
+  Button,
+  Box,
+  Grid,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 
 const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
-
   const navigate = useNavigate();
-  const handleCOD = () => {
+  const [loading, setLoading] = useState(false); // Loading state
+
+  const handleCOD = async () => {
+    setLoading(true); // Start loading
     setPaymentType("COD");
-    placeOrder();
+    try {
+      await placeOrder(); // Call the placeOrder function
+    } catch (error) {
+      console.error("Failed to place order:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   const handleOnlinePayment = () => {
@@ -37,7 +52,7 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
         sx={{ mb: 4 }}
       >
         Please press the CONFIRM button to create the order or press CANCEL
-        button to cancle it.
+        button to cancel it.
       </Typography>
 
       {/* Payment Buttons */}
@@ -53,8 +68,13 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
               borderColor: paymentType === "COD" ? "primary.main" : undefined,
             }}
             onClick={handleCOD}
+            disabled={loading} // Disable button when loading
           >
-            Confirm
+            {loading ? ( // Show CircularProgress when loading
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Confirm" // Show "Confirm" text when not loading
+            )}
           </Button>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -70,7 +90,7 @@ const PaymentType = ({ paymentType, setPaymentType, placeOrder, prevStep }) => {
             }}
             onClick={handleOnlinePayment}
           >
-            Cancle
+            Cancel
           </Button>
         </Grid>
       </Grid>

@@ -13,7 +13,7 @@ const apiCall = async (endpoint, method = 'GET', data = null) => {
   const token = localStorage.getItem('authToken');
   const headers = {
     'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` }), // If token exists, add it to headers
+    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
   const options = {

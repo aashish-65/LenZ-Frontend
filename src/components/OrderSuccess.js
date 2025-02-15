@@ -10,7 +10,6 @@ const OrderSuccess = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        bgcolor: "#f7f9fc",
         px: 2,
       }}
     >

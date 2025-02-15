@@ -595,9 +595,9 @@ const Signup = () => {
                   label="Plan"
                 >
                   <MenuItem value="Trial">Trial</MenuItem>
-                  <MenuItem value="400">₹400 - Basic Plan</MenuItem>
+                  {/* <MenuItem value="400">₹400 - Basic Plan</MenuItem>
                   <MenuItem value="3000">₹3000 - Standard Plan</MenuItem>
-                  <MenuItem value="5000">₹5000 - Premium Plan</MenuItem>
+                  <MenuItem value="5000">₹5000 - Premium Plan</MenuItem> */}
                 </Select>
               </FormControl>
             </Grid>

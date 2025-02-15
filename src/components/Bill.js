@@ -152,7 +152,7 @@ const Bill = ({
               </Grid>
               <Grid item xs={6} textAlign="right">
                 <Typography variant="body1">
-                  <strong>Bill Number:</strong> {billNumber}
+                  <strong>Bill Number:</strong> {billNumber || "N/A"}
                 </Typography>
               </Grid>
             </Grid>
