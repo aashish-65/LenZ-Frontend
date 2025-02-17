@@ -46,9 +46,9 @@ const ProfilePage = () => {
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
-    phone: "",
+    phone: "+91",
     userId: "",
-    alternatePhone: "",
+    alternatePhone: "+91",
     shopName: "",
     address: {
       line1: "",
@@ -91,6 +91,10 @@ const ProfilePage = () => {
   // Timer Interval Ref
   const timerInterval = useRef(null);
 
+  const formattedAlternatePhone = profileData.alternatePhone?.replace(/\s+/g, "") === "+91" 
+  ? "N/A" 
+  : profileData.alternatePhone;
+
   // Fetch Profile Data
   useEffect(() => {
     const fetchProfile = async () => {
@@ -116,6 +120,7 @@ const ProfilePage = () => {
   // Validate Input Fields
   const validate = useCallback(
     (name, value) => {
+      let sanitizedValue = "";
       let error = "";
       switch (name) {
         case "name":
@@ -126,11 +131,14 @@ const ProfilePage = () => {
             error = "Enter a valid email.";
           break;
         case "phone":
-          if (!/^\+91\d{10}$/.test(value))
-            error = "Enter a valid 10-digit phone number with +91.";
+          sanitizedValue = value.replace(/\s+/g, "");
+          if (!/^\+91\d{10}$/.test(sanitizedValue))
+            error = "Enter a valid 10-digit phone number after +91.";
           break;
         case "alternatePhone":
-          if (value && !/^\+91\d{10}$/.test(value))
+          sanitizedValue = value.replace(/\s+/g, "");
+          const phoneWithoutPrefix = sanitizedValue.replace(/^\+91/, "");
+          if (phoneWithoutPrefix && phoneWithoutPrefix.length !== 10)
             error = "Enter a valid 10-digit phone number with +91.";
           if (name === "alternatePhone" && value === profileData.phone)
             error =
@@ -165,26 +173,29 @@ const ProfilePage = () => {
   };
 
   // Handle Input Change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
 
-    // Validate field
-    const fieldError = validate(name, value);
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: fieldError }));
+      // Validate field
+      const fieldError = validate(name, value);
+      setErrors((prevErrors) => ({ ...prevErrors, [name]: fieldError }));
 
-    if (name.startsWith("address.")) {
-      const addressKey = name.split(".")[1];
-      setProfileData((prevState) => ({
-        ...prevState,
-        address: { ...prevState.address, [addressKey]: value },
-      }));
-    } else {
-      setProfileData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
+      if (name.startsWith("address.")) {
+        const addressKey = name.split(".")[1];
+        setProfileData((prevState) => ({
+          ...prevState,
+          address: { ...prevState.address, [addressKey]: value },
+        }));
+      } else {
+        setProfileData((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      }
+    },
+    [validate]
+  );
 
   // Request OTP
   const requestOTP = useCallback(async () => {
@@ -514,33 +525,33 @@ const ProfilePage = () => {
   );
 
   // Reusable TextField Component
-  const CustomTextField = ({
-    label,
-    name,
-    value,
-    onChange,
-    error,
-    icon,
-    disabled,
-    type,
-  }) => (
-    <TextField
-      fullWidth
-      label={label}
-      name={name}
-      type={type || "text"}
-      value={value || ""}
-      onChange={onChange}
-      disabled={disabled}
-      error={!!error}
-      helperText={error}
-      InputProps={{
-        startAdornment: icon && (
-          <InputAdornment position="start">{icon}</InputAdornment>
-        ),
-      }}
-    />
-  );
+  // const CustomTextField = React.memo(({
+  //   label,
+  //   name,
+  //   value,
+  //   onChange,
+  //   error,
+  //   icon,
+  //   disabled,
+  //   type,
+  // }) => (
+  //   <TextField
+  //     fullWidth
+  //     label={label}
+  //     name={name}
+  //     type={type || "text"}
+  //     value={value || ""}
+  //     onChange={onChange}
+  //     disabled={disabled}
+  //     error={!!error}
+  //     helperText={error}
+  //     InputProps={{
+  //       startAdornment: icon && (
+  //         <InputAdornment position="start">{icon}</InputAdornment>
+  //       ),
+  //     }}
+  //   />
+  // ));
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", p: 3 }}>
@@ -783,7 +794,7 @@ const ProfilePage = () => {
                     <DetailItem
                       icon={<Phone sx={{ color: "#2575fc" }} />}
                       label="Alternate Phone"
-                      value={profileData.alternatePhone || "N/A"}
+                      value={formattedAlternatePhone}
                     />
                   </Grid>
 
@@ -847,124 +858,209 @@ const ProfilePage = () => {
                   <Grid container spacing={2}>
                     {/* Name */}
                     <Grid item xs={12}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Name"
                         name="name"
                         value={profileData.name}
                         onChange={handleChange}
-                        error={errors.name}
-                        icon={<AccountCircle />}
+                        error={!!errors.name}
+                        helperText={errors.name}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AccountCircle />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     {/* Email (Disabled) */}
                     <Grid item xs={12}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Email"
                         name="email"
                         type="email"
                         value={profileData.email}
-                        onChange={handleChange}
-                        error={errors.email}
-                        icon={<Email />}
                         disabled
+                        onChange={handleChange}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Email />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     {/* Phone Numbers */}
                     <Grid item xs={12} sm={6}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Phone"
                         name="phone"
                         value={profileData.phone}
+                        // disabled
                         onChange={handleChange}
-                        error={errors.phone}
-                        icon={<Phone />}
+                        error={!!errors.phone}
+                        helperText={errors.phone}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Phone />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Alternate Phone"
                         name="alternatePhone"
                         value={profileData.alternatePhone}
+                        error={!!errors.alternatePhone}
+                        helperText={errors.alternatePhone}
                         onChange={handleChange}
-                        error={errors.alternatePhone}
-                        icon={<Phone />}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Phone />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     {/* Shop Name */}
                     <Grid item xs={12}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Shop Name"
                         name="shopName"
                         value={profileData.shopName}
                         onChange={handleChange}
-                        icon={<Business />}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Business />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     {/* Address Fields */}
                     <Grid item xs={12}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Address Line 1"
                         name="address.line1"
                         value={profileData.address.line1}
                         onChange={handleChange}
-                        icon={<Home />}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Home />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     <Grid item xs={12}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Address Line 2 (Optional)"
                         name="address.line2"
                         value={profileData.address.line2}
                         onChange={handleChange}
-                        icon={<Home />}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Home />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     <Grid item xs={12}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Landmark (Optional)"
                         name="address.landmark"
                         value={profileData.address.landmark}
                         onChange={handleChange}
-                        icon={<LocationOn />}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LocationOn />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     {/* City & State */}
                     <Grid item xs={12} sm={6}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="City"
                         name="address.city"
                         value={profileData.address.city}
                         onChange={handleChange}
-                        icon={<LocationCity />}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LocationCity />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="State"
                         name="address.state"
                         value={profileData.address.state}
                         onChange={handleChange}
+                        required
                       />
                     </Grid>
 
                     {/* Pin Code */}
                     <Grid item xs={12} sm={6}>
-                      <CustomTextField
+                      <TextField
+                        fullWidth
                         label="Pin Code"
                         name="address.pinCode"
                         value={profileData.address.pinCode}
                         onChange={handleChange}
-                        error={errors["address.pinCode"]}
-                        icon={<PinDrop />}
+                        helperText={errors["address.pinCode"]}
+                        error={!!errors["address.pinCode"]}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <PinDrop />
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -976,8 +1072,9 @@ const ProfilePage = () => {
                       color="primary"
                       type="submit"
                       sx={{ px: 4, py: 1.5, fontSize: 16, borderRadius: 2 }}
+                      disabled={showOtpModal}
                     >
-                      Save Changes
+                      {showOtpModal ? <CircularProgress size={24} /> : "Update"}
                     </Button>
                   </Box>
                 </Box>

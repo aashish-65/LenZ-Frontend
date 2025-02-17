@@ -34,7 +34,7 @@ const Signup = () => {
     name: "",
     email: "",
     phone: "+91",
-    alternatePhone: "",
+    alternatePhone: "+91",
     password: "",
     plan: "",
     shopName: "",
@@ -78,7 +78,9 @@ const Signup = () => {
           error = "Enter a valid 10-digit phone number with +91.";
         break;
       case "alternatePhone":
-        if (value && !/^\+91\d{10}$/.test(value))
+        const sanitizedValue = value.replace(/\s+/g, "");
+        const phoneWithoutPrefix = sanitizedValue.replace(/^\+91/, "");
+        if (phoneWithoutPrefix && !/^\+91\d{10}$/.test(phoneWithoutPrefix))
           error = "Enter a valid 10-digit phone number with +91.";
         if (name === "alternatePhone" && value === formData.phone)
           error = "Alternate phone number cannot be the same as phone number.";
