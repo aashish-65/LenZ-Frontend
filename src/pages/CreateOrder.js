@@ -7,7 +7,7 @@ import MaterialSelection from "../components/MaterialSelection";
 import CoatingSelection from "../components/CoatingSelection";
 import PowerEntry from "../components/PowerEntry";
 import Bill from "../components/Bill";
-import PaymentType from "../components/PaymentType";
+import ConfirmationBox from "../components/ConfirmationBox";
 import "../assets/styles/CreateOrder.css";
 import OrderSuccess from "../components/OrderSuccess";
 import { AuthContext } from "../AuthContext";
@@ -27,7 +27,7 @@ const CreateOrder = () => {
   const [powerEntryType, setPowerEntryType] = useState("");
   const purchaseLens = false;
   const [glassType, setGlassType] = useState("");
-  const [paymentType, setPaymentType] = useState("");
+  // const [paymentType, setPaymentType] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [fittingCharge, setFittingCharge] = useState(0);
   const [shiftingCharge, setShiftingCharge] = useState(0);
@@ -65,13 +65,13 @@ const CreateOrder = () => {
     fittingCharge,
     shiftingCharge,
     totalAmount,
-    paymentType,
+    // paymentType,
     orderPlaced,
   };
 
   // console.log("Shifting Order Details:", shiftingOrderDetails);
 
-  console.log("Payment Type", paymentType);
+  // console.log("Payment Type", paymentType);
   const placeOrder = async () => {
     if (!userId) {
       alert("User not logged in. Please log in to place an order.");
@@ -135,9 +135,9 @@ const CreateOrder = () => {
         />
       )}
       {step === 5 && shiftingOrFitting === "Shifting" && (
-        <PaymentType
-          paymentType={paymentType}
-          setPaymentType={setPaymentType}
+        <ConfirmationBox
+          // paymentType={paymentType}
+          // setPaymentType={setPaymentType}
           placeOrder={placeOrder}
           nextStep={nextStep}
           prevStep={prevStep}
@@ -392,6 +392,7 @@ const CreateOrder = () => {
         />
       )}
       {step === 6 && glassType === "Sunglass" && (
+        <div>
         <PowerEntry
           onPowerDataChange={setPowerDetails}
           onPowerTypeChange={setPowerType}
@@ -400,6 +401,7 @@ const CreateOrder = () => {
           nextStep={nextStep}
           prevStep={prevStep}
         />
+        </div>
       )}
       {step === 7 && glassType === "Sunglass" && (
         <Bill
@@ -420,9 +422,9 @@ const CreateOrder = () => {
         />
       )}
       {step === 8 && glassType === "Sunglass" && (
-        <PaymentType
-          paymentType={paymentType}
-          setPaymentType={setPaymentType}
+        <ConfirmationBox
+          // paymentType={paymentType}
+          // setPaymentType={setPaymentType}
           placeOrder={placeOrder}
           nextStep={nextStep}
           prevStep={prevStep}
@@ -475,9 +477,9 @@ const CreateOrder = () => {
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === false && (
-          <PaymentType
-            paymentType={paymentType}
-            setPaymentType={setPaymentType}
+          <ConfirmationBox
+            // paymentType={paymentType}
+            // setPaymentType={setPaymentType}
             placeOrder={placeOrder}
             nextStep={nextStep}
             prevStep={prevStep}
@@ -534,9 +536,9 @@ const CreateOrder = () => {
         glassType === "Normal" &&
         materialDetails &&
         purchaseLens === true && (
-          <PaymentType
-            paymentType={paymentType}
-            setPaymentType={setPaymentType}
+          <ConfirmationBox
+            // paymentType={paymentType}
+            // setPaymentType={setPaymentType}
             placeOrder={placeOrder}
             nextStep={nextStep}
             prevStep={prevStep}

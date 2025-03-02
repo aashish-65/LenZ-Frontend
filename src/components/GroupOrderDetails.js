@@ -40,7 +40,7 @@ const GroupOrderDetails = () => {
       try {
         const response = await axios.get(
           `https://lenz-backend.onrender.com/api/orders/get-group-order/${groupOrderId}`,
-          { headers: { Authorization: `Bearer ${authToken}` }}
+          { headers: { Authorization: `Bearer ${authToken}` } }
         );
         setGroupOrder(response.data.data);
       } catch (err) {
@@ -66,6 +66,10 @@ const GroupOrderDetails = () => {
         return "secondary.main"; // Purple
       case "Work Completed":
         return "primary.main"; // Primary color
+      case "Internal Tracking":
+        return "primary.main";
+      case "Delivery Accepted":
+        return "primary.main";
       case "Out For Delivery":
         return "info.light"; // Light blue
       case "Order Completed":
@@ -87,6 +91,10 @@ const GroupOrderDetails = () => {
       case "Order Received By Admin":
         return 56;
       case "Work Completed":
+        return 70;
+      case "Internal Tracking":
+        return 70;
+      case "Delivery Accepted":
         return 70;
       case "Out For Delivery":
         return 84;
@@ -207,7 +215,9 @@ const GroupOrderDetails = () => {
               sx={{
                 height: 10,
                 borderRadius: 5,
-                backgroundColor: `${getStatusColor(groupOrder.tracking_status)}.light`,
+                backgroundColor: `${getStatusColor(
+                  groupOrder.tracking_status
+                )}.light`,
                 "& .MuiLinearProgress-bar": {
                   backgroundColor: getStatusColor(groupOrder.tracking_status),
                 },
@@ -235,7 +245,9 @@ const GroupOrderDetails = () => {
                   <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                     {order.customerDetails.name}
                   </Typography>
-                  <Typography>Bill No.: {order.customerDetails.billNumber || "N/A"}</Typography>
+                  <Typography>
+                    Bill No.: {order.customerDetails.billNumber || "N/A"}
+                  </Typography>
                   <Typography>Order ID: {order._id}</Typography>
                   <Typography>Total Amount: ₹{order.totalAmount}</Typography>
                 </Card>
@@ -247,17 +259,23 @@ const GroupOrderDetails = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>Customer Name</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>
+                      Customer Name
+                    </TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>Bill No.</TableCell>
                     <TableCell sx={{ fontWeight: "bold" }}>Order ID</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>Total Amount</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>
+                      Total Amount
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {groupOrder.orders.map((order) => (
                     <TableRow key={order._id} hover sx={{ cursor: "pointer" }}>
                       <TableCell>{order.customerDetails.name}</TableCell>
-                      <TableCell>{order.customerDetails.billNumber || "N/A"}</TableCell>
+                      <TableCell>
+                        {order.customerDetails.billNumber || "N/A"}
+                      </TableCell>
                       <TableCell>{order._id}</TableCell>
                       <TableCell>₹{order.totalAmount}</TableCell>
                     </TableRow>

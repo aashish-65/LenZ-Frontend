@@ -41,7 +41,7 @@ const Login = () => {
       setError("Both fields are required");
       return;
     }
-
+    
     setIsLoading(true);
     try {
       const response = await axios.post(

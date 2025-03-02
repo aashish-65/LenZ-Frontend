@@ -39,24 +39,30 @@ const OrderSuccess = () => {
           gutterBottom
           sx={{ mb: 1 }}
         >
-          Order Placed Successfully!
+          Order Created Successfully!
         </Typography>
 
         {/* Subtext */}
-        <Typography
+        {/* <Typography
           variant="subtitle1"
           color="textSecondary"
           sx={{ mb: 3 }}
         >
           Your payment method: <strong>Cash on Delivery</strong>
+        </Typography> */}
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          sx={{ px: { xs: 1, sm: 5 } }}
+        >
+          Thank you for choosing <strong>LenZ</strong>!
         </Typography>
         <Typography
           variant="body1"
           color="textSecondary"
           sx={{ mb: 4, px: { xs: 1, sm: 5 } }}
         >
-          Thank you for choosing <strong>LenZ</strong>! Your order will be
-          processed shortly. Stay tuned for updates.
+          Now place your order for <strong>PICKUP</strong> in the <strong>Book For Pickup</strong> section.
         </Typography>
 
         {/* Action Buttons */}

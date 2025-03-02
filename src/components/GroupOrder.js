@@ -88,7 +88,7 @@ const Orders = () => {
 
   // Fetch user's orders and filter out grouped orders
   useEffect(() => {
-    console.log(user);
+    console.log("User:", user);
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
@@ -110,6 +110,7 @@ const Orders = () => {
         setLoading(false);
       }
     };
+    // const 
     if (user && authToken) {
       fetchOrders();
     }
@@ -133,7 +134,7 @@ const Orders = () => {
       (sum, order) => sum + order.totalAmount,
       0
     );
-    const deliveryCharge = 100; // Fixed delivery charge
+    const deliveryCharge = user.deliveryCharge;
     const finalAmount = totalAmount + deliveryCharge;
 
     setGroupOrderBill({

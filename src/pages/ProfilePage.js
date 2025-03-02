@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Box,
   Typography,
@@ -301,7 +303,7 @@ const ProfilePage = () => {
           }
         );
         setProfileData(data);
-        setSuccess("Profile updated successfully");
+        toast.success("Profile updated successfully!");
         setError("");
         setLoading(false);
         setTab(0);
@@ -523,35 +525,6 @@ const ProfilePage = () => {
       </Typography>
     </Box>
   );
-
-  // Reusable TextField Component
-  // const CustomTextField = React.memo(({
-  //   label,
-  //   name,
-  //   value,
-  //   onChange,
-  //   error,
-  //   icon,
-  //   disabled,
-  //   type,
-  // }) => (
-  //   <TextField
-  //     fullWidth
-  //     label={label}
-  //     name={name}
-  //     type={type || "text"}
-  //     value={value || ""}
-  //     onChange={onChange}
-  //     disabled={disabled}
-  //     error={!!error}
-  //     helperText={error}
-  //     InputProps={{
-  //       startAdornment: icon && (
-  //         <InputAdornment position="start">{icon}</InputAdornment>
-  //       ),
-  //     }}
-  //   />
-  // ));
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", p: 3 }}>
