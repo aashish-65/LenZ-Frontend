@@ -85,11 +85,12 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
 
 const OrderListItem = styled(ListItem)(({ theme }) => ({
   background: "#f9f9f9",
-  marginBottom: theme.spacing(1),
+  marginBottom: theme.spacing(2),
   borderRadius: "8px",
   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
   padding: theme.spacing(2),
   transition: "transform 0.3s ease, box-shadow 0.3s ease",
+  border: "2px solid rgb(162, 160, 237)",
   "&:hover": {
     background: "#f0f0f0",
     transform: "scale(1.02)",

@@ -66,7 +66,7 @@ const CreateOrder = () => {
     shiftingCharge,
     totalAmount,
     // paymentType,
-    orderPlaced,
+    // orderPlaced,
   };
 
   // console.log("Shifting Order Details:", shiftingOrderDetails);

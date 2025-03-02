@@ -29,6 +29,7 @@ const CreateOrder = lazy(() => import("./pages/CreateOrder"));
 // const Orders = lazy(() => import("./pages/Orders"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
 const GroupOrder = lazy(() => import("./components/GroupOrder"));
+const PrivacyPolicy = lazy(() => import("./pages/AdminPrivacyPolicy"));
 // toast.configure();
 
 // PublicRoute component to redirect logged-in users
@@ -56,6 +57,7 @@ const routes = [
   { path: "/group-orders/:groupOrderId", component: <GroupOrderDetails />, isPublic: false },
   { path: "/profile", component: <Profile />, isPublic: false },
   { path: "/orders/:orderId/details", component: <OrderDetails />, isPublic: false },
+  { path: "/admin-privacy-policy", component: <PrivacyPolicy /> },
   { path: "*", component: <NotFound /> },
 ];
 
