@@ -45,7 +45,7 @@ const Footer = () => {
           <Box sx={{ display: 'flex', gap: 3, marginBottom: 3 }}>
             <Button 
               component={Link} 
-              to="/privacy-policy" 
+              to="/shop-privacy-policy" 
               startIcon={<PolicyIcon />} // Icon added to the link
               sx={{
                 color: 'white',

@@ -5,12 +5,12 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
 import RouteGuard from "./routes/RouteGaurd";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme"; // Import your custom theme
-import { ClipLoader } from 'react-spinners';
+// import { ClipLoader } from 'react-spinners';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from "./AuthContext";
@@ -29,7 +29,8 @@ const CreateOrder = lazy(() => import("./pages/CreateOrder"));
 // const Orders = lazy(() => import("./pages/Orders"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
 const GroupOrder = lazy(() => import("./components/GroupOrder"));
-const PrivacyPolicy = lazy(() => import("./pages/AdminPrivacyPolicy"));
+const AdminPrivacyPolicy = lazy(() => import("./pages/AdminPrivacyPolicy"));
+const ShopPrivacyPolicy = lazy(() => import("./pages/ShopPrivacyPolicy"));
 // toast.configure();
 
 // PublicRoute component to redirect logged-in users
@@ -57,7 +58,6 @@ const routes = [
   { path: "/group-orders/:groupOrderId", component: <GroupOrderDetails />, isPublic: false },
   { path: "/profile", component: <Profile />, isPublic: false },
   { path: "/orders/:orderId/details", component: <OrderDetails />, isPublic: false },
-  { path: "/admin-privacy-policy", component: <PrivacyPolicy /> },
   { path: "*", component: <NotFound /> },
 ];
 
@@ -70,9 +70,11 @@ const App = () => {
             <Header />
             <ToastContainer position="top-right" autoClose={3000} />
             <div className="main-content">
-              <Suspense fallback={<ClipLoader color="#000" size={50} />}>
+              {/* <Suspense fallback={<ClipLoader color="#000" size={50} />}> */}
                 <ErrorBoundary>
                   <Routes>
+                    <Route path="/admin-privacy-policy" element={<AdminPrivacyPolicy />} />
+                    <Route path="/shop-privacy-policy" element={<ShopPrivacyPolicy />} />
                   {routes.map(({ path, component, isPublic }, index) => (
                     <Route
                       key={index}
@@ -86,7 +88,7 @@ const App = () => {
                   ))}
                   </Routes>
                 </ErrorBoundary>
-              </Suspense>
+              {/* </Suspense> */}
             </div>
             <Footer />
           </div>
