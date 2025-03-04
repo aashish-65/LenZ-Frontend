@@ -31,7 +31,7 @@ import { styled } from "@mui/material/styles";
 
 // Styled components for enhanced UI
 const GradientCard = styled(Card)(({ theme }) => ({
-  background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+  background: "linear-gradient(1deg, #6a11cb 0%, #2575fc 100%)",
   borderRadius: 16,
   boxShadow: "0 10px 20px rgba(106, 17, 203, 0.2)",
   overflow: "hidden",
@@ -148,6 +148,61 @@ const DashboardSkeleton = () => {
       />
 
       <Grid container spacing={4} maxWidth="lg">
+        {/* Active Deliveries Skeleton */}
+        <Grid item xs={12}>
+          <WhiteCard>
+            <CardContent>
+              <Skeleton
+                variant="text"
+                animation="wave"
+                sx={{ fontSize: "1.5rem", width: "40%", bgcolor: "grey.300" }}
+              />
+              <Divider sx={{ marginY: 2 }} />
+              {[1, 2].map((item) => (
+                <Box key={item} sx={{ mb: 2 }}>
+                  <Skeleton
+                    variant="rectangular"
+                    animation="wave"
+                    height={80}
+                    sx={{ borderRadius: "12px", bgcolor: "grey.200" }}
+                  />
+                </Box>
+              ))}
+            </CardContent>
+          </WhiteCard>
+        </Grid>
+        {/* Create Order Section Skeleton */}
+        <Grid item xs={12}>
+          <GradientCard>
+            <CardContent>
+              <Skeleton
+                variant="text"
+                animation="wave"
+                sx={{
+                  fontSize: "1.5rem",
+                  width: "40%",
+                  bgcolor: "rgba(255, 255, 255, 0.3)",
+                }}
+              />
+              <Divider
+                sx={{ marginY: 2, bgcolor: "rgba(255, 255, 255, 0.2)" }}
+              />
+              <Box textAlign="center">
+                <Skeleton
+                  variant="rectangular"
+                  animation="wave"
+                  width={180}
+                  height={50}
+                  sx={{
+                    borderRadius: "12px",
+                    bgcolor: "rgba(255, 255, 255, 0.3)",
+                    margin: "0 auto",
+                  }}
+                />
+              </Box>
+            </CardContent>
+          </GradientCard>
+        </Grid>
         {/* Profile Section Skeleton */}
         <Grid item xs={12} md={6}>
           <WhiteCard>
@@ -213,63 +268,6 @@ const DashboardSkeleton = () => {
             </CardContent>
           </WhiteCard>
         </Grid>
-
-        {/* Active Deliveries Skeleton */}
-        <Grid item xs={12}>
-          <WhiteCard>
-            <CardContent>
-              <Skeleton
-                variant="text"
-                animation="wave"
-                sx={{ fontSize: "1.5rem", width: "40%", bgcolor: "grey.300" }}
-              />
-              <Divider sx={{ marginY: 2 }} />
-              {[1, 2].map((item) => (
-                <Box key={item} sx={{ mb: 2 }}>
-                  <Skeleton
-                    variant="rectangular"
-                    animation="wave"
-                    height={80}
-                    sx={{ borderRadius: "12px", bgcolor: "grey.200" }}
-                  />
-                </Box>
-              ))}
-            </CardContent>
-          </WhiteCard>
-        </Grid>
-
-        {/* Create Order Section Skeleton */}
-        <Grid item xs={12}>
-          <GradientCard>
-            <CardContent>
-              <Skeleton
-                variant="text"
-                animation="wave"
-                sx={{
-                  fontSize: "1.5rem",
-                  width: "40%",
-                  bgcolor: "rgba(255, 255, 255, 0.3)",
-                }}
-              />
-              <Divider
-                sx={{ marginY: 2, bgcolor: "rgba(255, 255, 255, 0.2)" }}
-              />
-              <Box textAlign="center">
-                <Skeleton
-                  variant="rectangular"
-                  animation="wave"
-                  width={180}
-                  height={50}
-                  sx={{
-                    borderRadius: "12px",
-                    bgcolor: "rgba(255, 255, 255, 0.3)",
-                    margin: "0 auto",
-                  }}
-                />
-              </Box>
-            </CardContent>
-          </GradientCard>
-        </Grid>
       </Grid>
     </Box>
   );
@@ -296,9 +294,8 @@ const Dashboard = () => {
         console.log("Group Orders:", response.data.data);
         const filteredOrders = response.data.data
           ? response.data.data.filter(
-              (order) => console.log(order)
-            )
-          : response.data.data;
+              (order) => order.tracking_status === "Pickup Accepted"
+            ): response.data.data;
         setGroupOrders(filteredOrders);
       } catch (err) {
         setError(err.message);

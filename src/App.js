@@ -31,6 +31,7 @@ const Profile = lazy(() => import("./pages/ProfilePage"));
 const GroupOrder = lazy(() => import("./components/GroupOrder"));
 const AdminPrivacyPolicy = lazy(() => import("./pages/AdminPrivacyPolicy"));
 const ShopPrivacyPolicy = lazy(() => import("./pages/ShopPrivacyPolicy"));
+const DeliveryPrivacyPolicy = lazy(() => import("./pages/DeliveryPrivacyPolicy"));
 // toast.configure();
 
 // PublicRoute component to redirect logged-in users
@@ -75,6 +76,7 @@ const App = () => {
                   <Routes>
                     <Route path="/admin-privacy-policy" element={<AdminPrivacyPolicy />} />
                     <Route path="/shop-privacy-policy" element={<ShopPrivacyPolicy />} />
+                    <Route path="/delivery-privacy-policy" element={<DeliveryPrivacyPolicy />} />
                   {routes.map(({ path, component, isPublic }, index) => (
                     <Route
                       key={index}
