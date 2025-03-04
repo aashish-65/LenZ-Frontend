@@ -76,7 +76,7 @@ const App = () => {
                   <Routes>
                     <Route path="/admin-privacy-policy" element={<AdminPrivacyPolicy />} />
                     <Route path="/shop-privacy-policy" element={<ShopPrivacyPolicy />} />
-                    <Route path="/delivery-privacy-policy" element={<DeliveryPrivacyPolicy />} />
+                    <Route path="/rider-privacy-policy" element={<DeliveryPrivacyPolicy />} />
                   {routes.map(({ path, component, isPublic }, index) => (
                     <Route
                       key={index}
