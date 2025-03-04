@@ -26,6 +26,7 @@ import CallIcon from "@mui/icons-material/Call";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { motion, AnimatePresence } from "framer-motion";
 import { styled } from "@mui/material/styles";
 
@@ -278,39 +279,10 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [activeDeliveries, setActiveDeliveries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [groupOrders, setGroupOrders] = useState(null);
   const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false);
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
-
-  useEffect(() => {
-    const fetchGroupOrderDetails = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          "https://lenz-backend.onrender.com/api/orders/get-group-orders",
-          { headers: { Authorization: `Bearer ${authToken}` } }
-        );
-        console.log("Group Orders:", response.data.data);
-        const filteredOrders = response.data.data
-          ? response.data.data.filter(
-              (order) => order.tracking_status === "Pickup Accepted"
-            ): response.data.data;
-        setGroupOrders(filteredOrders);
-      } catch (err) {
-        setError(err.message);
-        console.log(error);
-      } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 800);
-      }
-    };
-
-    fetchGroupOrderDetails();
-  }, [authToken, error]);
-
-  console.log("Group Orders:", groupOrders);
 
   // Simulate fetching active deliveries
   useEffect(() => {
@@ -319,36 +291,21 @@ const Dashboard = () => {
       setIsLoading(true);
       try {
         // Simulating API response with mock data
-        const mockData = [
-          {
-            id: "GO123456",
-            trackingStatus: "Pickup Accepted",
-            otpCode: "1234",
-            deliveryPersonName: "Alex Johnson",
-            deliveryPersonPhone: "+1234567890",
-          },
-          {
-            id: "GO789012",
-            trackingStatus: "Out for Delivery",
-            otpCode: "5678",
-            deliveryPersonName: "Sarah Williams",
-            deliveryPersonPhone: "+1987654321",
-          },
-        ];
-
-        // Simulate network delay
-        setTimeout(() => {
-          setActiveDeliveries(mockData);
-          setIsLoading(false);
-        }, 1500);
-      } catch (error) {
-        console.error("Error fetching active deliveries:", error);
+        const response = await axios.get(
+          "https://lenz-backend.onrender.com/api/orders/active-shop-orders",
+          { headers: { "lenz-api-key": "a99ed2023194a3356d37634474417f8b" } }
+        );
+        setActiveDeliveries(response.data.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError("Error fetching active deliveries");
+        console.error(error, " ", err);
         setIsLoading(false);
       }
     };
 
     fetchActiveDeliveries();
-  }, [authToken]);
+  }, [authToken, error]);
 
   const handleCreateOrder = () => {
     navigate("/create-order");
@@ -363,7 +320,7 @@ const Dashboard = () => {
   };
 
   const handleViewDetails = (orderId) => {
-    navigate(`/orders/${orderId}`);
+    navigate(`/group-orders/${orderId}`);
   };
 
   const handleCall = (phone) => {
@@ -372,7 +329,8 @@ const Dashboard = () => {
 
   const handleCopyOtp = (otp) => {
     navigator.clipboard.writeText(otp);
-    // You could add a toast notification here
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   // Animation variants for Framer Motion
@@ -585,7 +543,7 @@ const Dashboard = () => {
                                   fontWeight="bold"
                                   color="text.primary"
                                 >
-                                  {delivery.id}
+                                  #{delivery.id.slice(-8)}
                                 </Typography>
                                 <StatusChip
                                   label={delivery.trackingStatus}
@@ -645,7 +603,11 @@ const Dashboard = () => {
                                   label={`OTP: ${delivery.otpCode}`}
                                   size="small"
                                   deleteIcon={
-                                    <ContentCopyIcon fontSize="small" />
+                                      copied ? (
+                                        <CheckCircleIcon fontSize="small" color="success.main"/>
+                                      ) : (
+                                        <ContentCopyIcon fontSize="small" />
+                                      )
                                   }
                                   onDelete={() =>
                                     handleCopyOtp(delivery.otpCode)

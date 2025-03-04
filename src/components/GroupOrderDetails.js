@@ -91,7 +91,7 @@ const GroupOrderDetails = () => {
             : "shop_delivery";
         try {
           const response = await axios.post(
-            "http://localhost:5000/api/otp/request-tracking-otp",
+            "https://lenz-backend.onrender.com/api/otp/request-tracking-otp",
             {
               groupOrder_id: groupOrder._id,
               purpose: purpose,

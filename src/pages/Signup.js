@@ -13,6 +13,11 @@ import {
   Grid,
   InputAdornment,
   IconButton,
+  Container,
+  Box,
+  useMediaQuery,
+  useTheme,
+  Divider,
 } from "@mui/material";
 import {
   AccountCircle,
@@ -26,7 +31,10 @@ import {
   Visibility,
   VisibilityOff,
   CheckCircle,
+  LockOpen,
+  ErrorOutline,
 } from "@mui/icons-material";
+import { ThemeProvider } from "@mui/material/styles";
 import SignupSuccess from "./SignupSuccess";
 
 const Signup = () => {
@@ -143,7 +151,6 @@ const Signup = () => {
       return;
     }
 
-    // Final validation before submission
     const newErrors = {};
     for (const key in formData) {
       if (typeof formData[key] === "object") {
@@ -158,7 +165,6 @@ const Signup = () => {
 
     setErrors(newErrors);
 
-    // Stop submission if there are errors
     if (Object.values(newErrors).some((error) => error)) {
       setLoading(false);
       return;
@@ -176,7 +182,7 @@ const Signup = () => {
         }
       );
       setUserId(response.data.userId);
-      setApiError(""); // Clear any API error
+      setApiError("");
     } catch (err) {
       setApiError(err.response?.data?.error || "Signup failed");
     } finally {
@@ -184,14 +190,13 @@ const Signup = () => {
     }
   };
 
-  const handleClickShowPassword = (field) => {
+  const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
   const handleVerifyEmail = async () => {
     try {
       setLoading(true);
-      // Send OTP to the email
       await axios.post(
         "https://lenz-backend.onrender.com/api/otp/request-otp",
         {
@@ -216,7 +221,6 @@ const Signup = () => {
   const handleVerifyOtp = async () => {
     try {
       setLoading(true);
-      // Verify OTP
       const response = await axios.post(
         "https://lenz-backend.onrender.com/api/otp/verify-otp",
         {
@@ -230,7 +234,6 @@ const Signup = () => {
           },
         }
       );
-      console.log(response.data);
       if (response.data.confirmation) {
         setOtpError("");
         setOtpVerified(true);
@@ -260,385 +263,581 @@ const Signup = () => {
     }, 1000);
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        maxWidth: 700,
-        margin: "50px auto",
-        padding: 4,
-        borderRadius: 3,
-        backgroundColor: "#f9f9f9",
-        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
-      }}
-    >
-      <Typography
-        variant="h4"
-        align="center"
-        gutterBottom
-        sx={{ color: "#333", fontWeight: "bold" }}
+    <ThemeProvider theme={theme}>
+      <Box 
+        sx={{
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%)',
+          py: { xs: 0, sm: 4 },
+          px: { xs: 0, sm: 2 }
+        }}
       >
-        Sign Up for LenZ
-      </Typography>
-      <Typography
-        variant="subtitle1"
-        align="center"
-        sx={{ color: "#555", marginBottom: 3 }}
-      >
-        Join our platform to manage your shop efficiently!
-      </Typography>
-
-      {userId ? (
-        <SignupSuccess userId={userId} />
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            {/* Basic Information */}
-            <Grid item xs={12}>
-              <TextField
-                label="Full Name"
-                name="name"
-                variant="outlined"
-                value={formData.name}
-                onChange={handleChange}
-                fullWidth
-                required
-                helperText={errors.name}
-                error={!!errors.name}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountCircle />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Email Address"
-                name="email"
-                type="email"
-                variant="outlined"
-                value={formData.email}
-                onChange={handleChange}
-                fullWidth
-                required
-                disabled={otpSent || otpVerified}
-                autoComplete="email"
-                helperText={errors.email}
-                error={!!errors.email}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Email />
-                    </InputAdornment>
-                  ),
-                  endAdornment: otpVerified && (
-                    <InputAdornment position="end">
-                      <CheckCircle sx={{ color: "green" }} /> {/* Green tick */}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              {showVerifyButton && !otpSent && !otpVerified && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleVerifyEmail}
-                  disabled={loading}
-                  sx={{ m: 1 }}
-                >
-                  Verify Email
-                </Button>
-              )}
-              {otpSent && !otpVerified && (
-                <>
-                  <TextField
-                    label="Enter OTP"
-                    variant="outlined"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    fullWidth
-                    required
-                    helperText={otpError}
-                    error={!!otpError}
-                    sx={{ mt: 2 }}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleVerifyOtp}
-                    disabled={loading}
-                    sx={{ m: 1 }}
-                  >
-                    Verify OTP
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={handleResendOtp}
-                    disabled={resendDisabled || loading}
-                    sx={{ m: 1 }}
-                  >
-                    {resendDisabled
-                      ? `Resend OTP in ${resendCooldown}s`
-                      : "Resend OTP"}
-                  </Button>
-                </>
-              )}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Phone Number (+91)"
-                name="phone"
-                type="tel"
-                variant="outlined"
-                value={formData.phone}
-                onChange={handleChange}
-                fullWidth
-                required
-                helperText={errors.phone}
-                error={!!errors.phone}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Phone />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Alternate Phone (+91)"
-                name="alternatePhone"
-                type="tel"
-                variant="outlined"
-                value={formData.alternatePhone}
-                onChange={handleChange}
-                fullWidth
-                helperText={errors.alternatePhone}
-                error={!!errors.alternatePhone}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Phone />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                variant="outlined"
-                value={formData.password}
-                onChange={handleChange}
-                fullWidth
-                required
-                autoComplete="new-password"
-                helperText={errors.password}
-                error={!!errors.password}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Lock />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => handleClickShowPassword()}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Shop Name"
-                name="shopName"
-                variant="outlined"
-                value={formData.shopName}
-                onChange={handleChange}
-                fullWidth
-                required
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Business />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-
-            {/* Address Section */}
-            <Grid item xs={12}>
-              <Typography
-                variant="h6"
-                sx={{ color: "#333", fontWeight: "bold", marginTop: 2 }}
-              >
-                Address Details
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Address Line 1"
-                name="address.line1"
-                variant="outlined"
-                value={formData.address.line1}
-                onChange={handleChange}
-                fullWidth
-                required
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Home />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Address Line 2"
-                name="address.line2"
-                variant="outlined"
-                value={formData.address.line2}
-                onChange={handleChange}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Home />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Landmark"
-                name="address.landmark"
-                variant="outlined"
-                value={formData.address.landmark}
-                onChange={handleChange}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LocationOn />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="City"
-                name="address.city"
-                variant="outlined"
-                value={formData.address.city}
-                onChange={handleChange}
-                fullWidth
-                required
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LocationCity />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="State"
-                name="address.state"
-                variant="outlined"
-                value={formData.address.state}
-                onChange={handleChange}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Pin Code"
-                name="address.pinCode"
-                variant="outlined"
-                value={formData.address.pinCode}
-                onChange={handleChange}
-                fullWidth
-                required
-                helperText={errors["address.pinCode"]}
-                error={!!errors["address.pinCode"]}
-              />
-            </Grid>
-
-            {/* Plan and Submit */}
-            <Grid item xs={12}>
-              <FormControl fullWidth margin="normal" required>
-                <InputLabel>Plan</InputLabel>
-                <Select
-                  name="plan"
-                  value={formData.plan}
-                  onChange={handleChange}
-                  variant="outlined"
-                  label="Plan"
-                >
-                  <MenuItem value="Trial">Trial</MenuItem>
-                  {/* <MenuItem value="400">₹400 - Basic Plan</MenuItem>
-                  <MenuItem value="3000">₹3000 - Standard Plan</MenuItem>
-                  <MenuItem value="5000">₹5000 - Premium Plan</MenuItem> */}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
+        <Container maxWidth="md" sx={{ 
+            px: { xs: 0, sm: 2 },
+            py: { xs: 0, sm: 2 }
+          }}>
+          <Paper
+            elevation={isMobile ? 0 : 12}
             sx={{
-              padding: 1.5,
-              fontSize: "16px",
-              textTransform: "none",
-              marginTop: 3,
-              backgroundColor: "#007bff",
-              "&:hover": { backgroundColor: "#0056b3" },
+              borderRadius: { xs: 0, sm: 4 },
+              overflow: 'hidden',
+              position: 'relative',
+              minHeight: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '5px',
+                background: 'linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)',
+              }
             }}
-            disabled={loading || !otpVerified}
           >
-            {loading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Sign Up"
-            )}
-          </Button>
-        </form>
-      )}
+            <Grid 
+              container 
+              sx={{ 
+                flexGrow: 1, 
+                height: '100%',
+                flexDirection: { xs: 'column', sm: 'row' }
+              }}
+            >
+              {!isMobile && (
+                <Grid 
+                  item 
+                  xs={5} 
+                  sx={{
+                    background: 'linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: 'white',
+                    p: 4,
+                    textAlign: 'center'
+                  }}
+                >
+                  <Typography variant="h4" gutterBottom>
+                    Welcome to LenZ
+                  </Typography>
+                  <Typography variant="subtitle1" sx={{ opacity: 0.8 }}>
+                    Revolutionize Your Shop Management
+                  </Typography>
+                </Grid>
+              )}
 
-      {apiError && (
-        <Typography
-          sx={{ color: "#d32f2f", marginTop: 2, textAlign: "center" }}
-          variant="body2"
-        >
-          {apiError}
-        </Typography>
-      )}
-    </Paper>
+              <Grid 
+                item 
+                xs={12} 
+                sm={isMobile ? 12 : 7} 
+                sx={{ 
+                  p: { xs: 3, sm: 5 },
+                  backgroundColor: 'background.paper',
+                  overflowY: 'auto',
+                  maxHeight: '100vh'
+                }}
+              >
+                <Box sx={{ textAlign: 'center', mb: 3, mt: { xs: 4, sm: 0 } }}>
+                {isMobile && (
+                    <Box 
+                      sx={{
+                        background: 'linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)',
+                        color: 'white',
+                        py: 3,
+                        mb: 3,
+                        textAlign: 'center'
+                      }}
+                    >
+                      <Typography variant="h4" gutterBottom>
+                        LenZ SignUp
+                      </Typography>
+                      <Typography variant="subtitle1" sx={{ opacity: 0.8 }}>
+                        Revolutionize Your Shop Management
+                      </Typography>
+                    </Box>
+                  )}
+                  {/* <Typography
+                    variant="h4"
+                    color="primary"
+                    gutterBottom
+                  >
+                    Create Your Account
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                  >
+                    Join LenZ and streamline your business management
+                  </Typography> */}
+                </Box>
+
+                {userId ? (
+                  <SignupSuccess userId={userId} />
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Full Name"
+                          name="name"
+                          variant="outlined"
+                          value={formData.name}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          helperText={errors.name}
+                          error={!!errors.name}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <AccountCircle color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Email Address"
+                          name="email"
+                          type="email"
+                          variant="outlined"
+                          value={formData.email}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          disabled={otpSent || otpVerified}
+                          helperText={errors.email}
+                          error={!!errors.email}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Email color="action" />
+                              </InputAdornment>
+                            ),
+                            endAdornment: otpVerified && (
+                              <InputAdornment position="end">
+                                <CheckCircle sx={{ color: 'green' }} />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                        {showVerifyButton && !otpSent && !otpVerified && (
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleVerifyEmail}
+                            disabled={loading}
+                            sx={{ mt: 1, borderRadius: 2 }}
+                          >
+                            Verify Email
+                          </Button>
+                        )}
+                        {otpSent && !otpVerified && (
+                          <Box sx={{ mt: 2 }}>
+                            <TextField
+                              label="Enter OTP"
+                              variant="outlined"
+                              value={otp}
+                              onChange={(e) => setOtp(e.target.value)}
+                              fullWidth
+                              required
+                              helperText={otpError}
+                              error={!!otpError}
+                              InputProps={{
+                                sx: { 
+                                  borderRadius: 2,
+                                  '& input': { 
+                                    padding: '14px 14px 14px 0' 
+                                  }
+                                }
+                              }}
+                            />
+                            <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleVerifyOtp}
+                                disabled={loading}
+                                sx={{ borderRadius: 2 }}
+                              >
+                                Verify OTP
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                color="secondary"
+                                onClick={handleResendOtp}
+                                disabled={resendDisabled || loading}
+                                sx={{ borderRadius: 2 }}
+                              >
+                                {resendDisabled
+                                  ? `Resend OTP in ${resendCooldown}s`
+                                  : "Resend OTP"}
+                              </Button>
+                            </Box>
+                          </Box>
+                        )}
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Phone Number (+91)"
+                          name="phone"
+                          type="tel"
+                          variant="outlined"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          helperText={errors.phone}
+                          error={!!errors.phone}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Phone color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Alternate Phone (+91)"
+                          name="alternatePhone"
+                          type="tel"
+                          variant="outlined"
+                          value={formData.alternatePhone}
+                          onChange={handleChange}
+                          fullWidth
+                          helperText={errors.alternatePhone}
+                          error={!!errors.alternatePhone}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Phone color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          variant="outlined"
+                          value={formData.password}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          helperText={errors.password}
+                          error={!!errors.password}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Lock color="action" />
+                              </InputAdornment>
+                            ),
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleClickShowPassword}
+                                  edge="end"
+                                >
+                                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Shop Name"
+                          name="shopName"
+                          variant="outlined"
+                          value={formData.shopName}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Business color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <Typography 
+                          variant="h6" 
+                          color="primary" 
+                          sx={{ mb: 2, fontWeight: 'bold' }}
+                        >
+                          Address Details
+                        </Typography>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Address Line 1"
+                          name="address.line1"
+                          variant="outlined"
+                          value={formData.address.line1}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Home color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Address Line 2"
+                          name="address.line2"
+                          variant="outlined"
+                          value={formData.address.line2}
+                          onChange={handleChange}
+                          fullWidth
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Home color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Landmark"
+                          name="address.landmark"
+                          variant="outlined"
+                          value={formData.address.landmark}
+                          onChange={handleChange}
+                          fullWidth
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <LocationOn color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="City"
+                          name="address.city"
+                          variant="outlined"
+                          value={formData.address.city}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <LocationCity color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="State"
+                          name="address.state"
+                          variant="outlined"
+                          value={formData.address.state}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          InputProps={{
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Pin Code"
+                          name="address.pinCode"
+                          variant="outlined"
+                          value={formData.address.pinCode}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          helperText={errors["address.pinCode"]}
+                          error={!!errors["address.pinCode"]}
+                          InputProps={{
+                            sx: { 
+                              borderRadius: 2,
+                              '& input': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <FormControl fullWidth margin="normal" required>
+                          <InputLabel>Plan</InputLabel>
+                          <Select
+                            name="plan"
+                            value={formData.plan}
+                            onChange={handleChange}
+                            variant="outlined"
+                            label="Plan"
+                            sx={{ 
+                              borderRadius: 2,
+                              '& .MuiSelect-select': { 
+                                padding: '14px 14px 14px 0' 
+                              }
+                            }}
+                          >
+                            <MenuItem value="Trial">Trial</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+
+                    <Divider sx={{ my: 3, borderColor: 'rgba(0,0,0,0.1)' }} />
+
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      startIcon={!loading && <LockOpen />}
+                      sx={{
+                        mt: 2,
+                        py: 1.5,
+                        fontSize: '1rem',
+                        borderRadius: 2,
+                      }}
+                      disabled={loading || !otpVerified}
+                    >
+                      {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        "Sign Up"
+                      )}
+                    </Button>
+
+                    {apiError && (
+                      <Box 
+                        sx={{ 
+                          mt: 2, 
+                          p: 2, 
+                          bgcolor: 'error.light', 
+                          color: 'error.contrastText',
+                          borderRadius: 2,
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <ErrorOutline sx={{ mr: 1 }} />
+                        <Typography variant="body2">{apiError}</Typography>
+                      </Box>
+                    )}
+                  </form>
+                )}
+              </Grid>
+            </Grid>
+          </Paper>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 };
 
