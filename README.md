@@ -80,8 +80,8 @@ src/
 ### **Deployment: Netlify**
 - **Why?** Netlify offers seamless deployment with features like continuous integration, custom domain management, and serverless functions support.
 
-### **Testing: Jest**
-- **Why?** Jest is a robust testing framework that supports snapshot testing, coverage reporting, and provides a simple API for unit testing.
+### **Testing: Postman**
+- **Why?** Postman is a powerful API testing tool that allows for automated testing, request chaining, and detailed response validation, making it ideal for testing RESTful APIs.
 
 ---
 
