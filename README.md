@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# LenZ Frontend Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Overview
+LenZ is a frontend application designed to provide a seamless user experience for managing and viewing various types of eyewear. This documentation outlines the project's structure, technologies used, setup instructions, and best practices.
 
-## Available Scripts
+## Project Structure
+The project follows a well-organized directory structure:
 
-In the project directory, you can run:
+```
+.gitignore
+netlify.toml
+package.json
+README.md
 
-### `npm start`
+public/
+    apple-touch-icon.png
+    favicon-96x96.png
+    favicon.ico
+    favicon.svg
+    index.html
+    manifest.json
+    robots.txt
+    site.webmanifest
+    web-app-manifest-192x192.png
+    web-app-manifest-512x512.png
+    images/
+        full-frame.png
+        rimless.png
+        supra.png
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+src/
+    App.css
+    App.js
+    App.test.js
+    AuthContext.js
+    index.css
+    index.js
+    logo.svg
+    reportWebVitals.js
+    setupTests.js
+    theme.js
+    
+    assets/
+        images/
+        styles/
+    
+    components/
+        Bill.js
+        ...
+    
+    pages/
+    routes/
+    utils/
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Key Directories and Files
+- **`public/`**: Contains static assets such as icons, the main HTML file, and manifest files.
+- **`src/`**: Houses the main source code for the application.
+- **`App.js`**: The main component responsible for initializing the application.
+- **`AuthContext.js`**: Manages authentication state across the application using React Context API.
+- **`index.js`**: The entry point for the React application.
+- **`components/`**: Contains reusable UI components.
+- **`pages/`**: Holds individual page components corresponding to different routes.
+- **`routes/`**: Defines and manages the application's routing configuration.
+- **`utils/`**: Includes utility functions and helper methods.
+- **`assets/`**: Stores images and styles used within the application.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies Used
+### **Frontend Framework: React**
+- **Why?** React is a widely-used JavaScript library for building user interfaces. It enables component-based architecture, improving modularity and maintainability.
 
-### `npm run build`
+### **State Management: Context API**
+- **Why?** The Context API allows efficient global state management without excessive prop drilling, making it ideal for handling authentication and shared data.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### **Styling: CSS Modules**
+- **Why?** CSS Modules provide scoped styles, preventing CSS conflicts and ensuring modularity in styling components.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### **Deployment: Netlify**
+- **Why?** Netlify offers seamless deployment with features like continuous integration, custom domain management, and serverless functions support.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### **Testing: Jest**
+- **Why?** Jest is a robust testing framework that supports snapshot testing, coverage reporting, and provides a simple API for unit testing.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Getting Started
+### **Prerequisites**
+Ensure you have the following installed:
+- **Node.js** (version 14 or higher)
+- **npm** (version 6 or higher)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### **Installation**
+Clone the repository:
+```sh
+git clone https://github.com/yourusername/lenz-frontend.git
+```
+Navigate to the project directory:
+```sh
+cd lenz-frontend
+```
+Install dependencies:
+```sh
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### **Running the Application**
+To start the development server:
+```sh
+npm start
+```
+This will start the application on `http://localhost:3000`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### **Running Tests**
+To execute tests:
+```sh
+npm test
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Conclusion
+This documentation provides an overview of the LenZ frontend application, including its structure, technology choices, and setup instructions. For more detailed insights, refer to individual files and inline comments within the codebase.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+For any issues or contributions, please check the repository and open a pull request or issue.
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
