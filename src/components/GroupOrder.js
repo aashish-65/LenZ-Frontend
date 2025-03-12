@@ -110,7 +110,7 @@ const Orders = () => {
         setLoading(false);
       }
     };
-    // const 
+    // const
     if (user && authToken) {
       fetchOrders();
     }
@@ -153,6 +153,7 @@ const Orders = () => {
         amount: amountInPaise,
         currency,
         receipt: receiptId,
+        payment_capture: 1,
       }
     );
     return response.data;
@@ -183,6 +184,7 @@ const Orders = () => {
         toast.success("Pickup created successfully!");
         setOpenDialog(false);
         setSelectedOrders([]);
+        setPaymentOption("");
 
         const fetchResponse = await axios.get(
           `https://lenz-backend.onrender.com/api/orders/get-order/${user._id}`,
@@ -923,7 +925,14 @@ const Orders = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+                setPaymentOption("");
+              }}
+            >
+              Cancel
+            </Button>
             <Button
               onClick={handlePayment}
               color="primary"

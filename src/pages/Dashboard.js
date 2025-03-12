@@ -276,6 +276,7 @@ const DashboardSkeleton = () => {
 
 const Dashboard = () => {
   const { user, authToken } = useContext(AuthContext);
+  const userId = user?._id;
   const navigate = useNavigate();
   const [activeDeliveries, setActiveDeliveries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -291,12 +292,17 @@ const Dashboard = () => {
       setIsLoading(true);
       try {
         // Simulating API response with mock data
+        if(userId) {
+          console.log("Lenz User ID: ", userId);
         const response = await axios.get(
-          "https://lenz-backend.onrender.com/api/orders/active-shop-orders",
+          `https://lenz-backend.onrender.com/api/orders/active-shop-orders/${userId}`,
           { headers: { "lenz-api-key": "a99ed2023194a3356d37634474417f8b" } }
         );
         setActiveDeliveries(response.data.data);
         setIsLoading(false);
+      }else{
+        setIsLoading(true);
+      }
       } catch (err) {
         setError("Error fetching active deliveries");
         console.error(error, " ", err);
@@ -305,7 +311,7 @@ const Dashboard = () => {
     };
 
     fetchActiveDeliveries();
-  }, [authToken, error]);
+  }, [authToken, error, userId]);
 
   const handleCreateOrder = () => {
     navigate("/create-order");

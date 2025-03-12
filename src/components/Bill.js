@@ -39,7 +39,7 @@ const Bill = ({
   shiftingOrFitting,
   lensDetails,
   materialDetails,
-  coatingDetails,
+  // coatingDetails,
   powerDetails,
   powerType,
   powerEntryType,

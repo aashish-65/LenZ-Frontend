@@ -68,25 +68,25 @@ const Login = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const backgroundVariants = {
-    initial: { 
-      background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-      opacity: 0.7
-    },
-    animate: {
-      background: [
-        'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-        'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)',
-        'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)'
-      ],
-      opacity: [0.7, 0.8, 0.7],
-      transition: {
-        duration: 10,
-        repeat: Infinity,
-        repeatType: 'reverse'
-      }
-    }
-  };
+  // const backgroundVariants = {
+  //   initial: { 
+  //     background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+  //     opacity: 0.7
+  //   },
+  //   animate: {
+  //     background: [
+  //       'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+  //       'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)',
+  //       'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)'
+  //     ],
+  //     opacity: [0.7, 0.8, 0.7],
+  //     transition: {
+  //       duration: 10,
+  //       repeat: Infinity,
+  //       repeatType: 'reverse'
+  //     }
+  //   }
+  // };
 
   const formVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -106,7 +106,7 @@ const Login = () => {
       component={motion.div}
       initial="initial"
       animate="animate"
-      variants={backgroundVariants}
+      // variants={backgroundVariants}
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -118,7 +118,7 @@ const Login = () => {
       }}
     >
       {/* Animated Background Elements */}
-      <Box
+      {/* <Box
         sx={{
           position: 'absolute',
           top: -50,
@@ -138,7 +138,7 @@ const Login = () => {
             repeatType: 'reverse'
           }
         }}
-      />
+      /> */}
 
       <Paper
         component={motion.div}
@@ -336,7 +336,7 @@ const Login = () => {
       </Paper>
 
       {/* Animated Background Elements */}
-      <Box
+      {/* <Box
         sx={{
           position: 'absolute',
           bottom: -50,
@@ -356,7 +356,7 @@ const Login = () => {
             repeatType: 'reverse'
           }
         }}
-      />
+      /> */}
     </Box>
   );
 };
