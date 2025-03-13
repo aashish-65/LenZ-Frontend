@@ -143,10 +143,10 @@ const PrivacyPolicy = () => {
           }}
         >
           <Typography variant="body1">
-            This privacy policy applies to the LenZ Delivery app (hereby referred
-            to as "Application") for mobile devices created by Vivek Ghosh
-            (hereby referred to as "Service Provider") as a Free service. This
-            service is intended for use "AS IS".
+            This privacy policy applies to the LenZ Delivery app (hereby
+            referred to as "Application") for mobile devices created by Vivek
+            Ghosh (hereby referred to as "Service Provider") as a Free service.
+            This service is intended for use "AS IS".
           </Typography>
         </Box>
 
@@ -170,7 +170,10 @@ const PrivacyPolicy = () => {
                 "The time spent on the Application",
                 "The operating system you use on your mobile device",
               ].map((item, index) => (
-                <ListItem key={index} sx={{ display: "list-item", p: 0, pl: 1 }}>
+                <ListItem
+                  key={index}
+                  sx={{ display: "list-item", p: 0, pl: 1 }}
+                >
                   <Typography variant="body1">{item}</Typography>
                 </ListItem>
               ))}
@@ -187,10 +190,10 @@ const PrivacyPolicy = () => {
             <Typography variant="body1" paragraph>
               For a better experience, while using the Application, the Service
               Provider may require you to provide us with certain personally
-              identifiable information, including but not limited to Name, Phone,
-              Email, Vehicle Number. The information that the Service Provider
-              request will be retained by them and used as described in this
-              privacy policy.
+              identifiable information, including but not limited to Name,
+              Phone, Email, Vehicle Number. The information that the Service
+              Provider request will be retained by them and used as described in
+              this privacy policy.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -212,10 +215,10 @@ const PrivacyPolicy = () => {
               this privacy statement.
             </Typography>
             <Typography variant="body1" paragraph>
-              Please note that the Application utilizes third-party services that
-              have their own Privacy Policy about handling data. Below are the
-              links to the Privacy Policy of the third-party service providers
-              used by the Application:
+              Please note that the Application utilizes third-party services
+              that have their own Privacy Policy about handling data. Below are
+              the links to the Privacy Policy of the third-party service
+              providers used by the Application:
             </Typography>
             <Box sx={{ pl: 2 }}>
               <Link
@@ -244,7 +247,10 @@ const PrivacyPolicy = () => {
                 "when they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others, investigate fraud, or respond to a government request;",
                 "with their trusted services providers who work on their behalf, do not have an independent use of the information we disclose to them, and have agreed to adhere to the rules set forth in this privacy statement.",
               ].map((item, index) => (
-                <ListItem key={index} sx={{ display: "list-item", p: 0, pl: 1 }}>
+                <ListItem
+                  key={index}
+                  sx={{ display: "list-item", p: 0, pl: 1 }}
+                >
                   <Typography variant="body1">{item}</Typography>
                 </ListItem>
               ))}
@@ -282,8 +288,8 @@ const PrivacyPolicy = () => {
             <Typography variant="body1">
               The Service Provider will retain User Provided data for as long as
               you use the Application and for a reasonable time thereafter. If
-              you'd like them to delete User Provided Data that you have provided
-              via the Application, please contact them at{" "}
+              you'd like them to delete User Provided Data that you have
+              provided via the Application, please contact them at{" "}
               <Link href="mailto:connect.lenz@gmail.com">
                 connect.lenz@gmail.com
               </Link>{" "}
@@ -307,13 +313,13 @@ const PrivacyPolicy = () => {
             </Typography>
             <Typography variant="body1">
               The Application does not address anyone under the age of 13. The
-              Service Provider does not knowingly collect personally identifiable
-              information from children under 13 years of age. In the case the
-              Service Provider discovers that a child under 13 has provided
-              personal information, the Service Provider will immediately delete
-              this from their servers. If you are a parent or guardian and you
-              are aware that your child has provided us with personal
-              information, please contact the Service Provider at{" "}
+              Service Provider does not knowingly collect personally
+              identifiable information from children under 13 years of age. In
+              the case the Service Provider discovers that a child under 13 has
+              provided personal information, the Service Provider will
+              immediately delete this from their servers. If you are a parent or
+              guardian and you are aware that your child has provided us with
+              personal information, please contact the Service Provider at{" "}
               <Link href="mailto:connect.lenz@gmail.com">
                 connect.lenz@gmail.com
               </Link>{" "}
@@ -350,11 +356,11 @@ const PrivacyPolicy = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Typography variant="body1" paragraph>
-              This Privacy Policy may be updated from time to time for any reason.
-              The Service Provider will notify you of any changes to the Privacy
-              Policy by updating this page with the new Privacy Policy. You are
-              advised to consult this Privacy Policy regularly for any changes,
-              as continued use is deemed approval of all changes.
+              This Privacy Policy may be updated from time to time for any
+              reason. The Service Provider will notify you of any changes to the
+              Privacy Policy by updating this page with the new Privacy Policy.
+              You are advised to consult this Privacy Policy regularly for any
+              changes, as continued use is deemed approval of all changes.
             </Typography>
             <Typography variant="body1">
               This privacy policy is effective as of 2025-03-01.
@@ -364,7 +370,12 @@ const PrivacyPolicy = () => {
 
         {/* Your Consent */}
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" component="strong" gutterBottom sx={{ fontWeight: 600 }}>
+          <Typography
+            variant="h6"
+            component="strong"
+            gutterBottom
+            sx={{ fontWeight: 600 }}
+          >
             Your Consent
           </Typography>
           <Typography variant="body1" paragraph>

@@ -292,17 +292,22 @@ const Dashboard = () => {
       setIsLoading(true);
       try {
         // Simulating API response with mock data
-        if(userId) {
+        if (userId) {
           console.log("Lenz User ID: ", userId);
-        const response = await axios.get(
-          `https://lenz-backend.onrender.com/api/orders/active-shop-orders/${userId}`,
-          { headers: { "lenz-api-key": "a99ed2023194a3356d37634474417f8b" } }
-        );
-        setActiveDeliveries(response.data.data);
-        setIsLoading(false);
-      }else{
-        setIsLoading(true);
-      }
+          const response = await axios.get(
+            `https://lenz-backend.onrender.com/api/orders/active-shop-orders/${userId}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY,
+              },
+            }
+          );
+          setActiveDeliveries(response.data.data);
+          setIsLoading(false);
+        } else {
+          setIsLoading(true);
+        }
       } catch (err) {
         setError("Error fetching active deliveries");
         console.error(error, " ", err);
@@ -609,11 +614,14 @@ const Dashboard = () => {
                                   label={`OTP: ${delivery.otpCode}`}
                                   size="small"
                                   deleteIcon={
-                                      copied ? (
-                                        <CheckCircleIcon fontSize="small" color="success.main"/>
-                                      ) : (
-                                        <ContentCopyIcon fontSize="small" />
-                                      )
+                                    copied ? (
+                                      <CheckCircleIcon
+                                        fontSize="small"
+                                        color="success.main"
+                                      />
+                                    ) : (
+                                      <ContentCopyIcon fontSize="small" />
+                                    )
                                   }
                                   onDelete={() =>
                                     handleCopyOtp(delivery.otpCode)

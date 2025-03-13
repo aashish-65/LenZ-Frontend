@@ -93,9 +93,10 @@ const ProfilePage = () => {
   // Timer Interval Ref
   const timerInterval = useRef(null);
 
-  const formattedAlternatePhone = profileData.alternatePhone?.replace(/\s+/g, "") === "+91" 
-  ? "N/A" 
-  : profileData.alternatePhone;
+  const formattedAlternatePhone =
+    profileData.alternatePhone?.replace(/\s+/g, "") === "+91"
+      ? "N/A"
+      : profileData.alternatePhone;
 
   // Fetch Profile Data
   useEffect(() => {

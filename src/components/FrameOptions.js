@@ -13,7 +13,12 @@ import {
 import { motion } from "framer-motion";
 import { useTheme } from "@mui/material/styles";
 
-const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => {
+const FrameOptions = ({
+  frameOptions,
+  setFrameOptions,
+  nextStep,
+  prevStep,
+}) => {
   const [selectedFrame, setSelectedFrame] = useState(frameOptions?.type || "");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -31,20 +36,20 @@ const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => 
   };
 
   const frameData = [
-    { 
-      label: "Full Frame", 
-      description: "Sturdy and reliable design.", 
-      image: "/images/full-frame.png" 
+    {
+      label: "Full Frame",
+      description: "Sturdy and reliable design.",
+      image: "/images/full-frame.png",
     },
-    { 
-      label: "Supra", 
-      description: "Minimal and lightweight.", 
-      image: "/images/supra.png" 
+    {
+      label: "Supra",
+      description: "Minimal and lightweight.",
+      image: "/images/supra.png",
     },
-    { 
-      label: "Rimless", 
-      description: "Elegant and modern style.", 
-      image: "/images/rimless.png" 
+    {
+      label: "Rimless",
+      description: "Elegant and modern style.",
+      image: "/images/rimless.png",
     },
   ];
 
@@ -54,7 +59,10 @@ const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      <Container maxWidth="md" sx={{ mt: isMobile ? 2 : 0, mb: isMobile ? 1 : 0 }}>
+      <Container
+        maxWidth="md"
+        sx={{ mt: isMobile ? 2 : 0, mb: isMobile ? 1 : 0 }}
+      >
         <Paper
           elevation={6}
           sx={{
@@ -67,7 +75,12 @@ const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => 
           <Slide direction="down" in={true} mountOnEnter unmountOnExit>
             <Box>
               <Box textAlign="center" mb={isMobile ? 2 : 3}>
-                <Typography variant={isMobile ? "h5" : "h4"} component="h2" color="primary" gutterBottom>
+                <Typography
+                  variant={isMobile ? "h5" : "h4"}
+                  component="h2"
+                  color="primary"
+                  gutterBottom
+                >
                   Select Frame Type
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
@@ -77,7 +90,11 @@ const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => 
 
               <Divider sx={{ mb: isMobile ? 2 : 3 }} />
 
-              <Grid container spacing={isMobile ? 2 : 3} justifyContent="center">
+              <Grid
+                container
+                spacing={isMobile ? 2 : 3}
+                justifyContent="center"
+              >
                 {frameData.map((frame) => (
                   <Grid item xs={12} sm={4} key={frame.label}>
                     <motion.div
@@ -97,9 +114,10 @@ const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => 
                             selectedFrame === frame.label
                               ? "rgba(25, 118, 210, 0.1)"
                               : "#fff",
-                          border: selectedFrame === frame.label
-                            ? "2px solid #1976d2"
-                            : "2px solid transparent",
+                          border:
+                            selectedFrame === frame.label
+                              ? "2px solid #1976d2"
+                              : "2px solid transparent",
                           textAlign: "center",
                           height: isMobile ? "130px" : "160px", // Reduced height on mobile
                           display: "flex",
@@ -119,15 +137,18 @@ const FrameOptions = ({ frameOptions, setFrameOptions, nextStep, prevStep }) => 
                             margin: "0 auto", // Center the image
                           }}
                         />
-                        <Typography variant={isMobile ? "subtitle1" : "h6"} color="textPrimary">
+                        <Typography
+                          variant={isMobile ? "subtitle1" : "h6"}
+                          color="textPrimary"
+                        >
                           {frame.label}
                         </Typography>
-                        <Typography 
-                          variant="body2" 
-                          color="textSecondary" 
-                          sx={{ 
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          sx={{
                             mt: isMobile ? 0.5 : 1,
-                            fontSize: isMobile ? "0.75rem" : "0.875rem" 
+                            fontSize: isMobile ? "0.75rem" : "0.875rem",
                           }}
                         >
                           {frame.description}

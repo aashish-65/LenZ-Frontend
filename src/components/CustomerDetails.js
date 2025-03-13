@@ -14,7 +14,9 @@ import { motion } from "framer-motion"; // For animations
 
 const CustomerDetails = ({ setCustomerDetails, nextStep, customerDetails }) => {
   const [name, setName] = useState(customerDetails?.name || "");
-  const [billNumber, setBillNumber] = useState(customerDetails?.billNumber || "");
+  const [billNumber, setBillNumber] = useState(
+    customerDetails?.billNumber || ""
+  );
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -51,11 +53,17 @@ const CustomerDetails = ({ setCustomerDetails, nextStep, customerDetails }) => {
           <Slide direction="down" in={showForm} mountOnEnter unmountOnExit>
             <Box>
               <Box textAlign="center" mb={3}>
-                <Typography variant="h4" component="h2" color="primary" gutterBottom>
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  color="primary"
+                  gutterBottom
+                >
                   Customer Details
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
-                  Please provide the customer's name and bill number (if applicable).
+                  Please provide the customer's name and bill number (if
+                  applicable).
                 </Typography>
               </Box>
 

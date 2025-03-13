@@ -62,7 +62,8 @@ const OrderSuccess = () => {
           color="textSecondary"
           sx={{ mb: 4, px: { xs: 1, sm: 5 } }}
         >
-          Now place your order for <strong>PICKUP</strong> in the <strong>Book For Pickup</strong> section.
+          Now place your order for <strong>PICKUP</strong> in the{" "}
+          <strong>Book For Pickup</strong> section.
         </Typography>
 
         {/* Action Buttons */}

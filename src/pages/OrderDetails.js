@@ -38,7 +38,11 @@ const OrderDetails = () => {
 
   return (
     <Box sx={{ padding: 4, maxWidth: "800px", margin: "auto" }}>
-      <Card component={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <Card
+        component={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
         <CardContent>
           <Typography variant="h4" gutterBottom>
             Order Details
@@ -47,15 +51,21 @@ const OrderDetails = () => {
 
           <Typography variant="h6">Customer Information</Typography>
           <Typography>Name: {order.customerDetails?.name}</Typography>
-          <Typography>Bill Number: {order.customerDetails?.billNumber}</Typography>
+          <Typography>
+            Bill Number: {order.customerDetails?.billNumber}
+          </Typography>
           <Divider sx={{ marginY: 2 }} />
 
           <Typography variant="h6">Frame Details</Typography>
           <Typography>Type: {order.frameOptions?.type || "N/A"}</Typography>
           <Divider sx={{ marginY: 2 }} />
 
-          <Typography variant="h6">Total Amount: ₹{order.totalAmount}</Typography>
-          <Typography>Status: {order.orderPlaced ? "Placed" : "Pending"}</Typography>
+          <Typography variant="h6">
+            Total Amount: ₹{order.totalAmount}
+          </Typography>
+          <Typography>
+            Status: {order.orderPlaced ? "Placed" : "Pending"}
+          </Typography>
         </CardContent>
       </Card>
     </Box>

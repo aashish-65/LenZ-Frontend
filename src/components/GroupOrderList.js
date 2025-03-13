@@ -130,10 +130,10 @@ const GroupOrderList = () => {
       alert("No orders available for export.");
       return;
     }
-  
+
     try {
       const doc = new jsPDF();
-  
+
       // Reset text color for main content
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(18);
@@ -151,28 +151,32 @@ const GroupOrderList = () => {
       doc.setTextColor(230, 230, 230); // Light gray color
       doc.setFontSize(200);
       doc.text("LenZ", 100, 300, { angle: 45, opacity: 5 });
-  
+
       // AutoTable for structured data
       doc.autoTable({
         startY: 30,
         head: [["ID", "Status", "Total Amount (₹)", "Date"]],
-        body: groupOrders.map(({ _id, tracking_status, finalAmount, createdAt }) => [
-          _id,
-          tracking_status,
-          `₹${finalAmount.toLocaleString()}`, // Format currency
-          new Date(createdAt).toLocaleDateString("en-GB"),
-        ]),
+        body: groupOrders.map(
+          ({ _id, tracking_status, finalAmount, createdAt }) => [
+            _id,
+            tracking_status,
+            `₹${finalAmount.toLocaleString()}`, // Format currency
+            new Date(createdAt).toLocaleDateString("en-GB"),
+          ]
+        ),
         theme: "striped",
       });
-  
+
       // Save file with date
-      const filename = `group_orders_${new Date().toISOString().slice(0, 10)}.pdf`;
+      const filename = `group_orders_${new Date()
+        .toISOString()
+        .slice(0, 10)}.pdf`;
       doc.save(filename);
     } catch (error) {
       console.error("Error exporting PDF:", error);
       alert("Failed to export PDF. Please try again.");
     }
-  };  
+  };
 
   // 🎨 **Color for Tracking Status**
   const getStatusColor = (status) => {

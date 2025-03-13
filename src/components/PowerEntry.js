@@ -15,11 +15,11 @@ import {
   Slide,
   useMediaQuery,
 } from "@mui/material";
-import { 
-  ArrowBack, 
-  ArrowForward, 
-  RemoveRedEye, 
-  RemoveRedEyeOutlined 
+import {
+  ArrowBack,
+  ArrowForward,
+  RemoveRedEye,
+  RemoveRedEyeOutlined,
 } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
 
@@ -47,18 +47,23 @@ const PowerEntry = ({
   });
 
   const [errors, setErrors] = useState({});
-  const [cylindricalErrorPowerRange, setCylindricalErrorPowerRange] = useState({});
-  const [isValidCylindricalPowerRange, setIsValidCylindricalPowerRange] = useState(true);
+  const [cylindricalErrorPowerRange, setCylindricalErrorPowerRange] = useState(
+    {}
+  );
+  const [isValidCylindricalPowerRange, setIsValidCylindricalPowerRange] =
+    useState(true);
   const [sphericalErrorPowerRange, setSphericalErrorPowerRange] = useState({});
-  const [isValidSphericalPowerRange, setIsValidSphericalPowerRange] = useState(true);
+  const [isValidSphericalPowerRange, setIsValidSphericalPowerRange] =
+    useState(true);
   const [axisErrorPowerRange, setAxisErrorPowerRange] = useState({});
   const [isValidAxisPowerRange, setIsValidAxisPowerRange] = useState(true);
   const [additionErrorPowerRange, setAdditionErrorPowerRange] = useState({});
-  const [isValidAdditionPowerRange, setIsValidAdditionPowerRange] = useState(true);
+  const [isValidAdditionPowerRange, setIsValidAdditionPowerRange] =
+    useState(true);
   const [isValid, setIsValid] = useState(false);
   const [isValidPowerRange, setIsValidPowerRange] = useState(false);
   const [activeEye, setActiveEye] = useState("both"); // "right", "left", or "both"
-  
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -371,37 +376,40 @@ const PowerEntry = ({
 
   const renderEyeSection = (eye) => {
     const eyeColor = eye === "right" ? "#1976d2" : "#9c27b0";
-    
+
     return (
-      <Card 
-        elevation={3} 
-        sx={{ 
+      <Card
+        elevation={3}
+        sx={{
           borderTop: `4px solid ${eyeColor}`,
-          height: '100%',
-          transition: 'all 0.3s ease',
-          '&:hover': {
+          height: "100%",
+          transition: "all 0.3s ease",
+          "&:hover": {
             boxShadow: 6,
           },
         }}
       >
         <CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <Box
               sx={{
                 backgroundColor: eyeColor,
-                borderRadius: '50%',
+                borderRadius: "50%",
                 width: 32,
                 height: 32,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 mr: 1,
               }}
             >
               {eye === "right" ? (
-                <RemoveRedEye sx={{ color: 'white' }} fontSize="small" />
+                <RemoveRedEye sx={{ color: "white" }} fontSize="small" />
               ) : (
-                <RemoveRedEyeOutlined sx={{ color: 'white' }} fontSize="small" />
+                <RemoveRedEyeOutlined
+                  sx={{ color: "white" }}
+                  fontSize="small"
+                />
               )}
             </Box>
             <Typography variant="h6" color={eyeColor} fontWeight="bold">
@@ -422,24 +430,28 @@ const PowerEntry = ({
                 onChange={(e) => handleChange(eye, "spherical", e.target.value)}
                 onBlur={() => handleBlur(eye, "spherical")}
                 error={Boolean(
-                  errors[eye]?.spherical || sphericalErrorPowerRange[eye]?.spherical
+                  errors[eye]?.spherical ||
+                    sphericalErrorPowerRange[eye]?.spherical
                 )}
                 helperText={
-                  errors[eye]?.spherical || sphericalErrorPowerRange[eye]?.spherical
+                  errors[eye]?.spherical ||
+                  sphericalErrorPowerRange[eye]?.spherical
                 }
                 onWheel={(e) => numberInputOnWheelPreventChange(e)}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">D</InputAdornment>,
+                  endAdornment: (
+                    <InputAdornment position="end">D</InputAdornment>
+                  ),
                 }}
-                sx={{ 
-                  '& .MuiOutlinedInput-root': {
-                    '&:hover fieldset': {
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
                       borderColor: eyeColor,
                     },
-                    '&.Mui-focused fieldset': {
+                    "&.Mui-focused fieldset": {
                       borderColor: eyeColor,
                     },
-                  }
+                  },
                 }}
               />
             </Grid>
@@ -453,27 +465,33 @@ const PowerEntry = ({
                 fullWidth
                 size={isMobile ? "small" : "medium"}
                 value={eyePower[eye].cylindrical}
-                onChange={(e) => handleChange(eye, "cylindrical", e.target.value)}
+                onChange={(e) =>
+                  handleChange(eye, "cylindrical", e.target.value)
+                }
                 onBlur={() => handleBlur(eye, "cylindrical")}
                 error={Boolean(
-                  errors[eye]?.cylindrical || cylindricalErrorPowerRange[eye]?.cylindrical
+                  errors[eye]?.cylindrical ||
+                    cylindricalErrorPowerRange[eye]?.cylindrical
                 )}
                 helperText={
-                  errors[eye]?.cylindrical || cylindricalErrorPowerRange[eye]?.cylindrical
+                  errors[eye]?.cylindrical ||
+                  cylindricalErrorPowerRange[eye]?.cylindrical
                 }
                 onWheel={(e) => numberInputOnWheelPreventChange(e)}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end">D</InputAdornment>,
+                  endAdornment: (
+                    <InputAdornment position="end">D</InputAdornment>
+                  ),
                 }}
-                sx={{ 
-                  '& .MuiOutlinedInput-root': {
-                    '&:hover fieldset': {
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
                       borderColor: eyeColor,
                     },
-                    '&.Mui-focused fieldset': {
+                    "&.Mui-focused fieldset": {
                       borderColor: eyeColor,
                     },
-                  }
+                  },
                 }}
               />
             </Grid>
@@ -497,17 +515,19 @@ const PowerEntry = ({
                   }
                   onWheel={(e) => numberInputOnWheelPreventChange(e)}
                   InputProps={{
-                    endAdornment: <InputAdornment position="end">°</InputAdornment>,
+                    endAdornment: (
+                      <InputAdornment position="end">°</InputAdornment>
+                    ),
                   }}
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      '&:hover fieldset': {
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
                         borderColor: eyeColor,
                       },
-                      '&.Mui-focused fieldset': {
+                      "&.Mui-focused fieldset": {
                         borderColor: eyeColor,
                       },
-                    }
+                    },
                   }}
                 />
               </Grid>
@@ -523,27 +543,33 @@ const PowerEntry = ({
                   fullWidth
                   size={isMobile ? "small" : "medium"}
                   value={eyePower[eye].addition}
-                  onChange={(e) => handleChange(eye, "addition", e.target.value)}
+                  onChange={(e) =>
+                    handleChange(eye, "addition", e.target.value)
+                  }
                   onBlur={() => handleBlur(eye, "addition")}
                   error={Boolean(
-                    errors[eye]?.addition || additionErrorPowerRange[eye]?.addition
+                    errors[eye]?.addition ||
+                      additionErrorPowerRange[eye]?.addition
                   )}
                   helperText={
-                    errors[eye]?.addition || additionErrorPowerRange[eye]?.addition
+                    errors[eye]?.addition ||
+                    additionErrorPowerRange[eye]?.addition
                   }
                   onWheel={(e) => numberInputOnWheelPreventChange(e)}
                   InputProps={{
-                    endAdornment: <InputAdornment position="end">D</InputAdornment>,
+                    endAdornment: (
+                      <InputAdornment position="end">D</InputAdornment>
+                    ),
                   }}
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      '&:hover fieldset': {
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
                         borderColor: eyeColor,
                       },
-                      '&.Mui-focused fieldset': {
+                      "&.Mui-focused fieldset": {
                         borderColor: eyeColor,
                       },
-                    }
+                    },
                   }}
                 />
               </Grid>
@@ -563,13 +589,13 @@ const PowerEntry = ({
         padding: { xs: 2, sm: 3, md: 4 },
         borderRadius: 2,
         backgroundColor: "#fdfdfd",
-        mt: (lensType !== "SV" && activeEye === "both") ? (isMobile ? 20 : 0) : 0,
+        mt: lensType !== "SV" && activeEye === "both" ? (isMobile ? 20 : 0) : 0,
         position: "relative",
         // overflow: "hidden",
       }}
     >
       {/* Gradient background accent */}
-      <Box 
+      <Box
         sx={{
           position: "absolute",
           top: 0,
@@ -581,11 +607,11 @@ const PowerEntry = ({
       />
 
       <Box sx={{ pt: 1 }}>
-        <Typography 
-          variant={isMobile ? "h5" : "h4"} 
-          gutterBottom 
+        <Typography
+          variant={isMobile ? "h5" : "h4"}
+          gutterBottom
           textAlign="center"
-          sx={{ 
+          sx={{
             fontWeight: 600,
             color: "#333",
             mb: 1,
@@ -593,30 +619,33 @@ const PowerEntry = ({
         >
           Enter Power Details
         </Typography>
-        
-        <Box 
-          sx={{ 
-            display: "flex", 
-            justifyContent: "center", 
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
             alignItems: "center",
             mb: 3,
           }}
         >
-          <Card 
-            sx={{ 
-              display: "inline-flex", 
+          <Card
+            sx={{
+              display: "inline-flex",
               px: 2,
               py: 1,
               backgroundColor: "#f5f5f5",
               borderRadius: 2,
             }}
           >
-            <Typography 
-              variant="subtitle1" 
+            <Typography
+              variant="subtitle1"
               textAlign="center"
               sx={{ fontWeight: 500 }}
             >
-              Selected Lens Type: <Box component="span" sx={{ fontWeight: 700, color: "#1976d2" }}>{lensType}</Box>
+              Selected Lens Type:{" "}
+              <Box component="span" sx={{ fontWeight: 700, color: "#1976d2" }}>
+                {lensType}
+              </Box>
             </Typography>
           </Card>
         </Box>
@@ -627,7 +656,7 @@ const PowerEntry = ({
         {isMobile && (
           <Box sx={{ mb: 3 }}>
             <Stack direction="row" spacing={1} justifyContent="center">
-              <Button 
+              <Button
                 variant={activeEye === "right" ? "contained" : "outlined"}
                 color="primary"
                 onClick={() => setActiveEye("right")}
@@ -636,7 +665,7 @@ const PowerEntry = ({
               >
                 Right
               </Button>
-              <Button 
+              <Button
                 variant={activeEye === "both" ? "contained" : "outlined"}
                 color="secondary"
                 onClick={() => setActiveEye("both")}
@@ -644,7 +673,7 @@ const PowerEntry = ({
               >
                 Both
               </Button>
-              <Button 
+              <Button
                 variant={activeEye === "left" ? "contained" : "outlined"}
                 color="secondary"
                 onClick={() => setActiveEye("left")}
@@ -666,7 +695,7 @@ const PowerEntry = ({
               </Slide>
             </Grid>
           )}
-          
+
           {(!isMobile || activeEye === "left" || activeEye === "both") && (
             <Grid item xs={12} md={6}>
               <Slide direction="left" in={true} mountOnEnter unmountOnExit>
@@ -677,35 +706,34 @@ const PowerEntry = ({
         </Grid>
 
         {/* Status Indicator */}
-        <Box 
-          sx={{ 
-            display: "flex", 
-            justifyContent: "center", 
-            mt: 3, 
-            mb: 2 
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: 3,
+            mb: 2,
           }}
         >
-          <Typography 
-            variant="body2" 
-            sx={{ 
+          <Typography
+            variant="body2"
+            sx={{
               color: isValid ? "success.main" : "text.secondary",
-              fontStyle: "italic"
+              fontStyle: "italic",
             }}
           >
-            {isValid 
-              ? "All required fields are valid. You can proceed to the next step." 
-              : "Please fill in the required fields to proceed."
-            }
+            {isValid
+              ? "All required fields are valid. You can proceed to the next step."
+              : "Please fill in the required fields to proceed."}
           </Typography>
         </Box>
 
         {/* Button Section */}
-        <Box 
+        <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             gap: 2,
-            mt: 3
+            mt: 3,
           }}
         >
           <Button
@@ -713,7 +741,7 @@ const PowerEntry = ({
             color="primary"
             startIcon={<ArrowBack />}
             onClick={prevStep}
-            sx={{ 
+            sx={{
               borderRadius: 2,
               px: { xs: 2, sm: 3 },
               py: 1,
@@ -722,8 +750,8 @@ const PowerEntry = ({
               transition: "all 0.3s ease",
               "&:hover": {
                 boxShadow: "0px 4px 8px rgba(0,0,0,0.15)",
-                backgroundColor: "rgba(25, 118, 210, 0.05)"
-              }
+                backgroundColor: "rgba(25, 118, 210, 0.05)",
+              },
             }}
           >
             Previous
@@ -734,7 +762,7 @@ const PowerEntry = ({
             endIcon={<ArrowForward />}
             onClick={nextStep}
             disabled={!isValid}
-            sx={{ 
+            sx={{
               borderRadius: 2,
               px: { xs: 2, sm: 3 },
               py: 1,
@@ -746,8 +774,8 @@ const PowerEntry = ({
               },
               "&.Mui-disabled": {
                 backgroundColor: "rgba(0, 0, 0, 0.12)",
-                color: "rgba(0, 0, 0, 0.26)"
-              }
+                color: "rgba(0, 0, 0, 0.26)",
+              },
             }}
           >
             Next

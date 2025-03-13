@@ -14,7 +14,9 @@ const CoatingSelection = ({
 
   return (
     <div className="coating-selection-container">
-      <h3 className="coating-selection-title">Select Coating for {materialDetails}</h3>
+      <h3 className="coating-selection-title">
+        Select Coating for {materialDetails}
+      </h3>
       <div className="coating-selection-buttons">
         {materialDetails === "Glass" && (
           <>
@@ -78,7 +80,9 @@ const CoatingSelection = ({
             </button>
             <button
               className="coating-selection-button"
-              onClick={() => handleCoatingSelection("Bluekart Blue (Violet) Pg")}
+              onClick={() =>
+                handleCoatingSelection("Bluekart Blue (Violet) Pg")
+              }
             >
               Bluekart Blue (Violet) Pg
             </button>
@@ -125,10 +129,7 @@ const CoatingSelection = ({
           </>
         )}
       </div>
-      <button
-        className="coating-selection-back-button"
-        onClick={prevStep}
-      >
+      <button className="coating-selection-back-button" onClick={prevStep}>
         Back
       </button>
     </div>

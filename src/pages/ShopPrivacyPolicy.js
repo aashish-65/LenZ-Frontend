@@ -193,11 +193,24 @@ const ShopPrivacyPolicy = () => {
           visit, use, or navigate our Services, we may process personal
           information depending on how you interact with us and the Services,
           the choices you make, and the products and features you use. Learn
-          more about{" "} <Link href="#personal-information">personal information you disclose to us</Link>.
+          more about{" "}
+          <Link href="#personal-information">
+            personal information you disclose to us
+          </Link>
+          .
         </Typography>
 
         <Typography variant="body1" sx={{ mt: 2 }}>
-        <strong>Do we process any sensitive personal information?</strong> Some of the information may be considered "special" or "sensitive" in certain jurisdictions, for example your racial or ethnic origins, sexual orientation, and religious beliefs. We may process sensitive personal information when necessary with your consent or as otherwise permitted by applicable law. Learn more about <Link href="#sensitive-information">sensitive information we process</Link>.
+          <strong>Do we process any sensitive personal information?</strong>{" "}
+          Some of the information may be considered "special" or "sensitive" in
+          certain jurisdictions, for example your racial or ethnic origins,
+          sexual orientation, and religious beliefs. We may process sensitive
+          personal information when necessary with your consent or as otherwise
+          permitted by applicable law. Learn more about{" "}
+          <Link href="#sensitive-information">
+            sensitive information we process
+          </Link>
+          .
         </Typography>
 
         {/* Table of Contents */}

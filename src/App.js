@@ -11,8 +11,8 @@ import RouteGuard from "./routes/RouteGaurd";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme"; // Import your custom theme
 // import { ClipLoader } from 'react-spinners';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./AuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -31,7 +31,9 @@ const Profile = lazy(() => import("./pages/ProfilePage"));
 const GroupOrder = lazy(() => import("./components/GroupOrder"));
 const AdminPrivacyPolicy = lazy(() => import("./pages/AdminPrivacyPolicy"));
 const ShopPrivacyPolicy = lazy(() => import("./pages/ShopPrivacyPolicy"));
-const DeliveryPrivacyPolicy = lazy(() => import("./pages/DeliveryPrivacyPolicy"));
+const DeliveryPrivacyPolicy = lazy(() =>
+  import("./pages/DeliveryPrivacyPolicy")
+);
 // toast.configure();
 
 // PublicRoute component to redirect logged-in users
@@ -56,9 +58,17 @@ const routes = [
   { path: "/orders", component: <Orders />, isPublic: false },
   { path: "/pickup-orders", component: <GroupOrder />, isPublic: false },
   { path: "/group-orders", component: <GroupOrderList />, isPublic: false },
-  { path: "/group-orders/:groupOrderId", component: <GroupOrderDetails />, isPublic: false },
+  {
+    path: "/group-orders/:groupOrderId",
+    component: <GroupOrderDetails />,
+    isPublic: false,
+  },
   { path: "/profile", component: <Profile />, isPublic: false },
-  { path: "/orders/:orderId/details", component: <OrderDetails />, isPublic: false },
+  {
+    path: "/orders/:orderId/details",
+    component: <OrderDetails />,
+    isPublic: false,
+  },
   { path: "*", component: <NotFound /> },
 ];
 
@@ -72,24 +82,31 @@ const App = () => {
             <ToastContainer position="top-right" autoClose={3000} />
             <div className="main-content">
               {/* <Suspense fallback={<ClipLoader color="#000" size={50} />}> */}
-                <ErrorBoundary>
-                  <Routes>
-                    <Route path="/admin-privacy-policy" element={<AdminPrivacyPolicy />} />
-                    <Route path="/shop-privacy-policy" element={<ShopPrivacyPolicy />} />
-                    <Route path="/rider-privacy-policy" element={<DeliveryPrivacyPolicy />} />
+              <ErrorBoundary>
+                <Routes>
+                  <Route
+                    path="/admin-privacy-policy"
+                    element={<AdminPrivacyPolicy />}
+                  />
+                  <Route
+                    path="/shop-privacy-policy"
+                    element={<ShopPrivacyPolicy />}
+                  />
+                  <Route
+                    path="/rider-privacy-policy"
+                    element={<DeliveryPrivacyPolicy />}
+                  />
                   {routes.map(({ path, component, isPublic }, index) => (
                     <Route
                       key={index}
                       path={path}
                       element={
-                        <RouteGuard isPublic={isPublic}>
-                          {component}
-                        </RouteGuard>
+                        <RouteGuard isPublic={isPublic}>{component}</RouteGuard>
                       }
                     />
                   ))}
-                  </Routes>
-                </ErrorBoundary>
+                </Routes>
+              </ErrorBoundary>
               {/* </Suspense> */}
             </div>
             <Footer />

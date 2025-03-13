@@ -67,7 +67,8 @@ const ConfirmationBox = ({ placeOrder, prevStep }) => {
             sx={{
               py: 1.5,
               fontSize: "16px",
-              borderColor: selectedOption === "confirm" ? "primary.main" : undefined,
+              borderColor:
+                selectedOption === "confirm" ? "primary.main" : undefined,
             }}
             onClick={handleConfirm}
             disabled={loading} // Disable button when loading

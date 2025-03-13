@@ -2,7 +2,12 @@ import React from "react";
 import { Container, Box, Button, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
-const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOptions }) => {
+const MaterialSelection = ({
+  setMaterialDetails,
+  nextStep,
+  prevStep,
+  frameOptions,
+}) => {
   const handleMaterialSelection = (materialType) => {
     setMaterialDetails(materialType);
     nextStep();
@@ -46,7 +51,10 @@ const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOption
         >
           {frameOptions.type === "Full Frame" && (
             <>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleMaterialSelection("CR")}
@@ -70,7 +78,10 @@ const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOption
                   CR
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleMaterialSelection("Glass")}
@@ -99,7 +110,10 @@ const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOption
 
           {frameOptions.type === "Supra" && (
             <>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleMaterialSelection("CR")}
@@ -123,7 +137,10 @@ const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOption
                   CR
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleMaterialSelection("Glass")}
@@ -152,7 +169,10 @@ const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOption
 
           {frameOptions.type === "Rimless" && (
             <>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleMaterialSelection("Poly")}
@@ -176,7 +196,10 @@ const MaterialSelection = ({ setMaterialDetails, nextStep, prevStep, frameOption
                   Poly
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleMaterialSelection("CR")}

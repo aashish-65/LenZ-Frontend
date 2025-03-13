@@ -265,13 +265,14 @@ const Bill = ({
                             <TableCell sx={{ p: 1 }}>
                               {Object.entries(powerDetails.right).map(
                                 ([key, value]) => {
-                                  const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+                                  const capitalizedKey =
+                                    key.charAt(0).toUpperCase() + key.slice(1);
                                   return (
-                                  <Typography key={key} variant="body2">
-                                    <strong>{capitalizedKey}:</strong> {value}
-                                  </Typography>
-                                );
-                              }
+                                    <Typography key={key} variant="body2">
+                                      <strong>{capitalizedKey}:</strong> {value}
+                                    </Typography>
+                                  );
+                                }
                               )}
                             </TableCell>
                           </TableRow>
@@ -284,13 +285,14 @@ const Bill = ({
                             <TableCell sx={{ p: 1 }}>
                               {Object.entries(powerDetails.left).map(
                                 ([key, value]) => {
-                                  const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+                                  const capitalizedKey =
+                                    key.charAt(0).toUpperCase() + key.slice(1);
                                   return (
-                                  <Typography key={key} variant="body2">
-                                    <strong>{capitalizedKey}:</strong> {value}
-                                  </Typography>
-                                );
-                              }
+                                    <Typography key={key} variant="body2">
+                                      <strong>{capitalizedKey}:</strong> {value}
+                                    </Typography>
+                                  );
+                                }
                               )}
                             </TableCell>
                           </TableRow>
@@ -620,14 +622,16 @@ const Bill = ({
                                     const capitalizedKey =
                                       key.charAt(0).toUpperCase() +
                                       key.slice(1);
-                                      return(
-                                    <Grid item xs={6} key={key}>
-                                      <Typography variant="body2">
-                                        <strong>{capitalizedKey}:</strong> {value}
-                                      </Typography>
-                                    </Grid>
-                                  );
-                                })}
+                                    return (
+                                      <Grid item xs={6} key={key}>
+                                        <Typography variant="body2">
+                                          <strong>{capitalizedKey}:</strong>{" "}
+                                          {value}
+                                        </Typography>
+                                      </Grid>
+                                    );
+                                  }
+                                )}
                               </Grid>
                             </TableCell>
                           </TableRow>

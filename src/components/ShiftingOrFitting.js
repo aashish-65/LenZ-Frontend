@@ -3,7 +3,12 @@ import { Button, Box, Typography, Container } from "@mui/material";
 import { motion } from "framer-motion";
 import "../assets/styles/ShiftingOrFitting.css";
 
-const ShiftingOrFitting = ({ shiftingOrFitting, setShiftingOrFitting, nextStep, prevStep }) => {
+const ShiftingOrFitting = ({
+  shiftingOrFitting,
+  setShiftingOrFitting,
+  nextStep,
+  prevStep,
+}) => {
   const [selectedOption, setSelectedOption] = useState(shiftingOrFitting || "");
 
   useEffect(() => {
@@ -42,7 +47,11 @@ const ShiftingOrFitting = ({ shiftingOrFitting, setShiftingOrFitting, nextStep, 
             },
           }}
         >
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "#1976d2" }}>
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{ fontWeight: "bold", color: "#1976d2" }}
+          >
             What would you like to do?
           </Typography>
           <Typography variant="body1" sx={{ color: "#555", marginBottom: 3 }}>
@@ -72,13 +81,21 @@ const ShiftingOrFitting = ({ shiftingOrFitting, setShiftingOrFitting, nextStep, 
                     fontWeight: "600",
                     borderRadius: 3,
                     textTransform: "none",
-                    border: selectedOption === option ? "2px solid #1976d2" : "2px solid #ccc",
-                    backgroundColor: selectedOption === option ? "#1976d2" : "#fff",
+                    border:
+                      selectedOption === option
+                        ? "2px solid #1976d2"
+                        : "2px solid #ccc",
+                    backgroundColor:
+                      selectedOption === option ? "#1976d2" : "#fff",
                     color: selectedOption === option ? "#fff" : "#1976d2",
-                    boxShadow: selectedOption === option ? "0 4px 10px rgba(25, 118, 210, 0.2)" : "none",
+                    boxShadow:
+                      selectedOption === option
+                        ? "0 4px 10px rgba(25, 118, 210, 0.2)"
+                        : "none",
                     transition: "all 0.3s ease",
                     ":hover": {
-                      backgroundColor: selectedOption === option ? "#1565c0" : "#f1f1f1",
+                      backgroundColor:
+                        selectedOption === option ? "#1565c0" : "#f1f1f1",
                       color: selectedOption === option ? "#fff" : "#1976d2",
                       borderColor: "#1976d2",
                     },

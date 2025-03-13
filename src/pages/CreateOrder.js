@@ -264,124 +264,128 @@ const CreateOrder = () => {
         </Container>
       )} */}
 
-{step === 4 &&
-  shiftingOrFitting === "Fitting" &&
-  purchaseLens !== null && (
-    <Container maxWidth="sm">
-      <Box
-        sx={{
-          padding: 4,
-          backgroundColor: "#fff",
-          borderRadius: 5,
-          boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
-          textAlign: "center",
-          transition: "all 0.3s ease",
-          ":hover": {
-            boxShadow: "0 14px 28px rgba(0, 0, 0, 0.2)",
-          },
-        }}
-      >
-        <Typography
-          variant="h5"
-          gutterBottom
-          sx={{
-            fontWeight: "bold",
-            color: "#1a237e",
-            marginBottom: 3,
-            textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-          }}
-        >
-          Select Glass Type
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#424242",
-            marginBottom: 4,
-            lineHeight: 1.6,
-          }}
-        >
-          Choose the glass type that suits your needs.
-        </Typography>
-        <Box
-          display="flex"
-          flexDirection={{ xs: "column", sm: "row" }}
-          justifyContent="center"
-          gap={{ xs: 3, sm: 4 }}
-          mb={4}
-        >
-          <Button
-            variant={glassType === "Sunglass" ? "contained" : "outlined"}
-            onClick={() => handleGlassTypeSelection("Sunglass")}
-            sx={{
-              padding: "14px 35px",
-              fontSize: "1.1rem",
-              fontWeight: "600",
-              borderRadius: 30,
-              textTransform: "none",
-              backgroundColor: glassType === "Sunglass" ? "#3949ab" : "#fff",
-              color: glassType === "Sunglass" ? "#fff" : "#3949ab",
-              borderColor: "#3949ab",
-              boxShadow:
-                glassType === "Sunglass"
-                  ? "0 6px 12px rgba(57, 73, 171, 0.3)"
-                  : "none",
-              transition: "all 0.3s ease",
-              ":hover": {
-                backgroundColor: glassType === "Sunglass" ? "#283593" : "#f5f5f5",
-                color: glassType === "Sunglass" ? "#fff" : "#3949ab",
-              },
-            }}
-          >
-            Sunglass
-          </Button>
-          <Button
-            variant={glassType === "Normal" ? "contained" : "outlined"}
-            onClick={() => handleGlassTypeSelection("Normal")}
-            sx={{
-              padding: "14px 35px",
-              fontSize: "1.1rem",
-              fontWeight: "600",
-              borderRadius: 30,
-              textTransform: "none",
-              backgroundColor: glassType === "Normal" ? "#3949ab" : "#fff",
-              color: glassType === "Normal" ? "#fff" : "#3949ab",
-              borderColor: "#3949ab",
-              boxShadow:
-                glassType === "Normal"
-                  ? "0 6px 12px rgba(57, 73, 171, 0.3)"
-                  : "none",
-              transition: "all 0.3s ease",
-              ":hover": {
-                backgroundColor: glassType === "Normal" ? "#283593" : "#f5f5f5",
-                color: glassType === "Normal" ? "#fff" : "#3949ab",
-              },
-            }}
-          >
-            Normal
-          </Button>
-        </Box>
-        <Button
-          variant="outlined"
-          onClick={prevStep}
-          sx={{
-            padding: "12px 30px",
-            fontWeight: "bold",
-            borderRadius: 20,
-            textTransform: "none",
-            borderColor: "#3949ab",
-            color: "#3949ab",
-            ":hover": {
-              backgroundColor: "#3949ab",
-              color: "#fff",
-            },
-          }}
-        >
-          Back
-        </Button>
-      </Box>
-    </Container>
-  )}
+      {step === 4 &&
+        shiftingOrFitting === "Fitting" &&
+        purchaseLens !== null && (
+          <Container maxWidth="sm">
+            <Box
+              sx={{
+                padding: 4,
+                backgroundColor: "#fff",
+                borderRadius: 5,
+                boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
+                textAlign: "center",
+                transition: "all 0.3s ease",
+                ":hover": {
+                  boxShadow: "0 14px 28px rgba(0, 0, 0, 0.2)",
+                },
+              }}
+            >
+              <Typography
+                variant="h5"
+                gutterBottom
+                sx={{
+                  fontWeight: "bold",
+                  color: "#1a237e",
+                  marginBottom: 3,
+                  textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+                }}
+              >
+                Select Glass Type
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "#424242",
+                  marginBottom: 4,
+                  lineHeight: 1.6,
+                }}
+              >
+                Choose the glass type that suits your needs.
+              </Typography>
+              <Box
+                display="flex"
+                flexDirection={{ xs: "column", sm: "row" }}
+                justifyContent="center"
+                gap={{ xs: 3, sm: 4 }}
+                mb={4}
+              >
+                <Button
+                  variant={glassType === "Sunglass" ? "contained" : "outlined"}
+                  onClick={() => handleGlassTypeSelection("Sunglass")}
+                  sx={{
+                    padding: "14px 35px",
+                    fontSize: "1.1rem",
+                    fontWeight: "600",
+                    borderRadius: 30,
+                    textTransform: "none",
+                    backgroundColor:
+                      glassType === "Sunglass" ? "#3949ab" : "#fff",
+                    color: glassType === "Sunglass" ? "#fff" : "#3949ab",
+                    borderColor: "#3949ab",
+                    boxShadow:
+                      glassType === "Sunglass"
+                        ? "0 6px 12px rgba(57, 73, 171, 0.3)"
+                        : "none",
+                    transition: "all 0.3s ease",
+                    ":hover": {
+                      backgroundColor:
+                        glassType === "Sunglass" ? "#283593" : "#f5f5f5",
+                      color: glassType === "Sunglass" ? "#fff" : "#3949ab",
+                    },
+                  }}
+                >
+                  Sunglass
+                </Button>
+                <Button
+                  variant={glassType === "Normal" ? "contained" : "outlined"}
+                  onClick={() => handleGlassTypeSelection("Normal")}
+                  sx={{
+                    padding: "14px 35px",
+                    fontSize: "1.1rem",
+                    fontWeight: "600",
+                    borderRadius: 30,
+                    textTransform: "none",
+                    backgroundColor:
+                      glassType === "Normal" ? "#3949ab" : "#fff",
+                    color: glassType === "Normal" ? "#fff" : "#3949ab",
+                    borderColor: "#3949ab",
+                    boxShadow:
+                      glassType === "Normal"
+                        ? "0 6px 12px rgba(57, 73, 171, 0.3)"
+                        : "none",
+                    transition: "all 0.3s ease",
+                    ":hover": {
+                      backgroundColor:
+                        glassType === "Normal" ? "#283593" : "#f5f5f5",
+                      color: glassType === "Normal" ? "#fff" : "#3949ab",
+                    },
+                  }}
+                >
+                  Normal
+                </Button>
+              </Box>
+              <Button
+                variant="outlined"
+                onClick={prevStep}
+                sx={{
+                  padding: "12px 30px",
+                  fontWeight: "bold",
+                  borderRadius: 20,
+                  textTransform: "none",
+                  borderColor: "#3949ab",
+                  color: "#3949ab",
+                  ":hover": {
+                    backgroundColor: "#3949ab",
+                    color: "#fff",
+                  },
+                }}
+              >
+                Back
+              </Button>
+            </Box>
+          </Container>
+        )}
 
       {step === 5 && glassType && (
         <LensSelection
@@ -393,14 +397,14 @@ const CreateOrder = () => {
       )}
       {step === 6 && glassType === "Sunglass" && (
         <div>
-        <PowerEntry
-          onPowerDataChange={setPowerDetails}
-          onPowerTypeChange={setPowerType}
-          onPowerEntryTypeChange={setPowerEntryType}
-          lensType={lensDetails}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
+          <PowerEntry
+            onPowerDataChange={setPowerDetails}
+            onPowerTypeChange={setPowerType}
+            onPowerEntryTypeChange={setPowerEntryType}
+            lensType={lensDetails}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
         </div>
       )}
       {step === 7 && glassType === "Sunglass" && (

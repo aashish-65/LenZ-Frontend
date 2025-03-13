@@ -614,7 +614,7 @@ const Orders = () => {
                                 {order.shiftingOrFitting}
                               </Typography>
                             </Box>
-                            
+
                             <Box display="flex" alignItems="center" mb={1}>
                               <Avatar
                                 sx={{

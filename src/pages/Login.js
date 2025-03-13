@@ -21,7 +21,7 @@ import {
   Visibility,
   VisibilityOff,
   LoginRounded,
-  AppRegistrationRounded
+  AppRegistrationRounded,
 } from "@mui/icons-material";
 
 const Login = () => {
@@ -47,7 +47,7 @@ const Login = () => {
       setError("Both fields are required");
       return;
     }
-    
+
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -69,7 +69,7 @@ const Login = () => {
   };
 
   // const backgroundVariants = {
-  //   initial: { 
+  //   initial: {
   //     background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
   //     opacity: 0.7
   //   },
@@ -90,15 +90,15 @@ const Login = () => {
 
   const formVariants = {
     hidden: { opacity: 0, scale: 0.9 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
-      transition: { 
+      transition: {
         type: "spring",
         stiffness: 120,
-        damping: 10
-      }
-    }
+        damping: 10,
+      },
+    },
   };
 
   return (
@@ -167,12 +167,12 @@ const Login = () => {
             variant="h4"
             align="center"
             gutterBottom
-            sx={{ 
-              fontWeight: "bold", 
+            sx={{
+              fontWeight: "bold",
               color: "#333",
               background: "linear-gradient(90deg, #6a11cb 0%, #2575fc 100%)",
               WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent"
+              WebkitTextFillColor: "transparent",
             }}
           >
             Welcome Back!
@@ -267,8 +267,7 @@ const Login = () => {
                 textTransform: "none",
                 marginTop: 3,
                 borderRadius: "12px",
-                background:
-                  "linear-gradient(90deg, #6a11cb 0%, #2575fc 100%)",
+                background: "linear-gradient(90deg, #6a11cb 0%, #2575fc 100%)",
                 boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)",
                 transition: "all 0.3s ease",
                 "&:hover": {

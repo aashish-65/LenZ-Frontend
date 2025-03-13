@@ -33,6 +33,10 @@ import {
   CheckCircle,
   LockOpen,
   ErrorOutline,
+  PermIdentity,
+  Key,
+  PinDrop,
+  Public,
 } from "@mui/icons-material";
 import { ThemeProvider } from "@mui/material/styles";
 import SignupSuccess from "./SignupSuccess";
@@ -54,6 +58,8 @@ const Signup = () => {
       state: "",
       pinCode: "",
     },
+    adminId: "",
+    authToken: "",
   });
 
   const [userId, setUserId] = useState(null);
@@ -86,9 +92,10 @@ const Signup = () => {
           error = "Enter a valid 10-digit phone number with +91.";
         break;
       case "alternatePhone":
-        const sanitizedValue = value.replace(/\s+/g, "");
-        const phoneWithoutPrefix = sanitizedValue.replace(/^\+91/, "");
-        if (phoneWithoutPrefix && !/^\+91\d{10}$/.test(phoneWithoutPrefix))
+        // const sanitizedValue = value.replace(/\s+/g, "");
+        // const phoneWithoutPrefix = sanitizedValue.replace(/^\+91/, "");
+        // if (phoneWithoutPrefix && !/^\+91\d{10}$/.test(phoneWithoutPrefix))
+        if (!/^\+91\d{10}$/.test(value))
           error = "Enter a valid 10-digit phone number with +91.";
         if (name === "alternatePhone" && value === formData.phone)
           error = "Alternate phone number cannot be the same as phone number.";
@@ -108,6 +115,15 @@ const Signup = () => {
         break;
       case "address.pinCode":
         if (!/^\d{6}$/.test(value)) error = "Pin code must be 6 digits.";
+        break;
+      case "adminId":
+        if (!/^\d{6}$/.test(value)) error = "Admin ID must be 6 digits.";
+        if (!value)
+          error = "Please Enter the Admin LenZ Id! Contact Admin to get it.";
+        break;
+      case "authToken":
+        if (!/^\d{6}$/.test(value)) error = "Auth Key must be 6 digits.";
+        if (!value) error = "Please Enter the Admin Auth Token.";
         break;
       default:
         break;
@@ -264,66 +280,70 @@ const Signup = () => {
   };
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <ThemeProvider theme={theme}>
-      <Box 
+      <Box
         sx={{
-          minHeight: '100vh', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          background: 'linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%)',
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(135deg, #f4f6f9 0%, #e9ecef 100%)",
           py: { xs: 0, sm: 4 },
-          px: { xs: 0, sm: 2 }
+          px: { xs: 0, sm: 2 },
         }}
       >
-        <Container maxWidth="md" sx={{ 
+        <Container
+          maxWidth="md"
+          sx={{
             px: { xs: 0, sm: 2 },
-            py: { xs: 0, sm: 2 }
-          }}>
+            py: { xs: 0, sm: 2 },
+          }}
+        >
           <Paper
             elevation={isMobile ? 0 : 12}
             sx={{
               borderRadius: { xs: 0, sm: 4 },
-              overflow: 'hidden',
-              position: 'relative',
-              minHeight: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              '&::before': {
+              overflow: "hidden",
+              position: "relative",
+              maxHeight: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              "&::before": {
                 content: '""',
-                position: 'absolute',
+                position: "absolute",
                 top: 0,
                 left: 0,
-                width: '100%',
-                height: '5px',
-                background: 'linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)',
-              }
+                width: "100%",
+                height: "5px",
+                background: "linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)",
+              },
             }}
           >
-            <Grid 
-              container 
-              sx={{ 
-                flexGrow: 1, 
-                height: '100%',
-                flexDirection: { xs: 'column', sm: 'row' }
+            <Grid
+              container
+              sx={{
+                flexGrow: 1,
+                height: "100%",
+                flexDirection: { xs: "column", sm: "row" },
               }}
             >
               {!isMobile && (
-                <Grid 
-                  item 
-                  xs={5} 
+                <Grid
+                  item
+                  xs={5}
                   sx={{
-                    background: 'linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: 'white',
+                    background:
+                      "linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
                     p: 4,
-                    textAlign: 'center'
+                    textAlign: "center",
                   }}
                 >
                   <Typography variant="h4" gutterBottom>
@@ -335,26 +355,27 @@ const Signup = () => {
                 </Grid>
               )}
 
-              <Grid 
-                item 
-                xs={12} 
-                sm={isMobile ? 12 : 7} 
-                sx={{ 
+              <Grid
+                item
+                xs={12}
+                sm={isMobile ? 12 : 7}
+                sx={{
                   p: { xs: 3, sm: 5 },
-                  backgroundColor: 'background.paper',
-                  overflowY: 'auto',
-                  maxHeight: '100vh'
+                  backgroundColor: "background.paper",
+                  overflowY: "auto",
+                  maxHeight: "100vh",
                 }}
               >
-                <Box sx={{ textAlign: 'center', mb: 3, mt: { xs: 4, sm: 0 } }}>
-                {isMobile && (
-                    <Box 
+                <Box sx={{ textAlign: "center", mb: 3, mt: { xs: 4, sm: 0 } }}>
+                  {isMobile && (
+                    <Box
                       sx={{
-                        background: 'linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)',
-                        color: 'white',
+                        background:
+                          "linear-gradient(135deg, #1e88e5 0%, #2196f3 100%)",
+                        color: "white",
                         py: 3,
                         mb: 3,
-                        textAlign: 'center'
+                        textAlign: "center",
                       }}
                     >
                       <Typography variant="h4" gutterBottom>
@@ -402,17 +423,17 @@ const Signup = () => {
                                 <AccountCircle color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12}>
                         <TextField
                           label="Email Address"
                           name="email"
@@ -433,15 +454,15 @@ const Signup = () => {
                             ),
                             endAdornment: otpVerified && (
                               <InputAdornment position="end">
-                                <CheckCircle sx={{ color: 'green' }} />
+                                <CheckCircle sx={{ color: "green" }} />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                         {showVerifyButton && !otpSent && !otpVerified && (
@@ -467,15 +488,15 @@ const Signup = () => {
                               helperText={otpError}
                               error={!!otpError}
                               InputProps={{
-                                sx: { 
+                                sx: {
                                   borderRadius: 2,
-                                  '& input': { 
-                                    padding: '14px 14px 14px 0' 
-                                  }
-                                }
+                                  "& input": {
+                                    padding: "14px 14px 14px 0",
+                                  },
+                                },
                               }}
                             />
-                            <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                            <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
                               <Button
                                 variant="contained"
                                 color="primary"
@@ -501,7 +522,7 @@ const Signup = () => {
                         )}
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12}>
                         <TextField
                           label="Phone Number (+91)"
                           name="phone"
@@ -519,17 +540,17 @@ const Signup = () => {
                                 <Phone color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12}>
                         <TextField
                           label="Alternate Phone (+91)"
                           name="alternatePhone"
@@ -546,17 +567,17 @@ const Signup = () => {
                                 <Phone color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12}>
                         <TextField
                           label="Password"
                           name="password"
@@ -580,16 +601,20 @@ const Signup = () => {
                                   onClick={handleClickShowPassword}
                                   edge="end"
                                 >
-                                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
@@ -609,21 +634,21 @@ const Signup = () => {
                                 <Business color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
 
                       <Grid item xs={12}>
-                        <Typography 
-                          variant="h6" 
-                          color="primary" 
-                          sx={{ mb: 2, fontWeight: 'bold' }}
+                        <Typography
+                          variant="h6"
+                          color="primary"
+                          sx={{ mb: 2, fontWeight: "bold" }}
                         >
                           Address Details
                         </Typography>
@@ -644,12 +669,12 @@ const Signup = () => {
                                 <Home color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
@@ -668,17 +693,17 @@ const Signup = () => {
                                 <Home color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12}>
                         <TextField
                           label="Landmark"
                           name="address.landmark"
@@ -692,17 +717,17 @@ const Signup = () => {
                                 <LocationOn color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
 
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={12}>
                         <TextField
                           label="City"
                           name="address.city"
@@ -717,12 +742,12 @@ const Signup = () => {
                                 <LocationCity color="action" />
                               </InputAdornment>
                             ),
-                            sx: { 
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
@@ -737,12 +762,17 @@ const Signup = () => {
                           fullWidth
                           required
                           InputProps={{
-                            sx: { 
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Public color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
@@ -759,12 +789,81 @@ const Signup = () => {
                           helperText={errors["address.pinCode"]}
                           error={!!errors["address.pinCode"]}
                           InputProps={{
-                            sx: { 
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PinDrop color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: {
                               borderRadius: 2,
-                              '& input': { 
-                                padding: '14px 14px 14px 0' 
-                              }
-                            }
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <Typography
+                          variant="h6"
+                          color="primary"
+                          sx={{ mb: 2, fontWeight: "bold" }}
+                        >
+                          Admin Details
+                        </Typography>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="LenZ Admin ID"
+                          name="adminId"
+                          variant="outlined"
+                          value={formData.adminId}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          helperText={errors["adminId"]}
+                          error={!!errors["adminId"]}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <PermIdentity color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: {
+                              borderRadius: 2,
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <TextField
+                          label="Admin Auth Key"
+                          name="authToken"
+                          variant="outlined"
+                          value={formData.authToken}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                          helperText={errors["authToken"]}
+                          error={!!errors["authToken"]}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Key color="action" />
+                              </InputAdornment>
+                            ),
+                            sx: {
+                              borderRadius: 2,
+                              "& input": {
+                                padding: "14px 14px 14px 0",
+                              },
+                            },
                           }}
                         />
                       </Grid>
@@ -778,11 +877,13 @@ const Signup = () => {
                             onChange={handleChange}
                             variant="outlined"
                             label="Plan"
-                            sx={{ 
-                              borderRadius: 2,
-                              '& .MuiSelect-select': { 
-                                padding: '14px 14px 14px 0' 
-                              }
+                            InputProps={{
+                              sx: {
+                                borderRadius: 2,
+                                "& .MuiSelect-select": {
+                                  padding: "14px 14px 14px 0",
+                                },
+                              },
                             }}
                           >
                             <MenuItem value="Trial">Trial</MenuItem>
@@ -791,7 +892,7 @@ const Signup = () => {
                       </Grid>
                     </Grid>
 
-                    <Divider sx={{ my: 3, borderColor: 'rgba(0,0,0,0.1)' }} />
+                    <Divider sx={{ my: 3, borderColor: "rgba(0,0,0,0.1)" }} />
 
                     <Button
                       type="submit"
@@ -802,7 +903,7 @@ const Signup = () => {
                       sx={{
                         mt: 2,
                         py: 1.5,
-                        fontSize: '1rem',
+                        fontSize: "1rem",
                         borderRadius: 2,
                       }}
                       disabled={loading || !otpVerified}
@@ -815,15 +916,15 @@ const Signup = () => {
                     </Button>
 
                     {apiError && (
-                      <Box 
-                        sx={{ 
-                          mt: 2, 
-                          p: 2, 
-                          bgcolor: 'error.light', 
-                          color: 'error.contrastText',
+                      <Box
+                        sx={{
+                          mt: 2,
+                          p: 2,
+                          bgcolor: "error.light",
+                          color: "error.contrastText",
                           borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center'
+                          display: "flex",
+                          alignItems: "center",
                         }}
                       >
                         <ErrorOutline sx={{ mr: 1 }} />

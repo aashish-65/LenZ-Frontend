@@ -1,18 +1,18 @@
 // src/utils/api.js
-const API_URL = 'https://lenz-backend.onrender.com/api';
+const API_URL = "https://lenz-backend.onrender.com/api";
 
 const handleResponse = async (response) => {
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || 'An error occurred');
+    throw new Error(errorData.message || "An error occurred");
   }
   return response.json();
 };
 
-const apiCall = async (endpoint, method = 'GET', data = null) => {
-  const token = localStorage.getItem('authToken');
+const apiCall = async (endpoint, method = "GET", data = null) => {
+  const token = localStorage.getItem("authToken");
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
   };
 
@@ -26,7 +26,7 @@ const apiCall = async (endpoint, method = 'GET', data = null) => {
     const response = await fetch(`${API_URL}${endpoint}`, options);
     return await handleResponse(response);
   } catch (error) {
-    throw new Error(error.message || 'Failed to fetch data');
+    throw new Error(error.message || "Failed to fetch data");
   }
 };
 

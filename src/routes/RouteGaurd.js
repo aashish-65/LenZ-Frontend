@@ -1,7 +1,7 @@
 // src/components/RouteGuard.js
-import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../AuthContext';
+import React, { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 const RouteGuard = ({ children, isPublic }) => {
   const { authToken } = useContext(AuthContext);
