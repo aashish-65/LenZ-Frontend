@@ -21,6 +21,7 @@ import GroupOrderList from "./components/GroupOrderList";
 import GroupOrderDetails from "./components/GroupOrderDetails";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
+import ResetPassword from "./pages/ResetPassword";
 const Signup = lazy(() => import("./pages/Signup"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -52,6 +53,7 @@ const DeliveryPrivacyPolicy = lazy(() =>
 const routes = [
   { path: "/signup", component: <Signup />, isPublic: true },
   { path: "/login", component: <Login />, isPublic: true },
+  { path: "/reset-password/:token", component: <ResetPassword />, isPublic: true },
   { path: "/dashboard", component: <Dashboard />, isPublic: false },
   { path: "/create-order", component: <CreateOrder />, isPublic: false },
   { path: "/", component: <Navigate to="/signup" /> }, // Redirect to signup by default

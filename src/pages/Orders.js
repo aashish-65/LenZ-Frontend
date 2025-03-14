@@ -652,10 +652,10 @@ const Orders = () => {
                                 <strong>Status:</strong>{" "}
                                 <StatusChip
                                   label={
-                                    order.orderPlaced ? "Placed" : "Pending"
+                                    order.isGroupOrder ? "Placed" : "Pending"
                                   }
                                   status={
-                                    order.orderPlaced ? "Placed" : "Pending"
+                                    order.isGroupOrder ? "Placed" : "Pending"
                                   }
                                 />
                               </Typography>
