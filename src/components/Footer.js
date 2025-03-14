@@ -67,8 +67,10 @@ const Footer = () => {
             </Button>
             <Button
               component={Link}
-              to="/terms-of-service"
-              startIcon={<TermsIcon />} // Icon added to the link
+              to="https://merchant.razorpay.com/policy/Q5DDWrbvqT2SkD/terms"
+              startIcon={<TermsIcon />}
+              target="_blank"
+              rel="noreferrer"
               sx={{
                 color: "white",
                 textDecoration: "none",

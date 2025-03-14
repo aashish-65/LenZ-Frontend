@@ -152,8 +152,11 @@ const ShopPrivacyPolicy = () => {
             our services ( "Services" ), including when you:
           </Typography>
           <Typography variant="body1" sx={{ mt: 2 }}>
-            • Visit our website at https://lenz-booking.netlify.app/ , or any
-            website of ours that links to this Privacy Notice
+            • Visit our website at{" "}
+            <Link href="https://lenz-booking.netlify.app/" target="_blank">
+              https://lenz-booking.netlify.app/
+            </Link>{" "}
+            , or any website of ours that links to this Privacy Notice
           </Typography>
           <Typography variant="body1" sx={{ mt: 0 }}>
             • Engage with us in other related ways, including any sales,
@@ -291,11 +294,11 @@ const ShopPrivacyPolicy = () => {
               <strong>Sensitive Information:</strong> With your consent, we may
               process bank/card details. Payment data is handled by RazorPay (
               <Link
-                href="https://merchant.razorpay.com/policy/Pr0MnZADWXzeM3/privacy"
+                href="https://merchant.razorpay.com/policy/Q5DDWrbvqT2SkD/terms"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Privacy Policy
+                Terms & Conditions
               </Link>
               ).
             </Typography>

@@ -1193,19 +1193,17 @@ const GroupOrderDetails = () => {
                         ₹{order.totalAmount?.toLocaleString("en-IN")}
                       </Typography>
                       <Chip
-                        label={order.paymentStatus}
+                        label={order.isGroupOrder ? "Placed" : "Unplaced"}
                         size="small"
                         sx={{
                           fontSize: "0.7rem",
                           height: 20,
-                          bgcolor:
-                            order.paymentStatus === "completed"
-                              ? "success.light"
-                              : "warning.light",
-                          color:
-                            order.paymentStatus === "completed"
-                              ? "success.dark"
-                              : "warning.dark",
+                          bgcolor: order.isGroupOrder
+                            ? "success.light"
+                            : "warning.light",
+                          color: order.isGroupOrder
+                            ? "success.dark"
+                            : "warning.dark",
                         }}
                       />
                     </Grid>
@@ -1220,7 +1218,7 @@ const GroupOrderDetails = () => {
                         variant="outlined"
                         size="small"
                         endIcon={<KeyboardArrowRightIcon />}
-                        onClick={() => navigate(`/order/${order._id}`)}
+                        onClick={() => navigate(`/orders/${order._id}/details`)}
                         sx={{ borderRadius: 1.5 }}
                       >
                         View
@@ -1328,22 +1326,20 @@ const GroupOrderDetails = () => {
                       <Divider sx={{ my: 1.5 }} />
                       <Box sx={{ px: 1, pb: 1 }}>
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                          Payment Status:
+                          Order Status:
                           <Chip
-                            label={order.paymentStatus}
+                            label={order.isGroupOrder ? "Placed" : "Unplaced"}
                             size="small"
                             sx={{
                               ml: 1,
                               fontSize: "0.7rem",
                               height: 20,
-                              bgcolor:
-                                order.paymentStatus === "completed"
-                                  ? "success.light"
-                                  : "warning.light",
-                              color:
-                                order.paymentStatus === "completed"
-                                  ? "success.dark"
-                                  : "warning.dark",
+                              bgcolor: order.isGroupOrder
+                                ? "success.light"
+                                : "warning.light",
+                              color: order.isGroupOrder
+                                ? "success.dark"
+                                : "warning.dark",
                             }}
                           />
                         </Typography>
@@ -1353,7 +1349,9 @@ const GroupOrderDetails = () => {
                           variant="outlined"
                           size="small"
                           endIcon={<KeyboardArrowRightIcon />}
-                          onClick={() => navigate(`/order/${order._id}`)}
+                          onClick={() =>
+                            navigate(`/orders/${order._id}/details`)
+                          }
                           sx={{ borderRadius: 1.5, mt: 1 }}
                         >
                           View Order Details
