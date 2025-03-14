@@ -591,7 +591,7 @@ const OrderDetails = () => {
                 <DetailLabel variant="body2" sx={{ minWidth: "120px" }}>
                   Group Order ID:
                 </DetailLabel>
-                <DetailValue variant="body1">{order.groupOrderId}</DetailValue>
+                <DetailValue variant="body2">{order.groupOrderId}</DetailValue>
               </DetailItem>
               <Box sx={{ mt: 2, textAlign: "center" }}>
                 <Button
