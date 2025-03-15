@@ -552,7 +552,7 @@ const ProfilePage = () => {
 
         <DialogContent>
           <Typography variant="body2" color="text.secondary" textAlign="center">
-            Enter the OTP sent to your registered number.
+            Enter the OTP sent to your registered Email.
           </Typography>
 
           {/* OTP Input Field */}
