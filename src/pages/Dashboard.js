@@ -432,10 +432,13 @@ const Dashboard = () => {
               mb: 2,
               border: "3px solid white",
               boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              fontSize: "2rem",
             }}
             alt={user?.name || "User"}
             // src={user?.avatar || "https://via.placeholder.com/80"}
-          />
+          >
+            {user?.name?.charAt(0) || "U"}
+          </Avatar>
         </Badge>
         <Typography
           variant="h4"
@@ -444,7 +447,7 @@ const Dashboard = () => {
             textShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
           }}
         >
-          Welcome, {user?.name || "User"}!
+          Welcome, {user?.name?.split(" ")[0] || "User"}!
         </Typography>
       </Box>
 

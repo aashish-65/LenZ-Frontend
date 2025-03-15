@@ -240,6 +240,51 @@ const OrderDetails = () => {
         </Box>
 
         <CardContent sx={{ padding: isMobile ? 2 : 4 }}>
+          {/* Group Order Information - Conditional */}
+          {order.isGroupOrder && (
+            <DetailCard component={motion.div} whileHover={{ y: -5 }}>
+              <SectionTitle variant="h6">
+                <SettingsSuggest sx={{ mr: 1, verticalAlign: "middle" }} />
+                Group Order Information
+              </SectionTitle>
+              <DetailItem>
+                <DetailLabel variant="body2" sx={{ minWidth: "120px" }}>
+                  Group Status:
+                </DetailLabel>
+                <DetailValue variant="body1">
+                  <Chip
+                    label="Part of Group Order"
+                    color="primary"
+                    sx={{ fontWeight: 500 }}
+                  />
+                </DetailValue>
+              </DetailItem>
+              <DetailItem>
+                <DetailLabel variant="body2" sx={{ minWidth: "120px" }}>
+                  Group Order ID:
+                </DetailLabel>
+                <DetailValue variant="body2">{order.groupOrderId}</DetailValue>
+              </DetailItem>
+              <Box sx={{ mt: 2, textAlign: "center" }}>
+                <Button
+                  variant="contained"
+                  component={Link}
+                  to={`/group-orders/${order.groupOrderId}`}
+                  startIcon={<Visibility />}
+                  sx={{
+                    background: "linear-gradient(to right, #6a11cb, #2575fc)",
+                    color: "#fff",
+                    "&:hover": {
+                      background: "linear-gradient(to right, #2575fc, #6a11cb)",
+                    },
+                  }}
+                >
+                  View Details
+                </Button>
+              </Box>
+            </DetailCard>
+          )}
+          
           {/* Customer Details Section */}
           <DetailCard component={motion.div} whileHover={{ y: -5 }}>
             <SectionTitle variant="h6">
@@ -567,51 +612,6 @@ const OrderDetails = () => {
               </>
             )}
           </DetailCard>
-
-          {/* Group Order Information - Conditional */}
-          {order.isGroupOrder && (
-            <DetailCard component={motion.div} whileHover={{ y: -5 }}>
-              <SectionTitle variant="h6">
-                <SettingsSuggest sx={{ mr: 1, verticalAlign: "middle" }} />
-                Group Order Information
-              </SectionTitle>
-              <DetailItem>
-                <DetailLabel variant="body2" sx={{ minWidth: "120px" }}>
-                  Group Status:
-                </DetailLabel>
-                <DetailValue variant="body1">
-                  <Chip
-                    label="Part of Group Order"
-                    color="primary"
-                    sx={{ fontWeight: 500 }}
-                  />
-                </DetailValue>
-              </DetailItem>
-              <DetailItem>
-                <DetailLabel variant="body2" sx={{ minWidth: "120px" }}>
-                  Group Order ID:
-                </DetailLabel>
-                <DetailValue variant="body2">{order.groupOrderId}</DetailValue>
-              </DetailItem>
-              <Box sx={{ mt: 2, textAlign: "center" }}>
-                <Button
-                  variant="contained"
-                  component={Link}
-                  to={`/group-orders/${order.groupOrderId}`}
-                  startIcon={<Visibility />}
-                  sx={{
-                    background: "linear-gradient(to right, #6a11cb, #2575fc)",
-                    color: "#fff",
-                    "&:hover": {
-                      background: "linear-gradient(to right, #2575fc, #6a11cb)",
-                    },
-                  }}
-                >
-                  View Details
-                </Button>
-              </Box>
-            </DetailCard>
-          )}
 
           {/* Total Section */}
           <DetailCard
