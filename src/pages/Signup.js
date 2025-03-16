@@ -188,7 +188,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "https://lenz-backend.onrender.com/api/auth/signup",
+        `${process.env.REACT_APP_BACKEND_URL}/auth/signup`,
         formData,
         {
           headers: {
@@ -214,7 +214,7 @@ const Signup = () => {
     try {
       setLoading(true);
       await axios.post(
-        "https://lenz-backend.onrender.com/api/otp/request-otp",
+        `${process.env.REACT_APP_BACKEND_URL}/otp/request-otp`,
         {
           email: formData.email,
         },
@@ -238,7 +238,7 @@ const Signup = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://lenz-backend.onrender.com/api/otp/verify-otp",
+        `${process.env.REACT_APP_BACKEND_URL}/otp/verify-otp`,
         {
           email: formData.email,
           otp,

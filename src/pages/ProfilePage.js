@@ -105,7 +105,7 @@ const ProfilePage = () => {
         setLoading(true);
         const token = localStorage.getItem("authToken");
         const { data } = await axios.get(
-          "https://lenz-backend.onrender.com/api/profile/",
+          `${process.env.REACT_APP_BACKEND_URL}/profile/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -211,7 +211,7 @@ const ProfilePage = () => {
 
       // const token = localStorage.getItem("authToken");
       await axios.post(
-        "https://lenz-backend.onrender.com/api/otp/request-otp",
+        `${process.env.REACT_APP_BACKEND_URL}/otp/request-otp`,
         { email: profileData.email },
         {
           headers: {
@@ -240,7 +240,7 @@ const ProfilePage = () => {
       }
       // const token = localStorage.getItem("authToken");
       await axios.post(
-        "https://lenz-backend.onrender.com/api/otp/verify-otp",
+        `${process.env.REACT_APP_BACKEND_URL}/otp/verify-otp`,
         { email: profileData.email, otp },
         {
           headers: {
@@ -297,7 +297,7 @@ const ProfilePage = () => {
         setLoading(true);
         const token = localStorage.getItem("authToken");
         const { data } = await axios.put(
-          "https://lenz-backend.onrender.com/api/profile/",
+          `${process.env.REACT_APP_BACKEND_URL}/profile/`,
           profileData,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -366,7 +366,7 @@ const ProfilePage = () => {
         const token = localStorage.getItem("authToken");
         console.log(token);
         const { data } = await axios.post(
-          "https://lenz-backend.onrender.com/api/profile/change-password",
+          `${process.env.REACT_APP_BACKEND_URL}/profile/change-password`,
           { oldPassword, newPassword },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -1225,7 +1225,7 @@ export default ProfilePage;
 //   DialogTitle,
 //   DialogContent,
 //   DialogActions,
-//   IconButton,
+//   // IconButton,
 //   Paper,
 //   Skeleton,
 // } from "@mui/material";
@@ -1240,12 +1240,12 @@ export default ProfilePage;
 //   Home,
 //   LocationCity,
 //   LocationOn,
-//   Visibility,
-//   VisibilityOff,
+//   // Visibility,
+//   // VisibilityOff,
 //   CardMembership,
 //   AccountBalanceWallet,
 //   PinDrop,
-//   VpnKey,
+//   // VpnKey,
 // } from "@mui/icons-material";
 // import ChangePassword from "../components/ChangePassword"; // Import the ChangePassword component
 
@@ -1299,7 +1299,7 @@ export default ProfilePage;
 //         setLoading(true);
 //         const token = localStorage.getItem("authToken");
 //         const { data } = await axios.get(
-//           "https://lenz-backend.onrender.com/api/profile/",
+//           `${process.env.REACT_APP_BACKEND_URL}/profile/`,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -1404,7 +1404,7 @@ export default ProfilePage;
 //       }
 
 //       await axios.post(
-//         "https://lenz-backend.onrender.com/api/otp/request-otp",
+//         `${process.env.REACT_APP_BACKEND_URL}/otp/request-otp`,
 //         { email: profileData.email },
 //         {
 //           headers: {
@@ -1431,7 +1431,7 @@ export default ProfilePage;
 //         return;
 //       }
 //       await axios.post(
-//         "https://lenz-backend.onrender.com/api/otp/verify-otp",
+//         `${process.env.REACT_APP_BACKEND_URL}/otp/verify-otp`,
 //         { email: profileData.email, otp },
 //         {
 //           headers: {
@@ -1442,6 +1442,7 @@ export default ProfilePage;
 //       setOtpVerified(true);
 //       setShowOtpModal(false);
 //       setError("");
+//       setOtp("");
 //       clearInterval(timerInterval.current);
 //     } catch (err) {
 //       setError("Invalid OTP. Please try again.");
@@ -1487,7 +1488,7 @@ export default ProfilePage;
 //         setLoading(true);
 //         const token = localStorage.getItem("authToken");
 //         const { data } = await axios.put(
-//           "https://lenz-backend.onrender.com/api/profile/",
+//           `${process.env.REACT_APP_BACKEND_URL}/profile/`,
 //           profileData,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
@@ -2168,6 +2169,7 @@ export default ProfilePage;
 //               <ChangePassword
 //                 requestOTP={requestOTP}
 //                 otpVerified={otpVerified}
+//                 setOtpVerified={setOtpVerified}
 //                 validate={validate}
 //               />
 //             )}

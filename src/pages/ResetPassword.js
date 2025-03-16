@@ -104,7 +104,7 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      await axios.post("https://lenz-backend.onrender.com/api/auth/reset-password", {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/reset-password`, {
         token,
         newPassword,
       });

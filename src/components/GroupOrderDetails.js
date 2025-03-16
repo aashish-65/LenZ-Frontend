@@ -61,7 +61,7 @@ const GroupOrderDetails = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://lenz-backend.onrender.com/api/orders/get-group-order/${groupOrderId}`,
+          `${process.env.REACT_APP_BACKEND_URL}/orders/get-group-order/${groupOrderId}`,
           { headers: { Authorization: `Bearer ${authToken}` } }
         );
         setGroupOrder(response.data.data);
@@ -91,7 +91,7 @@ const GroupOrderDetails = () => {
             : "shop_delivery";
         try {
           const response = await axios.post(
-            "https://lenz-backend.onrender.com/api/otp/request-tracking-otp",
+            `${process.env.REACT_APP_BACKEND_URL}/otp/request-tracking-otp`,
             {
               groupOrder_id: groupOrder._id,
               purpose: purpose,

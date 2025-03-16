@@ -58,7 +58,7 @@ const GroupOrderList = () => {
     const fetchGroupOrders = async () => {
       try {
         const response = await axios.get(
-          "https://lenz-backend.onrender.com/api/orders/get-group-orders",
+          `${process.env.REACT_APP_BACKEND_URL}/orders/get-group-orders`,
           { headers: { Authorization: `Bearer ${authToken}` } }
         );
         setGroupOrders(response.data.data);

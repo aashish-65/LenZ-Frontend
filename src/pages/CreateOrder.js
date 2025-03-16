@@ -80,7 +80,7 @@ const CreateOrder = () => {
 
     try {
       const response = await axios.post(
-        "https://lenz-backend.onrender.com/api/orders/place-order",
+        `${process.env.REACT_APP_BACKEND_URL}/orders/place-order`,
         {
           userId,
           ...orderDetails, // Spread order details to include in the request

@@ -1,5 +1,5 @@
 // src/utils/api.js
-const API_URL = "https://lenz-backend.onrender.com/api";
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const handleResponse = async (response) => {
   if (!response.ok) {

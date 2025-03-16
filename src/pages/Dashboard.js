@@ -295,7 +295,7 @@ const Dashboard = () => {
         if (userId) {
           console.log("Lenz User ID: ", userId);
           const response = await axios.get(
-            `https://lenz-backend.onrender.com/api/orders/active-shop-orders/${userId}`,
+            `${process.env.REACT_APP_BACKEND_URL}/orders/active-shop-orders/${userId}`,
             {
               headers: {
                 "Content-Type": "application/json",

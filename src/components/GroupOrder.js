@@ -45,7 +45,7 @@ import {
   Person,
   Receipt,
   CurrencyRupee,
-  CheckCircle,
+  // CheckCircle,
   Sort,
   ArrowDownward,
   ArrowUpward,
@@ -92,7 +92,7 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          `https://lenz-backend.onrender.com/api/orders/get-order/${user._id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/orders/get-order/${user._id}`,
           {
             headers: { Authorization: `Bearer ${authToken}` },
           }
@@ -148,7 +148,7 @@ const Orders = () => {
 
   const createRazorpayOrder = async (amountInPaise) => {
     const response = await axios.post(
-      "https://lenz-backend.onrender.com/api/payments/order",
+      `${process.env.REACT_APP_BACKEND_URL}/payments/order`,
       {
         amount: amountInPaise,
         currency,
@@ -161,7 +161,7 @@ const Orders = () => {
 
   const handlePaymentSuccess = async (response) => {
     const validateResponse = await axios.post(
-      "https://lenz-backend.onrender.com/api/payments/verify",
+      `${process.env.REACT_APP_BACKEND_URL}/payments/verify`,
       response
     );
     return validateResponse.data;
@@ -170,7 +170,7 @@ const Orders = () => {
   const createGroupOrder = async () => {
     try {
       const createOrderResponse = await axios.post(
-        "https://lenz-backend.onrender.com/api/orders/create-group-order",
+        `${process.env.REACT_APP_BACKEND_URL}/orders/create-group-order`,
         {
           userId: user._id,
           orderIds: selectedOrders,
@@ -187,7 +187,7 @@ const Orders = () => {
         setPaymentOption("");
 
         const fetchResponse = await axios.get(
-          `https://lenz-backend.onrender.com/api/orders/get-order/${user._id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/orders/get-order/${user._id}`,
           {
             headers: { Authorization: `Bearer ${authToken}` },
           }
@@ -213,6 +213,7 @@ const Orders = () => {
         toast.warning("Please select a payment option");
         return;
       }
+      setOpenDialog(false);
       const amountInPaise = amount * 100;
       const order = await createRazorpayOrder(amountInPaise);
       console.log(order);
@@ -243,7 +244,7 @@ const Orders = () => {
           contact: user.phone,
         },
         notes: {
-          address: "Razorpay Corporate Office",
+          address: user.address,
         },
         theme: {
           color: "powderblue",
@@ -566,14 +567,6 @@ const Orders = () => {
                     >
                       <CardContent>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <Checkbox
-                            checked={selectedOrders.includes(order._id)}
-                            onChange={() => handleOrderSelection(order._id)}
-                            sx={{ marginRight: 1 }}
-                            inputProps={{
-                              "aria-label": `Select order ${order._id}`,
-                            }}
-                          />
                           <Box sx={{ flexGrow: 1 }}>
                             {/* Order ID */}
                             <Box
@@ -650,7 +643,7 @@ const Orders = () => {
                             </Box>
 
                             {/* Status */}
-                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                            {/* <Box sx={{ display: "flex", alignItems: "center" }}>
                               <CheckCircle
                                 fontSize="small"
                                 sx={{ mr: 1, color: "text.secondary" }}
@@ -672,12 +665,12 @@ const Orders = () => {
                                   {order.paymentStatus}
                                 </Typography>
                               </Typography>
-                            </Box>
+                            </Box> */}
                             {/* Action Buttons */}
                             <Box
                               sx={{
                                 display: "flex",
-                                justifyContent: "flex-end",
+                                justifyContent: "flex-start",
                                 mt: 1,
                                 gap: 1,
                               }}
@@ -706,6 +699,14 @@ const Orders = () => {
                               </Button>
                             </Box>
                           </Box>
+                          <Checkbox
+                            checked={selectedOrders.includes(order._id)}
+                            onChange={() => handleOrderSelection(order._id)}
+                            sx={{ marginRight: 1 }}
+                            inputProps={{
+                              "aria-label": `Select order ${order._id}`,
+                            }}
+                          />
                         </Box>
                       </CardContent>
                     </Card>
@@ -750,7 +751,7 @@ const Orders = () => {
                     <TableCell sx={{ fontWeight: "bold" }}>
                       Total Amount
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+                    {/* <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -783,7 +784,7 @@ const Orders = () => {
                             {order.customerDetails.billNumber || "N/A"}
                           </TableCell>
                           <TableCell>₹{order.totalAmount}</TableCell>
-                          <TableCell>
+                          {/* <TableCell>
                             <Typography
                               variant="body2"
                               sx={{
@@ -798,7 +799,7 @@ const Orders = () => {
                             >
                               {order.paymentStatus}
                             </Typography>
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       </Fade>
                     ))}
@@ -895,6 +896,7 @@ const Orders = () => {
                 <AccordionDetails>
                   <Button
                     fullWidth
+                    disabled={isProcessingPayment}
                     variant={
                       paymentOption === "full" ? "contained" : "outlined"
                     }
@@ -909,6 +911,7 @@ const Orders = () => {
                   </Button>
                   <Button
                     fullWidth
+                    disabled={isProcessingPayment}
                     variant={
                       paymentOption === "delivery" ? "contained" : "outlined"
                     }
@@ -926,6 +929,7 @@ const Orders = () => {
           </DialogContent>
           <DialogActions>
             <Button
+            disabled={isProcessingPayment}
               onClick={() => {
                 setOpenDialog(false);
                 setPaymentOption("");
@@ -978,6 +982,7 @@ const Orders = () => {
               </Typography>
               <Button
                 variant={paymentOption === "full" ? "contained" : "outlined"}
+                disabled={isProcessingPayment}
                 startIcon={<Payment />}
                 onClick={() => {
                   setAmount(groupOrderBill.finalAmount);
@@ -995,6 +1000,7 @@ const Orders = () => {
                 variant={
                   paymentOption === "delivery" ? "contained" : "outlined"
                 }
+                disabled={isProcessingPayment}
                 startIcon={<LocalShipping />}
                 onClick={() => {
                   setAmount(groupOrderBill.deliveryCharge);

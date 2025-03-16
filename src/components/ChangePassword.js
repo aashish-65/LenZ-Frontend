@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff, VpnKey, Lock } from "@mui/icons-material";
 
-const ChangePassword = ({ requestOTP, otpVerified, validate }) => {
+const ChangePassword = ({ requestOTP, otpVerified, setOtpVerified, validate }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -31,9 +31,14 @@ const ChangePassword = ({ requestOTP, otpVerified, validate }) => {
     async (e) => {
       if (e && e.preventDefault) e.preventDefault();
 
+      setErrors({}); // Clear previous errors
+      setError("");
+      setSuccess("");
+      setLoading(true);
       // Validate inputs
       if (!oldPassword || !newPassword || !confirmPassword) {
         setError("All fields are required.");
+        setLoading(false);
         return;
       }
 
@@ -41,18 +46,22 @@ const ChangePassword = ({ requestOTP, otpVerified, validate }) => {
       const passwordError = validate("password", newPassword);
       if (passwordError) {
         setError(passwordError);
+        setLoading(false);
         return;
       }
 
       if (newPassword !== confirmPassword) {
         setError("New password and confirm password do not match.");
+        setLoading(false);
         return;
       }
 
       // If OTP is not verified, request OTP and set pending update
       if (!otpVerified) {
-        setPendingUpdate(true); // Mark update as pending
+        setError("");
+        setPendingUpdate(true);
         await requestOTP();
+        setLoading(false);
         return;
       }
 
@@ -61,7 +70,7 @@ const ChangePassword = ({ requestOTP, otpVerified, validate }) => {
         setLoading(true);
         const token = localStorage.getItem("authToken");
         const { data } = await axios.post(
-          "https://lenz-backend.onrender.com/api/profile/change-password",
+          `${process.env.REACT_APP_BACKEND_URL}/profile/change-password`,
           { oldPassword, newPassword },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -69,14 +78,18 @@ const ChangePassword = ({ requestOTP, otpVerified, validate }) => {
         setError("");
         setLoading(false);
         toast.success("Password updated successfully!");
-        setPendingUpdate(false); // Reset pending update
+        setPendingUpdate(false);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setOtpVerified(false);
       } catch (err) {
         setError(err.response?.data?.error || "Failed to update password.");
         setSuccess("");
         setLoading(false);
       }
     },
-    [oldPassword, newPassword, confirmPassword, otpVerified, requestOTP, validate]
+    [oldPassword, newPassword, confirmPassword, otpVerified, setOtpVerified, requestOTP, validate]
   );
 
   // Automatically trigger handleChangePassword when OTP is verified

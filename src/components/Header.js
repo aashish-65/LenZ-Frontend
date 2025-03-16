@@ -829,7 +829,7 @@ import {
   MenuItem,
   Fade,
   Avatar,
-  Badge,
+  // Badge,
   Tooltip,
 } from "@mui/material";
 import { AuthContext } from "../AuthContext";
@@ -1235,12 +1235,12 @@ const Header = memo(() => {
                   primary="Book For Pickup"
                   primaryTypographyProps={{ fontWeight: 600 }}
                 />
-                <Badge
+                {/* <Badge
                   color="error"
                   variant="dot"
                   invisible={true}
                   sx={{ ml: 1 }}
-                />
+                /> */}
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
@@ -1794,12 +1794,12 @@ const Header = memo(() => {
                       />
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         Book For Pickup
-                        <Badge
+                        {/* <Badge
                           color="error"
                           variant="dot"
                           invisible={false}
                           sx={{ ml: 1 }}
-                        />
+                        /> */}
                       </Box>
                     </MenuItem>
                     <MenuItem
@@ -1857,10 +1857,16 @@ const Header = memo(() => {
                               ? "#3f51b5"
                               : "rgba(255, 255, 255, 0.2)",
                             color: scrolled ? "white" : "#fff",
-                            fontSize: "0.875rem",
                           }}
                         >
+                          <Typography
+                            sx={{
+                              fontSize: "0.875rem",
+                              fontWeight: "bold",
+                            }}
+                          >
                           {getUserInitials()}
+                          </Typography>
                         </Avatar>
                       }
                       sx={{

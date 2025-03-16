@@ -64,7 +64,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://lenz-backend.onrender.com/api/auth/login",
+        `${process.env.REACT_APP_BACKEND_URL}/auth/login`,
         formData
       );
       login(response.data.token, response.data.user);
@@ -102,7 +102,7 @@ const Login = () => {
     }
 
     try {
-      await axios.post("https://lenz-backend.onrender.com/api/auth/forgot-password", {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/forgot-password`, {
         email: forgotPasswordEmail,
       });
       setForgotPasswordSuccess("Password reset email sent. Check your inbox.");
