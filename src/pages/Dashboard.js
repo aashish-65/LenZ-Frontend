@@ -2,6 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
+import usePickupTimeRestriction from "../routes/usePickupTimeRestriction";
+import { isServiceUnavailable } from "../utils/serviceAvailability";
+import ServiceUnavailableBanner from "../components/ServiceUnavailableBanner";
 import {
   Box,
   Typography,
@@ -137,6 +140,7 @@ const DashboardSkeleton = () => {
       }}
     >
       {/* Skeleton for Welcome Message */}
+      <Skeleton variant="circular" width={100} height={100} sx={{ mr: 2, background: "linear-gradient(275deg, #6a11cb 0%, #2575fc 100%)", }} />
       <Skeleton
         variant="text"
         animation="wave"
@@ -242,7 +246,7 @@ const DashboardSkeleton = () => {
 
         {/* Orders Section Skeleton */}
         <Grid item xs={12} md={6}>
-          <WhiteCard>
+          <WhiteCard sx={{ height: "100%" }}>
             <CardContent>
               <Skeleton
                 variant="text"
@@ -284,6 +288,7 @@ const Dashboard = () => {
   const [copied, setCopied] = useState(false);
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
+  const serviceUnavailable = isServiceUnavailable();
 
   // Simulate fetching active deliveries
   useEffect(() => {
@@ -303,6 +308,9 @@ const Dashboard = () => {
               },
             }
           );
+          console.log("Active Deliveries API: ", response);
+          console.log("Active Deliveries: ", response.data.data);
+
           setActiveDeliveries(response.data.data);
           setIsLoading(false);
         } else {
@@ -326,9 +334,7 @@ const Dashboard = () => {
     navigate("/orders");
   };
 
-  const handleBookForPickup = () => {
-    navigate("/pickup-orders");
-  };
+  const handleBookForPickup = usePickupTimeRestriction();
 
   const handleViewDetails = (orderId) => {
     navigate(`/group-orders/${orderId}`);
@@ -395,6 +401,7 @@ const Dashboard = () => {
         color: "#fff",
       }}
     >
+      {serviceUnavailable && <ServiceUnavailableBanner />}
       {/* Welcome message with badge */}
       <Box
         component={motion.div}
@@ -863,27 +870,40 @@ const Dashboard = () => {
                       View All Orders
                     </Button>
 
-                    <Button
-                      variant="contained"
-                      onClick={handleBookForPickup}
-                      sx={{
-                        py: 1.5,
-                        px: 3,
-                        fontSize: "15px",
-                        borderRadius: "12px",
-                        color: "#fff",
-                        fontWeight: "medium",
-                        textTransform: "none",
-                        background:
-                          "linear-gradient(135deg, #6a11cb 30%, #2575fc 90%)",
-                        boxShadow: "0 8px 16px rgba(37, 117, 252, 0.2)",
-                        "&:hover": {
-                          boxShadow: "0 8px 20px rgba(37, 117, 252, 0.4)",
-                        },
-                      }}
+                    <Tooltip
+                      title={
+                        serviceUnavailable
+                          ? "Service is unavailable after 8 PM and before 10 AM"
+                          : "Place your order for pickup"
+                      }
                     >
-                      Book For Pickup
-                    </Button>
+                      <span>
+                      <Box sx={{ cursor: serviceUnavailable ? "not-allowed" : "pointer" }}>
+                        <Button
+                          variant="contained"
+                          onClick={handleBookForPickup}
+                          disabled={serviceUnavailable}
+                          sx={{
+                            py: 1.5,
+                            px: 3,
+                            fontSize: "15px",
+                            borderRadius: "12px",
+                            color: "#fff",
+                            fontWeight: "medium",
+                            textTransform: "none",
+                            background:
+                              "linear-gradient(135deg, #6a11cb 30%, #2575fc 90%)",
+                            boxShadow: "0 8px 16px rgba(37, 117, 252, 0.2)",
+                            "&:hover": {
+                              boxShadow: "0 8px 20px rgba(37, 117, 252, 0.4)",
+                            },
+                          }}
+                        >
+                          Book For Pickup
+                        </Button>
+                      </Box>
+                      </span>
+                    </Tooltip>
                   </Box>
                 </CardContent>
               </WhiteCard>

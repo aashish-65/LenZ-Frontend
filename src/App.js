@@ -8,6 +8,7 @@ import {
 import { lazy } from "react";
 import ErrorBoundary from "./components/ErrorBoundary"; // Import ErrorBoundary
 import RouteGuard from "./routes/RouteGaurd";
+import TimeBasedRouteGuard from "./routes/TimeBasedRouteGuard";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme"; // Import your custom theme
 // import { ClipLoader } from 'react-spinners';
@@ -27,7 +28,6 @@ const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const CreateOrder = lazy(() => import("./pages/CreateOrder"));
-// const Orders = lazy(() => import("./pages/Orders"));
 const Profile = lazy(() => import("./pages/ProfilePage"));
 const GroupOrder = lazy(() => import("./components/GroupOrder"));
 const AdminPrivacyPolicy = lazy(() => import("./pages/AdminPrivacyPolicy"));
@@ -35,28 +35,18 @@ const ShopPrivacyPolicy = lazy(() => import("./pages/ShopPrivacyPolicy"));
 const DeliveryPrivacyPolicy = lazy(() =>
   import("./pages/DeliveryPrivacyPolicy")
 );
-// toast.configure();
 
-// PublicRoute component to redirect logged-in users
-// const PublicRoute = ({ children }) => {
-//   const { authToken } = React.useContext(AuthContext);
-//   return authToken ? <Navigate to="/dashboard" /> : children;
-// };
-
-// // PrivateRoute component to protect routes
-// const PrivateRoute = ({ children }) => {
-//   const { authToken } = React.useContext(AuthContext);
-//   return authToken ? children : <Navigate to="/login" />;
-// };
-
-// Route configuration
 const routes = [
   { path: "/signup", component: <Signup />, isPublic: true },
   { path: "/login", component: <Login />, isPublic: true },
-  { path: "/reset-password/:token", component: <ResetPassword />, isPublic: true },
+  {
+    path: "/reset-password/:token",
+    component: <ResetPassword />,
+    isPublic: true,
+  },
   { path: "/dashboard", component: <Dashboard />, isPublic: false },
   { path: "/create-order", component: <CreateOrder />, isPublic: false },
-  { path: "/", component: <Navigate to="/signup" /> }, // Redirect to signup by default
+  { path: "/", component: <Navigate to="/signup" /> },
   { path: "/orders", component: <Orders />, isPublic: false },
   { path: "/pickup-orders", component: <GroupOrder />, isPublic: false },
   { path: "/group-orders", component: <GroupOrderList />, isPublic: false },
@@ -103,7 +93,17 @@ const App = () => {
                       key={index}
                       path={path}
                       element={
-                        <RouteGuard isPublic={isPublic}>{component}</RouteGuard>
+                        path === "/pickup-orders" ? (
+                          <TimeBasedRouteGuard>
+                            <RouteGuard isPublic={isPublic}>
+                              {component}
+                            </RouteGuard>
+                          </TimeBasedRouteGuard>
+                        ) : (
+                          <RouteGuard isPublic={isPublic}>
+                            {component}
+                          </RouteGuard>
+                        )
                       }
                     />
                   ))}

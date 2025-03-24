@@ -810,6 +810,8 @@
 
 import React, { useState, useContext, memo, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import usePickupTimeRestriction from "../routes/usePickupTimeRestriction";
+import { isServiceUnavailable } from "../utils/serviceAvailability";
 import {
   AppBar,
   Toolbar,
@@ -856,6 +858,9 @@ const Header = memo(() => {
   const [ordersMenuAnchor, setOrdersMenuAnchor] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  const handleBookForPickup = usePickupTimeRestriction();
+  const serviceUnavailable = isServiceUnavailable();
 
   // Handle scroll effect
   useEffect(() => {
@@ -1208,7 +1213,10 @@ const Header = memo(() => {
               <ListItemButton
                 component={Link}
                 to="/pickup-orders"
+                onClick={handleBookForPickup}
+                disabled={serviceUnavailable}
                 sx={{
+                  cursor: serviceUnavailable ? "not-allowed" : "pointer",
                   borderRadius: "12px",
                   transition: "all 0.3s ease",
                   background: isActive("/pickup-orders")
@@ -1763,8 +1771,13 @@ const Header = memo(() => {
                     <MenuItem
                       component={Link}
                       to="/pickup-orders"
-                      onClick={handleOrdersMenuClose}
+                      onClick={(e) => {
+                        handleOrdersMenuClose();
+                        handleBookForPickup();
+                      }}
+                      disabled={serviceUnavailable}
                       sx={{
+                        cursor: serviceUnavailable ? "not-allowed" : "pointer",
                         borderRadius: "8px",
                         margin: "4px 8px",
                         padding: "10px 16px",
