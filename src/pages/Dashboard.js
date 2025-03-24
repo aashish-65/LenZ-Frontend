@@ -140,7 +140,15 @@ const DashboardSkeleton = () => {
       }}
     >
       {/* Skeleton for Welcome Message */}
-      <Skeleton variant="circular" width={100} height={100} sx={{ mr: 2, background: "linear-gradient(275deg, #6a11cb 0%, #2575fc 100%)", }} />
+      <Skeleton
+        variant="circular"
+        width={100}
+        height={100}
+        sx={{
+          mr: 2,
+          background: "linear-gradient(275deg, #6a11cb 0%, #2575fc 100%)",
+        }}
+      />
       <Skeleton
         variant="text"
         animation="wave"
@@ -869,7 +877,6 @@ const Dashboard = () => {
                     >
                       View All Orders
                     </Button>
-
                     <Tooltip
                       title={
                         serviceUnavailable
@@ -877,32 +884,30 @@ const Dashboard = () => {
                           : "Place your order for pickup"
                       }
                     >
-                      <span>
-                      <Box sx={{ cursor: serviceUnavailable ? "not-allowed" : "pointer" }}>
-                        <Button
-                          variant="contained"
-                          onClick={handleBookForPickup}
-                          disabled={serviceUnavailable}
-                          sx={{
-                            py: 1.5,
-                            px: 3,
-                            fontSize: "15px",
-                            borderRadius: "12px",
-                            color: "#fff",
-                            fontWeight: "medium",
-                            textTransform: "none",
-                            background:
-                              "linear-gradient(135deg, #6a11cb 30%, #2575fc 90%)",
-                            boxShadow: "0 8px 16px rgba(37, 117, 252, 0.2)",
-                            "&:hover": {
-                              boxShadow: "0 8px 20px rgba(37, 117, 252, 0.4)",
-                            },
-                          }}
-                        >
-                          Book For Pickup
-                        </Button>
-                      </Box>
-                      </span>
+                    <Button
+                      variant="contained"
+                      onClick={handleBookForPickup}
+                      // disabled={serviceUnavailable}
+                      
+                      sx={{
+                        py: 1.5,
+                        px: 3,
+                        fontSize: "15px",
+                        borderRadius: "12px",
+                        color: "#fff",
+                        fontWeight: "medium",
+                        textTransform: "none",
+                        cursor: serviceUnavailable ? "not-allowed" : "pointer", 
+                        background:
+                          "linear-gradient(135deg, #6a11cb 30%, #2575fc 90%)",
+                        boxShadow: "0 8px 16px rgba(37, 117, 252, 0.2)",
+                        "&:hover": {
+                          boxShadow: "0 8px 20px rgba(37, 117, 252, 0.4)",
+                        },
+                      }}
+                    >
+                      Book For Pickup
+                    </Button>
                     </Tooltip>
                   </Box>
                 </CardContent>

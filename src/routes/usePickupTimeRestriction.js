@@ -8,7 +8,7 @@ const usePickupTimeRestriction = () => {
   const handleBookForPickup = () => {
     const isBlocked = isServiceUnavailable();
     if (isBlocked) {
-      toast.error("Pickup orders are not available after 8 PM IST. It will restart at 10 AM IST.");
+      toast.error("Service not available. It will restart at 10 AM IST.");
       return;
     }
 

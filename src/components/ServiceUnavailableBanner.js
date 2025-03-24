@@ -179,10 +179,10 @@ const ServiceUnavailableBanner = () => {
     const istOffset = 5.5 * 60 * 60 * 1000;
     const istNow = new Date(now.getTime() + istOffset);
     
-    let targetHour = 10; // 10 AM
+    let targetHour = 10;
     let targetDay = istNow.getUTCDate();
     
-    if (istNow.getUTCHours() >= 10) {
+    if (istNow.getUTCHours() >= 20) {
       targetDay = istNow.getUTCDate() + 1;
     }
     
@@ -190,8 +190,8 @@ const ServiceUnavailableBanner = () => {
       istNow.getUTCFullYear(),
       istNow.getUTCMonth(),
       targetDay,
-      targetHour - 5, // Adjust for IST offset in hours
-      30 - 30, // Adjust for IST offset in minutes
+      targetHour - 5.5,
+      30,
       0
     ));
     
