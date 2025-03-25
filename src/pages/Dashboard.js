@@ -465,6 +465,7 @@ const Dashboard = () => {
           Welcome, {user?.name?.split(" ")[0] || "User"}!
         </Typography>
       </Box>
+      
 
       {/* Dashboard content */}
       <motion.div

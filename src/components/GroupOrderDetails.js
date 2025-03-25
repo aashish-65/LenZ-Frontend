@@ -96,7 +96,7 @@ const GroupOrderDetails = () => {
               groupOrder_id: groupOrder._id,
               purpose: purpose,
             },
-            { headers: { "lenz-api-key": "a99ed2023194a3356d37634474417f8b" } }
+            { headers: { "lenz-api-key": process.env.REACT_APP_AUTHORIZED_API_KEY } }
           );
           setOtp(response.data.otp_code);
           setError(null);
