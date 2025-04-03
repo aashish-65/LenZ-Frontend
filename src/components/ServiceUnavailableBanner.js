@@ -1,7 +1,6 @@
-// components/ServiceUnavailableBanner.js
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Fade, Grow } from "@mui/material";
-import { styled, keyframes } from "@mui/material/styles";
+import { Box, Typography, Paper, Fade, Grow, useMediaQuery } from "@mui/material";
+import { styled, keyframes, useTheme } from "@mui/material/styles";
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
@@ -108,19 +107,28 @@ const IconWrapper = styled(Box)(({ theme }) => ({
 const StyledIcon = styled(InfoOutlinedIcon)(({ theme }) => ({
   fontSize: '2.5rem',
   color: '#d32f2f',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '2rem',
+  },
 }));
 
-const TimeIcon = styled(ScheduleIcon)({
+const TimeIcon = styled(ScheduleIcon)(({ theme }) => ({
   fontSize: '1.2rem',
   marginRight: '8px',
   verticalAlign: 'middle',
   color: '#d32f2f',
-});
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1rem',
+  },
+}));
 
-const ClockIcon = styled(WatchLaterIcon)(({ active }) => ({
+const ClockIcon = styled(WatchLaterIcon)(({ active, theme }) => ({
   fontSize: '1.2rem',
   color: '#d32f2f',
   animation: active ? `${blink} 1.5s ease-in-out infinite` : 'none',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1rem',
+  },
 }));
 
 const TimeHighlight = styled(Box)(({ theme }) => ({
@@ -134,11 +142,38 @@ const TimeHighlight = styled(Box)(({ theme }) => ({
   animation: `${pulse} 2s infinite`,
   position: 'relative',
   overflow: 'hidden',
+  [theme.breakpoints.down('sm')]: {
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    padding: theme.spacing(0.75, 1),
+    width: '100%',
+  },
+}));
+
+const TimeInfo = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    justifyContent: 'center',
+    marginBottom: theme.spacing(0.5),
+  },
+}));
+
+const CountdownInfo = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    justifyContent: 'center',
+  },
 }));
 
 const ServiceUnavailableBanner = () => {
   const [visible, setVisible] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Animation entrance effect
   useEffect(() => {
@@ -212,7 +247,12 @@ const ServiceUnavailableBanner = () => {
               <StyledIcon />
             </IconWrapper>
           </Grow>
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ 
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: isMobile ? 'center' : 'flex-start'
+          }}>
             <Typography variant="h6" component="h2" sx={{ 
               fontWeight: 600, 
               color: '#d32f2f',
@@ -229,19 +269,27 @@ const ServiceUnavailableBanner = () => {
               Our service is currently unavailable as it ends after 8 PM IST.
             </Typography>
             <TimeHighlight>
-              <TimeIcon />
-              <Typography variant="body2" sx={{ fontWeight: 500, color: '#d32f2f', mr: 2 }}>
-                Service restarts at {restartTime}
-              </Typography>
-              <ClockIcon active={true} />
-              <Typography variant="body2" sx={{ 
-                fontWeight: 500, 
-                color: '#d32f2f', 
-                ml: 0.5,
-                animation: `${blink} 1.5s ease-in-out infinite`
-              }}>
-                ({getTimeRemaining()})
-              </Typography>
+              <TimeInfo>
+                <TimeIcon />
+                <Typography variant="body2" sx={{ 
+                  fontWeight: 500, 
+                  color: '#d32f2f', 
+                  mr: { xs: 0, sm: 2 }
+                }}>
+                  Service restarts at {restartTime}
+                </Typography>
+              </TimeInfo>
+              <CountdownInfo>
+                <ClockIcon active={true} />
+                <Typography variant="body2" sx={{ 
+                  fontWeight: 500, 
+                  color: '#d32f2f', 
+                  ml: 0.5,
+                  animation: `${blink} 1.5s ease-in-out infinite`
+                }}>
+                  ({getTimeRemaining()})
+                </Typography>
+              </CountdownInfo>
             </TimeHighlight>
           </Box>
         </BannerContent>

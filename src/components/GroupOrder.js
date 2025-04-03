@@ -45,7 +45,6 @@ import {
   Person,
   Receipt,
   CurrencyRupee,
-  // CheckCircle,
   Sort,
   ArrowDownward,
   ArrowUpward,
@@ -82,9 +81,15 @@ const Orders = () => {
   const receiptId = "qwsaq1";
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Check for mobile view
-
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+
+  const isPeakHour = () => {
+    const now = new Date();
+    const hours = now.getHours();
+    return hours >= 18 && hours < 20;
+    // return true;
+  };
 
   // Fetch user's orders and filter out grouped orders
   useEffect(() => {
@@ -134,7 +139,10 @@ const Orders = () => {
       (sum, order) => sum + order.totalAmount,
       0
     );
-    const deliveryCharge = user.deliveryCharge;
+    let deliveryCharge = user.deliveryCharge;
+    if (isPeakHour()) {
+      deliveryCharge += 20;
+    }
     const finalAmount = totalAmount + deliveryCharge;
 
     setGroupOrderBill({
@@ -860,6 +868,8 @@ const Orders = () => {
           open={openDialog}
           onClose={() => setOpenDialog(false)}
           onOpen={() => setOpenDialog(true)}
+          disableSwipeToClose={false}
+          swipeAreaWidth={0}
           sx={{
             "& .MuiDrawer-paper": {
               borderTopLeftRadius: 16, // Rounded corners at the top
@@ -876,9 +886,42 @@ const Orders = () => {
                 <Typography>
                   Total Amount: ₹{groupOrderBill?.totalAmount}
                 </Typography>
-                <Typography>
-                  Delivery Charge: ₹{groupOrderBill?.deliveryCharge}
-                </Typography>
+                {!isPeakHour() ? (
+                  <Typography>
+                    Delivery Charge: ₹{groupOrderBill?.deliveryCharge}
+                  </Typography>
+                ) : (
+                  <Accordion
+                    disableGutters
+                    elevation={0}
+                    sx={{
+                      "&:before": { display: "none" },
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <AccordionSummary
+                      expandIcon={isPeakHour ? <ExpandMore /> : null}
+                      sx={{
+                        padding: 0,
+                        "& .MuiAccordionSummary-content": { margin: 0 },
+                      }}
+                    >
+                      <Typography>
+                        Delivery Charge: ₹{groupOrderBill?.deliveryCharge}
+                      </Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails sx={{ padding: "0 0 0 16px", mb: 2 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Original Charge: ₹
+                        {groupOrderBill?.deliveryCharge - 20 || 0}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Night Surge Charge: ₹{20 || 0}
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                )}
                 <Typography>
                   Final Amount: ₹{groupOrderBill?.finalAmount}
                 </Typography>
@@ -929,7 +972,7 @@ const Orders = () => {
           </DialogContent>
           <DialogActions>
             <Button
-            disabled={isProcessingPayment}
+              disabled={isProcessingPayment}
               onClick={() => {
                 setOpenDialog(false);
                 setPaymentOption("");
@@ -967,9 +1010,42 @@ const Orders = () => {
                 <Typography>
                   Total Amount: ₹{groupOrderBill?.totalAmount}
                 </Typography>
-                <Typography>
-                  Delivery Charge: ₹{groupOrderBill?.deliveryCharge}
-                </Typography>
+                {!isPeakHour() ? (
+                  <Typography>
+                    Delivery Charge: ₹{groupOrderBill?.deliveryCharge}
+                  </Typography>
+                ) : (
+                  <Accordion
+                    disableGutters
+                    elevation={0}
+                    sx={{
+                      "&:before": { display: "none" },
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <AccordionSummary
+                      expandIcon={isPeakHour ? <ExpandMore /> : null}
+                      sx={{
+                        padding: 0,
+                        "& .MuiAccordionSummary-content": { margin: 0 },
+                      }}
+                    >
+                      <Typography>
+                        Delivery Charge: ₹{groupOrderBill?.deliveryCharge}
+                      </Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails sx={{ padding: "0 0 0 16px", mb: 2 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        Original Charge: ₹
+                        {groupOrderBill?.deliveryCharge - 20 || 0}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Night Surge Charge: ₹{20 || 0}
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                )}
                 <Typography>
                   Final Amount: ₹{groupOrderBill?.finalAmount}
                 </Typography>
